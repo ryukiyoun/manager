@@ -1,0 +1,6 @@
+.table.table-striped.table-bordered.dataTable tr.selected {
+    background-color: #6D85FB !important;
+}
+.table.table-striped.table-bordered.dataTable tr.selected td {
+    color: white !important;
+}

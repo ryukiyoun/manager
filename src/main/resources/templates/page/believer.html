@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" data-layout-decorate="~{default-layout}">
+<head>
+    <title>신도정보</title>
+    <link href="/static/css/datatable_selected.css" rel="stylesheet">
+</head>
+
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8 p-r-0 title-margin-right">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>신도정보</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 p-l-0 title-margin-left">
+                <div class="page-header">
+                    <div class="page-title">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">Apps</li>
+                            <li class="breadcrumb-item active">신도</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="main-content">
+            <div class="row">
+                <div id="table_container" class="col-12">
+                    <div class="card">
+                        <table id="believerTB" class="table table-striped table-bordered" style="width:100%">
+                        </table>
+                    </div>
+                </div>
+                <div id="editor_container" class="col-3 hidden">
+                    <div class="card">
+                        <div id="believerEditor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="/static/js/component/believer-editor.js"></script>
+
+    <script type="text/javascript" src="/static/js/util/typeUtil.js"></script>
+
+    <script>
+        let believerEditor = $('#believerEditor').believerEditor({
+            onSaveSuccess: function(){
+                let selectedIndex = table.rows('.selected').indexes()[0];
+                table.ajax.reload(function(){
+                    table.rows(selectedIndex).select();
+                }, false);
+            },
+
+            onDeleteSuccess: function(){
+                table.ajax.reload(function(){
+                    table.rows('.selected').deselect();
+                    $('#table_container').addClass('col-12').removeClass('col-9');
+                    $('#editor_container').addClass('hidden');
+                    table.draw();
+
+                    believerEditor.setEmpty();
+                }, true);
+            }
+        });
+
+        let table = $('#believerTB').DataTable({
+            language: {
+                emptyTable: '저장된 데이터가 없습니다.',
+                lengthMenu: '페이지당 _MENU_ 개씩 보기',
+                info: '현재 _START_ ~ _END_ / _TOTAL_건',
+                infoEmpty: '데이터 없음',
+                infoFiltered: '( _MAX_건의 데이터에서 필터링됨 )',
+                search: '검색: ',
+                zeroRecords: '일치하는 데이터가 없어요.',
+                loadingRecords: '로딩중...',
+                processing:     '잠시만 기다려 주세요...',
+                paginate: {
+                    next: '다음',
+                    previous: '이전'
+                }
+            },
+            scrollY:'550px',
+            select: 'single',
+            ajax: {
+                url: '/believers',
+                type: 'GET',
+                dataSrc: function (json) {
+                    $.each(json, function(index, el){
+                        lunarSolarConvert(el, 'lunarSolarType', 'lunarSolarTypeText');
+                    })
+                    return json;
+                }
+            },
+            columns : [
+                {data: 'believerId', title:'BelieverId'},
+                {data: 'lunarSolarType', title:'lunarSolarType'},
+                {data: 'believerName', title:'이름', width: '20%'},
+                {data: 'birthOfYear', title:'생년월일', width: '20%'},
+                {data: 'lunarSolarTypeText', title:'음력/양력', width: '20%'},
+                {data: 'address', title:'주소', width: '40%'}
+            ],
+            columnDefs: [
+                {
+                    targets: [0, 1],
+                    searchable: false,
+                    visible: false
+                },
+                {
+                    targets: [2,3,4],
+                    className: 'dt-head-center dt-body-center',
+                    createdCell: function (td) {
+                        $(td).css('padding', '5px 10px 5px 10px')
+                    }
+                },
+                {
+                    targets: [5],
+                    className: 'dt-head-center dt-body-left',
+                    createdCell: function (td) {
+                        $(td).css('padding', '5px 10px 5px 10px')
+                    }
+                }
+            ]
+        });
+
+        table.on('select', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                $('#table_container').removeClass('col-12').addClass('col-9');
+                $('#editor_container').removeClass('hidden');
+                table.draw();
+
+                believerEditor.setValues(table.rows(indexes).data()[0]);
+            }
+        } );
+
+        table.on('deselect', function (e, dt, type) {
+            if (type === 'row') {
+                $('#table_container').addClass('col-12').removeClass('col-9');
+                $('#editor_container').addClass('hidden');
+                table.draw();
+
+                believerEditor.setEmpty();
+            }
+        } );
+    </script>
+</th:block>
