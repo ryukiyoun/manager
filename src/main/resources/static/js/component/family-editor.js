@@ -39,7 +39,7 @@
             });
 
             $(instance.element).on('click', '.btn-save', function() {
-                if(instance.prayerId !== 0) {
+                if(instance.familyId !== 0) {
                     ajaxPutRequest('/family/' + instance.familyId, JSON.stringify({
                         familyType: $('#' + instance.familyTypeElId).val(),
                         etcValue: $('#' + instance.familyTypeETCElId).val(),
@@ -56,7 +56,7 @@
             });
 
             $(instance.element).on('click', '.btn-delete', function () {
-                if(instance.prayerId !== 0) {
+                if(instance.familyId !== 0) {
                     ajaxDeleteRequest('/family/' + instance.familyId, null,
                         function () {
                             //OPTION CALLBACK
@@ -164,7 +164,8 @@
 
             let familyNameInput = $('<input/>', {
                 id: this.familyNameElId,
-                class: 'input-default form-control'
+                class: 'input-default form-control',
+                maxlength: 10
             });
 
             familyNameFormGroup.append(familyNameLabel);
@@ -187,7 +188,8 @@
             let birthInput = $('<input/>', {
                 id: this.familyBirthElId,
                 type: 'text',
-                class: 'input-default form-control'
+                class: 'input-default form-control',
+                maxlength: 6
             });
 
             birthGroup.append(birthLabel);
@@ -241,7 +243,7 @@
             });
 
             $('#family_editor_container select').each(function(index, el){
-                $(el).find('option:first').prop('selected', 'selected');
+                $(el).val('');
             });
         }
     };

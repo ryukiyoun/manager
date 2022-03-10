@@ -15,8 +15,6 @@
         this.select2        = null;
         this.datepicker     = null;
 
-        this.prayerType     = [];
-
         this.element        = element;
         this.options        = $.extend( true, {}, defaults, options );
 

@@ -99,7 +99,8 @@
             let nameInput = $('<input/>', {
                 id: 'believerEditor_name',
                 type: 'text',
-                class: 'input-default form-control'
+                class: 'input-default form-control',
+                maxlength: 10
             });
 
             nameFormGroup.append(nameLabel);
@@ -122,7 +123,8 @@
             let birthInput = $('<input/>', {
                 id: 'believerEditor_birth',
                 type: 'text',
-                class: 'input-default form-control'
+                class: 'input-default form-control',
+                maxlength: 6
             });
 
             birthGroup.append(birthLabel);
@@ -140,7 +142,8 @@
 
             let lunarSolarSelect = $('<select/>', {
                 id: 'believerEditor_lunar_solar',
-                class: 'input-default form-control'
+                class: 'input-default form-control',
+                maxlength: 30
             });
 
             lunarSolarSelect.append(new Option('음력', 'LUNAR', true, true));
@@ -194,7 +197,7 @@
             });
 
             $('#believer_editor_container select').each(function(index, el){
-                $(el).find('option:first').prop('selected', 'selected');
+                $(el).val('');
             });
         }
     };

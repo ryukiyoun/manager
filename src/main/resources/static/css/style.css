@@ -2012,7 +2012,7 @@ footer p {
 --------------------*/
 .input-sm {
   font-size: 12px;
-  height: 30px;
+  height: 30px !important;
   line-height: 1.5;
 }
 .input-lg {
