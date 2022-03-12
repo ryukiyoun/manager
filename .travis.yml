@@ -27,18 +27,29 @@ notifications:
       - ryukiyoun@naver.com
 
 deploy:
-  -provider: s3
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_SECRET_KEY
-  bucket: springboottest-deploy
-  region: ap-northeast-2
-  skip_cleanup: true
-  acl: private
-  local_dir: deploy
-  wait-until-deployed: true
-  bundle_type: zip
-  application: springboot-temple-manager
-  deployment_group: springboot-temple-manager
-  on:
-    repo: ryukiyoun/manager
-    branch: master
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: springboottest-deploy
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy
+    wait-until-deployed: true
+    on:
+      repo: ryukiyoun/manager
+      branch: master
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: springboottest-deploy
+    key: springboot-temple-manager.zip
+    bundle_type: zip
+    application: springboot-temple-manager
+    deployment_group: springboot-temple-manager
+    region: ap-northeast-2
+    wait-until-deployed: true
+    on:
+      repo: ryukiyoun/manager
+      branch: master
