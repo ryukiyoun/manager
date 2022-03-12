@@ -10,7 +10,13 @@ jacoco {
 }
 
 group = 'com.temple'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
+
+bootJar{
+	archivesBaseName = 'springboot-temple-manager'
+	archiveFileName = 'springboot-temple-manager.jar'
+	archiveVersion = "0.0.1"
+}
 
 configurations {
 	compileOnly {
