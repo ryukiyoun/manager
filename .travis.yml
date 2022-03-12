@@ -7,7 +7,6 @@ branches:
     - master
 
 before_install:
-  - git pull
   - chmod +x gradlew
 
 cache:
@@ -29,7 +28,8 @@ deploy:
   bucket: springboottest-deploy
   region: ap-northeast-2
   skip_cleanup: true
-  acl: public_read
+  acl: private
+  wait-until-deployed: true
   on:
     repo: ryukiyoun/manager
     branch: master
