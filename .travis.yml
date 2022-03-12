@@ -36,6 +36,9 @@ deploy:
   acl: private
   local_dir: deploy
   wait-until-deployed: true
+  bundle_type: zip
+  application: springboot-temple-manager
+  deployment_group: springboot-temple-manager
   on:
     repo: ryukiyoun/manager
     branch: master
