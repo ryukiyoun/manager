@@ -16,6 +16,11 @@ cache:
 
 script: "./gradlew clean build"
 
+before_deploy:
+  - zip -r springboot-temple-manager *
+  - mkdir -p deploy
+  - mv springboot-temple-manager.zip deploy/springboot-temple-manager.zip
+
 notifications:
   email:
     recipients:
@@ -29,6 +34,7 @@ deploy:
   region: ap-northeast-2
   skip_cleanup: true
   acl: private
+  local_dir: deploy
   wait-until-deployed: true
   on:
     repo: ryukiyoun/manager
