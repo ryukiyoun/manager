@@ -7,7 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class ManagerApplication {
 	public static final String APPLICATION_PROPERTIES = "spring.config.location="
 			+ "classpath:application.yml,"
-			+ "/app/config/prod-application.yml";
+			+ "/home/ec2-user/app/config/prod-application.yml";
 
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(ManagerApplication.class)
