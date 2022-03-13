@@ -1,5 +1,7 @@
 package com.temple.manager.service;
 
+import com.temple.manager.dto.BelieverDTO;
+import com.temple.manager.dto.CodeDTO;
 import com.temple.manager.dto.PrayerDTO;
 import com.temple.manager.entity.Believer;
 import com.temple.manager.entity.Code;
@@ -86,7 +88,7 @@ class PrayerServiceTest {
         given(prayerRepository.findAllByActive("99999999999999")).willReturn(fixtureList);
 
         //when
-        List<PrayerDTO> result = prayerService.getAllPrayers();
+        List<PrayerDTO> result = prayerService.getPrayersByActive();
 
         //then
         assertThat(result.size(), is(2));
@@ -98,16 +100,33 @@ class PrayerServiceTest {
     @DisplayName("특정 기도 수정 테스트")
     void updatePrayer() {
         //given
-        Prayer mockPrayer = mock(Prayer.class);
+        Prayer spyPrayer = spy(Prayer.class);
 
-        given(prayerRepository.findById(anyLong())).willReturn(Optional.of(mockPrayer));
+        PrayerDTO fixture = PrayerDTO.builder()
+                .prayerId(1)
+                .believer(BelieverDTO.builder()
+                        .believerId(1)
+                        .believerName("tester1")
+                        .build())
+                .code(CodeDTO.builder()
+                        .codeId(1)
+                        .codeName("testCode1")
+                        .build())
+                .prayerStartDate(LocalDate.now())
+                .build();
+
+        given(prayerRepository.findById(anyLong())).willReturn(Optional.of(spyPrayer));
 
         //when
-        prayerService.updatePrayer(1, PrayerDTO.builder().build());
+        prayerService.updatePrayer(1, fixture);
 
         //then
         verify(prayerRepository, times(1)).findById(anyLong());
-        verify(mockPrayer, times(1)).update(any(PrayerDTO.class));
+        verify(spyPrayer, times(1)).update(any(PrayerDTO.class));
+
+        assertThat(spyPrayer.getBeliever().getBelieverId(), is(fixture.getBeliever().getBelieverId()));
+        assertThat(spyPrayer.getCode().getCodeId(), is(fixture.getCode().getCodeId()));
+        assertThat(spyPrayer.getPrayerStartDate(), is(fixture.getPrayerStartDate()));
     }
 
     @Test
@@ -124,16 +143,16 @@ class PrayerServiceTest {
     @DisplayName("특정 기도 Soft Delete 테스트")
     void deletePrayer() {
         //given
-        Prayer mockPrayer = mock(Prayer.class);
+        Prayer spyPrayer = spy(Prayer.class);
 
-        given(prayerRepository.findById(anyLong())).willReturn(Optional.of(mockPrayer));
+        given(prayerRepository.findById(anyLong())).willReturn(Optional.of(spyPrayer));
 
         //when
         prayerService.deletePrayer(1);
 
         //then
         verify(prayerRepository, times(1)).findById(anyLong());
-        verify(mockPrayer, times(1)).delete();
+        verify(spyPrayer, times(1)).delete();
     }
 
     @Test

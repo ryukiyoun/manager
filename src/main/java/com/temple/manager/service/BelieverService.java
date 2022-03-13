@@ -15,7 +15,7 @@ import java.util.List;
 public class BelieverService {
     private final BelieverRepository believerRepository;
 
-    public List<BelieverDTO> getAllBelievers(){
+    public List<BelieverDTO> getBelieversByActive(){
         List<Believer> believerList = believerRepository.findAllByActive("99999999999999");
 
         return BelieverMapper.INSTANCE.entityListToDTOList(believerList);

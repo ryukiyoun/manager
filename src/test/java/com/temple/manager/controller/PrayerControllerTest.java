@@ -79,7 +79,7 @@ class PrayerControllerTest {
     void accessPage() throws Exception{
         //given, when, then
         mockMvc.perform(get("/prayer"))
-                .andExpect(view().name("/page/prayer"))
+                .andExpect(view().name("page/prayer"))
                 .andDo(print());
     }
 
@@ -91,7 +91,7 @@ class PrayerControllerTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(prayerService.getAllPrayers()).willReturn(fixtureList);
+        given(prayerService.getPrayersByActive()).willReturn(fixtureList);
 
         //when, then
         String content = objectMapper.writeValueAsString(fixtureList);

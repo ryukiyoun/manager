@@ -66,7 +66,7 @@ class BelieverControllerTest {
     void accessPage() throws Exception{
         //given, when, then
         mockMvc.perform(get("/believer"))
-                .andExpect(view().name("/page/believer"))
+                .andExpect(view().name("page/believer"))
                 .andDo(print());
     }
 
@@ -78,7 +78,7 @@ class BelieverControllerTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(believerService.getAllBelievers()).willReturn(fixtureList);
+        given(believerService.getBelieversByActive()).willReturn(fixtureList);
 
         //when, then
         String content = objectMapper.writeValueAsString(fixtureList);
@@ -112,13 +112,7 @@ class BelieverControllerTest {
     @DisplayName("특정 신도 수정 테스트")
     void updateBeliever() throws Exception{
         //given
-        String content = objectMapper.writeValueAsString(BelieverDTO.builder()
-                .believerId(1)
-                .believerName("테스터")
-                .address("부산시")
-                .birthOfYear("295102")
-                .lunarSolarType(LunarSolarType.LUNAR)
-                .build());
+        String content = objectMapper.writeValueAsString(fixture1);
 
         doNothing().when(believerService).updateBeliever(anyLong(), any(BelieverDTO.class));
 

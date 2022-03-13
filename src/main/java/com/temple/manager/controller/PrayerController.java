@@ -23,7 +23,7 @@ public class PrayerController {
 
     @GetMapping("/prayers")
     public ResponseEntity<List<PrayerDTO>> getAllPrayers(){
-        return ResponseEntity.ok(prayerService.getAllPrayers());
+        return ResponseEntity.ok(prayerService.getPrayersByActive());
     }
 
     @PutMapping("/prayer/{id}")

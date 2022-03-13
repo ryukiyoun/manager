@@ -15,7 +15,7 @@ import java.util.List;
 public class PrayerService {
     private final PrayerRepository prayerRepository;
 
-    public List<PrayerDTO> getAllPrayers(){
+    public List<PrayerDTO> getPrayersByActive(){
         List<Prayer> prayerList = prayerRepository.findAllByActive("99999999999999");
 
         return PrayerMapper.INSTANCE.entityListToDTOList(prayerList);

@@ -63,7 +63,7 @@ class BelieverServiceTest {
         given(believerRepository.findAllByActive("99999999999999")).willReturn(fixtureList);
 
         //when
-        List<BelieverDTO> result = believerService.getAllBelievers();
+        List<BelieverDTO> result = believerService.getBelieversByActive();
 
         //then
         assertThat(result.size(), is(2));
@@ -94,16 +94,16 @@ class BelieverServiceTest {
     @DisplayName("특정 신도 수정 테스트")
     void updateBeliever(){
         //given
-        Believer mockBeliever = mock(Believer.class);
+        Believer spyBeliever = spy(Believer.class);
 
-        given(believerRepository.findById(anyLong())).willReturn(Optional.of(mockBeliever));
+        given(believerRepository.findById(anyLong())).willReturn(Optional.of(spyBeliever));
 
         //when
         believerService.updateBeliever(1, BelieverDTO.builder().build());
 
         //then
         verify(believerRepository, times(1)).findById(anyLong());
-        verify(mockBeliever, times(1)).update(any(BelieverDTO.class));
+        verify(spyBeliever, times(1)).update(any(BelieverDTO.class));
     }
 
     @Test
@@ -120,16 +120,16 @@ class BelieverServiceTest {
     @DisplayName("특정 신도 Soft Delete 테스트")
     void deleteBeliever(){
         //given
-        Believer mockBeliever = mock(Believer.class);
+        Believer spyBeliever = spy(Believer.class);
 
-        given(believerRepository.findById(anyLong())).willReturn(Optional.of(mockBeliever));
+        given(believerRepository.findById(anyLong())).willReturn(Optional.of(spyBeliever));
 
         //when
         believerService.deleteBeliever(1);
 
         //then
         verify(believerRepository, times(1)).findById(anyLong());
-        verify(mockBeliever, times(1)).delete();
+        verify(spyBeliever, times(1)).delete();
     }
 
     @Test
