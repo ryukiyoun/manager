@@ -1,5 +1,6 @@
 package com.temple.manager.entity;
 
+import com.temple.manager.converter.AesConverter;
 import com.temple.manager.dto.FamilyDTO;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
@@ -27,9 +28,11 @@ public class Family {
     private String etcValue;
 
     @Column(nullable = false, length = 100)
+    @Convert(converter = AesConverter.class)
     private String familyName;
 
-    @Column(nullable = false, length = 6)
+    @Column(nullable = false, length = 30)
+    @Convert(converter = AesConverter.class)
     private String birthOfYear;
 
     @Column(nullable = false)
