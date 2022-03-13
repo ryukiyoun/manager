@@ -28,11 +28,9 @@ public class Family {
     private String etcValue;
 
     @Column(nullable = false, length = 100)
-    @Convert(converter = AesConverter.class)
     private String familyName;
 
     @Column(nullable = false, length = 30)
-    @Convert(converter = AesConverter.class)
     private String birthOfYear;
 
     @Column(nullable = false)
