@@ -9,9 +9,6 @@ jacoco {
 	toolVersion = '0.8.6'
 }
 
-group = 'com.temple'
-version = '0.0.1'
-
 bootJar{
 	archivesBaseName = 'springboot-temple-manager'
 	archiveFileName = 'springboot-temple-manager.jar'
@@ -52,10 +49,7 @@ dependencies {
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:1.17'
 
 	//MariaDB Connection 의존성
-	implementation 'mysql:mysql-connector-java'
-
-	//H2 DB
-	implementation 'com.h2database:h2:2.0.202'
+	implementation 'org.mariadb.jdbc:mariadb-java-client'
 
 	//Jpa 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
