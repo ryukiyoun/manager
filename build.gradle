@@ -51,6 +51,9 @@ dependencies {
 	//MariaDB Connection 의존성
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
 
+	//H2 DB
+	implementation 'com.h2database:h2:2.0.202'
+
 	//Jpa 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
