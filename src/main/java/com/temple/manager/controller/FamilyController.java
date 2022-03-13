@@ -17,7 +17,7 @@ public class FamilyController {
 
     @GetMapping("/family")
     public ModelAndView accessPage(ModelAndView mav) {
-        mav.setViewName("/page/family");
+        mav.setViewName("page/family");
         return mav;
     }
 

@@ -17,7 +17,7 @@ public class PrayerController {
 
     @GetMapping("/prayer")
     public ModelAndView accessPage(ModelAndView mav){
-        mav.setViewName("/page/prayer");
+        mav.setViewName("page/prayer");
         return mav;
     }
 

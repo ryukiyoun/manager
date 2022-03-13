@@ -26,7 +26,7 @@ public class Prayer {
     private Believer believer;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CODE_ID", nullable = false)
+    @JoinColumn(name = "PRAYER_TYPE_CODE_ID", nullable = false)
     private Code code;
 
     @Column(nullable = false, length = 14)
