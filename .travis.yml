@@ -14,7 +14,7 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-script: "./gradlew clean build -Djasypt.encryptor.password=$JASYPT_PASSWORD"
+script: "./gradlew clean build -Djasypt.encryptor.password="$JASYPT_PASSWORD
 
 before_deploy:
   - zip -r springboot-temple-manager *
