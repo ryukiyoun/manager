@@ -1,5 +1,6 @@
 package com.temple.manager.entity;
 
+import com.temple.manager.converter.AesConverter;
 import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.enumable.LunarSolarType;
 import lombok.*;
@@ -22,6 +23,7 @@ public class Believer {
     private String believerName;
 
     @Column(nullable = false, length = 30)
+    @Convert(converter = AesConverter.class)
     private String birthOfYear;
 
     @Column(nullable = false)
@@ -29,6 +31,7 @@ public class Believer {
     private LunarSolarType lunarSolarType;
 
     @Column(nullable = false, length = 200)
+    @Convert(converter = AesConverter.class)
     private String address;
 
     @Column(nullable = false, length = 14)
