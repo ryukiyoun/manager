@@ -1,6 +1,7 @@
 package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.temple.manager.config.RedisConfig;
 import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.dto.CodeDTO;
 import com.temple.manager.dto.PrayerDTO;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@Import(RedisConfig.class)
 @WebMvcTest(controllers = PrayerController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class PrayerControllerTest {

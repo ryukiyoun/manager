@@ -18,6 +18,10 @@ spring:
       cache:
         period: 0
 
+  redis:
+    host: localhost
+    port: 6379
+
 jasypt:
   encryptor:
     bean: jasyptEncryptor
