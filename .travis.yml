@@ -9,6 +9,9 @@ branches:
 before_install:
   - chmod +x gradlew
 
+services:
+  - redis-server
+
 cache:
   directories:
     - '$HOME/.m2/repository'

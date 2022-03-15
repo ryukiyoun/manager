@@ -8,7 +8,7 @@ class ManagerApplicationTests {
 
 	@Test
 	void contextLoads() {
-		ManagerApplication.main(new String[] {});
+
 	}
 
 }
