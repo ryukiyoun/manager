@@ -2,6 +2,7 @@ package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.config.RedisConfig;
+import com.temple.manager.config.RedisProperties;
 import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.dto.CodeDTO;
 import com.temple.manager.dto.PrayerDTO;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@Import(RedisConfig.class)
+@Import({RedisConfig.class, RedisProperties.class})
 @WebMvcTest(controllers = PrayerController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class PrayerControllerTest {

@@ -2,6 +2,7 @@ package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.config.RedisConfig;
+import com.temple.manager.config.RedisProperties;
 import com.temple.manager.dto.CodeDTO;
 import com.temple.manager.service.CodeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@Import(RedisConfig.class)
+@Import({RedisConfig.class, RedisProperties.class})
 @WebMvcTest(controllers = CodeController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class CodeControllerTest {

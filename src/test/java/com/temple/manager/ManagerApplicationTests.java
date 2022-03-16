@@ -1,9 +1,10 @@
 package com.temple.manager;
 
+import com.temple.manager.config.TestRedisConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = TestRedisConfig.class)
 class ManagerApplicationTests {
 
 	@Test

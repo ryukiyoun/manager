@@ -1,6 +1,7 @@
 package com.temple.manager.controller;
 
 import com.temple.manager.config.RedisConfig;
+import com.temple.manager.config.RedisProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -14,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@Import(RedisConfig.class)
+@Import({RedisConfig.class, RedisProperties.class})
 @WebMvcTest(controllers = ProfileController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class ProfileControllerTest {
