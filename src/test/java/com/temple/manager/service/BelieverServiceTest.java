@@ -2,8 +2,10 @@ package com.temple.manager.service;
 
 import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.entity.Believer;
+import com.temple.manager.entity.Family;
 import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.repository.BelieverRepository;
+import com.temple.manager.repository.FamilyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,9 @@ import static org.mockito.Mockito.*;
 class BelieverServiceTest {
     @Mock
     BelieverRepository believerRepository;
+
+    @Mock
+    FamilyRepository familyRepository;
 
     @InjectMocks
     BelieverService believerService;
@@ -60,10 +65,10 @@ class BelieverServiceTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(believerRepository.findAllByActive("99999999999999")).willReturn(fixtureList);
+        given(believerRepository.findAll()).willReturn(fixtureList);
 
         //when
-        List<BelieverDTO> result = believerService.getBelieversByActive();
+        List<BelieverDTO> result = believerService.getAllBelievers();
 
         //then
         assertThat(result.size(), is(2));
@@ -79,7 +84,7 @@ class BelieverServiceTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(believerRepository.findAllByActiveAndBelieverNameContains(eq("99999999999999"), anyString())).willReturn(fixtureList);
+        given(believerRepository.findAllByBelieverNameContains(anyString())).willReturn(fixtureList);
 
         //when
         List<BelieverDTO> result = believerService.getBelieversByName("testName");
@@ -121,8 +126,15 @@ class BelieverServiceTest {
     void deleteBeliever(){
         //given
         Believer spyBeliever = spy(Believer.class);
+        Family spyFamily1 = spy(Family.class);
+        Family spyFamily2 = spy(Family.class);
+
+        List<Family> fixtureList = new ArrayList<>();
+        fixtureList.add(spyFamily1);
+        fixtureList.add(spyFamily2);
 
         given(believerRepository.findById(anyLong())).willReturn(Optional.of(spyBeliever));
+        given(familyRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
 
         //when
         believerService.deleteBeliever(1);
@@ -130,6 +142,8 @@ class BelieverServiceTest {
         //then
         verify(believerRepository, times(1)).findById(anyLong());
         verify(spyBeliever, times(1)).delete();
+        verify(spyFamily1, times(1)).delete();
+        verify(spyFamily2, times(1)).delete();
     }
 
     @Test

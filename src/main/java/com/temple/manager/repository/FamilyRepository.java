@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface FamilyRepository extends JpaRepository<Family, Long> {
-    @Query("from Family f join fetch f.believer b where f.active = :active and b.believerId = :believerId")
-    List<Family> findAllByActiveAndBeliever_BelieverId(String active, long believerId);
+    @Query("from Family f join fetch f.believer b where b.believerId = :believerId")
+    List<Family> findAllByBeliever_BelieverId(long believerId);
 }

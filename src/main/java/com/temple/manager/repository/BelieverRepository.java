@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BelieverRepository extends JpaRepository<Believer, Long> {
-    List<Believer> findAllByActive(String active);
-
-    List<Believer> findAllByActiveAndBelieverNameContains(String active, String name);
+    List<Believer> findAllByBelieverNameContains(String name);
 }

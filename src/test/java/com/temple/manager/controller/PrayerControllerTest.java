@@ -95,7 +95,7 @@ class PrayerControllerTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(prayerService.getPrayersByActive()).willReturn(fixtureList);
+        given(prayerService.getAllPrayers()).willReturn(fixtureList);
 
         //when, then
         String content = objectMapper.writeValueAsString(fixtureList);

@@ -85,10 +85,10 @@ class PrayerServiceTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(prayerRepository.findAllByActive("99999999999999")).willReturn(fixtureList);
+        given(prayerRepository.findAll()).willReturn(fixtureList);
 
         //when
-        List<PrayerDTO> result = prayerService.getPrayersByActive();
+        List<PrayerDTO> result = prayerService.getAllPrayers();
 
         //then
         assertThat(result.size(), is(2));

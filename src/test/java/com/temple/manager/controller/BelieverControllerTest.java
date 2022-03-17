@@ -82,7 +82,7 @@ class BelieverControllerTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(believerService.getBelieversByActive()).willReturn(fixtureList);
+        given(believerService.getAllBelievers()).willReturn(fixtureList);
 
         //when, then
         String content = objectMapper.writeValueAsString(fixtureList);

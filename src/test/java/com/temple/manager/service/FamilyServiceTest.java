@@ -77,7 +77,7 @@ class FamilyServiceTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(familyRepository.findAllByActiveAndBeliever_BelieverId(eq("99999999999999"), anyLong())).willReturn(fixtureList);
+        given(familyRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
 
         //when
         List<FamilyDTO> result = familyService.getFamiliesByBelieverId(1);

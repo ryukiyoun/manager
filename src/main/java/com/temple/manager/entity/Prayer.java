@@ -2,6 +2,7 @@ package com.temple.manager.entity;
 
 import com.temple.manager.dto.PrayerDTO;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "active=99999999999999")
 public class Prayer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

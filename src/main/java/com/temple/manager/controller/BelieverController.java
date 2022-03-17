@@ -23,7 +23,7 @@ public class BelieverController {
 
     @GetMapping("/believers")
     public ResponseEntity<List<BelieverDTO>> getAllBelievers(){
-        return ResponseEntity.ok(believerService.getBelieversByActive());
+        return ResponseEntity.ok(believerService.getAllBelievers());
     }
 
     @GetMapping("/believers/{name}")

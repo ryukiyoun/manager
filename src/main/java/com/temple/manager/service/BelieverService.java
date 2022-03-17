@@ -2,8 +2,10 @@ package com.temple.manager.service;
 
 import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.entity.Believer;
+import com.temple.manager.entity.Family;
 import com.temple.manager.mapper.BelieverMapper;
 import com.temple.manager.repository.BelieverRepository;
+import com.temple.manager.repository.FamilyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,15 +16,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BelieverService {
     private final BelieverRepository believerRepository;
+    private final FamilyRepository familyRepository;
 
-    public List<BelieverDTO> getBelieversByActive(){
-        List<Believer> believerList = believerRepository.findAllByActive("99999999999999");
+    public List<BelieverDTO> getAllBelievers(){
+        List<Believer> believerList = believerRepository.findAll();
 
         return BelieverMapper.INSTANCE.entityListToDTOList(believerList);
     }
 
     public List<BelieverDTO> getBelieversByName(String name){
-        List<Believer> believerList = believerRepository.findAllByActiveAndBelieverNameContains("99999999999999", name);
+        List<Believer> believerList = believerRepository.findAllByBelieverNameContains(name);
 
         return BelieverMapper.INSTANCE.entityListToDTOList(believerList);
     }
@@ -37,5 +40,10 @@ public class BelieverService {
     public void deleteBeliever(long id){
         Believer believer = believerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Fount Believer"));
         believer.delete();
+
+        List<Family> families = familyRepository.findAllByBeliever_BelieverId(believer.getBelieverId());
+
+        for(Family family : families)
+            family.delete();
     }
 }

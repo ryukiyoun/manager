@@ -16,7 +16,7 @@ public class FamilyService {
     private final FamilyRepository familyRepository;
 
     public List<FamilyDTO> getFamiliesByBelieverId(long believerId){
-        List<Family> familyList = familyRepository.findAllByActiveAndBeliever_BelieverId("99999999999999", believerId);
+        List<Family> familyList = familyRepository.findAllByBeliever_BelieverId(believerId);
 
         return FamilyMapper.INSTANCE.entityListToDTOList(familyList);
     }

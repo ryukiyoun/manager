@@ -1,6 +1,7 @@
 package com.temple.manager.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "99999999999999")
 public class Code {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +33,7 @@ public class Code {
 
     @Column(length = 30)
     private String att3;
+
+    @Column(length = 14)
+    private String active;
 }
