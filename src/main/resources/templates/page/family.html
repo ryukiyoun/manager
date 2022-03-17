@@ -7,14 +7,14 @@
 <th:block layout:fragment="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-8 p-r-0 title-margin-right">
+            <div class="col-lg-8 p-r-0">
                 <div class="page-header">
                     <div class="page-title">
                         <h1>가족정보</h1>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 p-l-0 title-margin-left">
+            <div class="col-lg-4 p-l-0">
                 <div class="page-header">
                     <div class="page-title">
                         <ol class="breadcrumb">
@@ -267,16 +267,18 @@
         let familyTable = $('#familyTB').DataTable(familyAdditionalOption);
 
         believerTable.on('click', 'tbody tr', function () {
-            $('#believer_table_container').addClass('hidden');
-            $('#family_table_container').removeClass('hidden');
+            if(believerTable.row( this ).data() !== undefined) {
+                $('#believer_table_container').addClass('hidden');
+                $('#family_table_container').removeClass('hidden');
 
-            let rowData = believerTable.row(this).data();
+                let rowData = believerTable.row(this).data();
 
-            $('#family_table_container span').text(rowData.believerName);
+                $('#family_table_container span').text(rowData.believerName);
 
-            familyTable.columns.adjust().draw();
+                familyTable.columns.adjust().draw();
 
-            familyTable.ajax.url('/families/' + rowData.believerId).load();
+                familyTable.ajax.url('/families/' + rowData.believerId).load();
+            }
         });
 
         familyTable.on('select', function (e, dt, type, indexes){
