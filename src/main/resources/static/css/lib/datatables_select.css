@@ -1,3 +1,12 @@
+.dataTables_scroll {
+    overflow-x: auto;
+}
+.dataTables_scroll .dataTables_scrollHead {
+    min-width: 800px;
+}
+.dataTables_scroll .dataTables_scrollBody {
+    min-width: 800px;
+}
 .table.dataTable .selected{
     background-color: #6D85FB !important;
 }
