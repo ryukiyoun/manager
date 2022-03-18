@@ -114,7 +114,7 @@
             });
 
             let expenditureTypeLabel = $('<label/>', {
-                text: '수입종류'
+                text: '지출종류'
             });
 
             let expenditureTypeSelect = $('<select/>', {
