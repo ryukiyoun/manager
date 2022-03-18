@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PrayerRepository extends JpaRepository<Prayer, Long> {
-    @Query("from Prayer p join fetch p.believer join fetch p.code where p.active = :active")
-    List<Prayer> findAllByActive(String active);
+    @Query("from Prayer p join fetch p.believer join fetch p.code")
+    List<Prayer> findAll();
 }
