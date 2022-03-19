@@ -127,8 +127,12 @@
 
             container.append(expenditureTypeFormGroup);
 
+            let cashCardFormGroup = $('<div/>', {
+                class: 'd-flex'
+            });
+
             let expenditureCashAmountFormGroup = $('<div/>', {
-                class: 'form-group'
+                class: 'form-group m-r-10'
             });
 
             let expenditureCashAmountLabel = $('<label/>', {
@@ -138,13 +142,14 @@
             let expenditureCashAmountInput = $('<input/>', {
                 id: this.expenditureCashAmountElId,
                 type: 'text',
+                oninput: 'this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*)\\./g, \'$1\');',
                 class: 'input-default form-control',
             });
 
             expenditureCashAmountFormGroup.append(expenditureCashAmountLabel);
             expenditureCashAmountFormGroup.append(expenditureCashAmountInput);
 
-            container.append(expenditureCashAmountFormGroup);
+            cashCardFormGroup.append(expenditureCashAmountFormGroup);
 
             let expenditureCardAmountFormGroup = $('<div/>', {
                 class: 'form-group'
@@ -157,32 +162,40 @@
             let expenditureCardAmountInput = $('<input/>', {
                 id: this.expenditureCardAmountElId,
                 type: 'text',
+                oninput: 'this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*)\\./g, \'$1\');',
                 class: 'input-default form-control',
             });
 
             expenditureCardAmountFormGroup.append(expenditureCardAmountLabel);
             expenditureCardAmountFormGroup.append(expenditureCardAmountInput);
 
-            container.append(expenditureCardAmountFormGroup);
+            cashCardFormGroup.append(expenditureCardAmountFormGroup)
+
+            container.append(cashCardFormGroup);
+
+            let bankBookInstallmentFormGroup = $('<div/>', {
+                class: 'd-flex'
+            });
 
             let expenditureBankBookAmountFormGroup = $('<div/>', {
-                class: 'form-group'
+                class: 'form-group m-r-10'
             });
 
             let expenditureBankBookAmountLabel = $('<label/>', {
-                text: '카드 결제액'
+                text: '통장 결제액'
             });
 
             let expenditureBankBookAmountInput = $('<input/>', {
                 id: this.expenditureBankBookAmountElId,
                 type: 'text',
+                oninput: 'this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*)\\./g, \'$1\');',
                 class: 'input-default form-control',
             });
 
             expenditureBankBookAmountFormGroup.append(expenditureBankBookAmountLabel);
             expenditureBankBookAmountFormGroup.append(expenditureBankBookAmountInput);
 
-            container.append(expenditureBankBookAmountFormGroup);
+            bankBookInstallmentFormGroup.append(expenditureBankBookAmountFormGroup);
 
             let expenditureInstallmentFormGroup = $('<div/>', {
                 class: 'form-group'
@@ -195,13 +208,16 @@
             let expenditureInstallmentInput = $('<input/>', {
                 id: this.expenditureInstallmentElId,
                 type: 'text',
+                oninput: 'this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*)\\./g, \'$1\');',
                 class: 'input-default form-control',
             });
 
             expenditureInstallmentFormGroup.append(expenditureInstallmentLabel);
             expenditureInstallmentFormGroup.append(expenditureInstallmentInput);
 
-            container.append(expenditureInstallmentFormGroup);
+            bankBookInstallmentFormGroup.append(expenditureInstallmentFormGroup);
+
+            container.append(bankBookInstallmentFormGroup);
 
             let expenditureDateFormGroup = $('<div/>', {
                 class: 'form-group'
