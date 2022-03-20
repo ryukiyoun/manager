@@ -188,6 +188,7 @@
             let birthInput = $('<input/>', {
                 id: this.familyBirthElId,
                 type: 'text',
+                oninput: 'this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*)\\./g, \'$1\');',
                 class: 'input-default form-control',
                 maxlength: 6
             });

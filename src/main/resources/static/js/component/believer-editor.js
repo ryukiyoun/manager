@@ -100,7 +100,8 @@
                 id: 'believerEditor_name',
                 type: 'text',
                 class: 'input-default form-control',
-                maxlength: 10
+                maxlength: 10,
+                disabled: 'disabled'
             });
 
             nameFormGroup.append(nameLabel);
@@ -123,8 +124,10 @@
             let birthInput = $('<input/>', {
                 id: 'believerEditor_birth',
                 type: 'text',
+                oninput: 'this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*)\\./g, \'$1\');',
                 class: 'input-default form-control',
-                maxlength: 6
+                maxlength: 6,
+                disabled: 'disabled'
             });
 
             birthGroup.append(birthLabel);

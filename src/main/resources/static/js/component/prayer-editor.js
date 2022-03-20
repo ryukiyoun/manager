@@ -31,6 +31,7 @@
 
             this.select2 = $('#' + instance.prayerBelieverNameElId).select2({
                 width: '100%',
+                theme: 'bootstrap4',
                 language: {
                     noResults: function(){
                         return '등록된 신도가 없습니다.';
