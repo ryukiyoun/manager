@@ -3,7 +3,7 @@
 <head>
     <title>기도정보</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet" />
 
     <style>
@@ -15,6 +15,13 @@
 
         .datepicker {
             margin-bottom: 3rem;
+        }
+        .select2-container--bootstrap4 .select2-selection--single{
+            height: 42px !important;
+        }
+        .select2-container--bootstrap4 .select2-results__option--highlighted, .select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
+            color: #fff;
+            background-color: #6D85FB;
         }
     </style>
 </head>
@@ -99,7 +106,7 @@
                     $('#editor_container').addClass('hidden');
                     table.draw();
 
-                    believerEditor.setEmpty();
+                    prayerEditor.setEmpty();
                 }, true);
             }
         });
