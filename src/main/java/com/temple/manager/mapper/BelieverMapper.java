@@ -11,5 +11,9 @@ import java.util.List;
 public interface BelieverMapper {
     BelieverMapper INSTANCE = Mappers.getMapper(BelieverMapper.class);
 
+    BelieverDTO entityToDTO(Believer believer);
+
+    Believer DTOToEntity(BelieverDTO believerDTO);
+
     List<BelieverDTO> entityListToDTOList(List<Believer> entityList);
 }

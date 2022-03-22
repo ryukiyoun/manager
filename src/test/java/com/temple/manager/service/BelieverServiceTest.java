@@ -4,6 +4,8 @@ import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.entity.Believer;
 import com.temple.manager.entity.Family;
 import com.temple.manager.enumable.LunarSolarType;
+import com.temple.manager.mapper.BelieverMapper;
+import com.temple.manager.mapper.BelieverMapperImpl;
 import com.temple.manager.repository.BelieverRepository;
 import com.temple.manager.repository.FamilyRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -32,6 +35,9 @@ class BelieverServiceTest {
 
     @Mock
     FamilyRepository familyRepository;
+
+    @Spy
+    BelieverMapperImpl believerMapper;
 
     @InjectMocks
     BelieverService believerService;
@@ -93,6 +99,40 @@ class BelieverServiceTest {
         assertThat(result.size(), is(2));
         checkEntity(result.get(0), fixture1);
         checkEntity(result.get(0), fixture1);
+    }
+
+    @Test
+    @DisplayName("등록된 신도 중 특정 이름 생년월일로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
+    void getBelieversByNameAndBirthOfYear() {
+        //given
+        given(believerRepository.findAllByBelieverNameAndBirthOfYear(anyString(), anyString())).willReturn(Optional.of(fixture1));
+
+        //when
+        BelieverDTO result = believerService.getBelieverByNameAndBirtOfYear("testName", "testBirthOfYear");
+
+        //then
+        checkEntity(result, fixture1);
+    }
+
+    @Test
+    @DisplayName("신도 추가 테스트")
+    void appendBeliever(){
+        //given
+        BelieverDTO fixtureDTO = BelieverDTO.builder()
+                .believerId(1)
+                .believerName("홍길동")
+                .address("부산시")
+                .birthOfYear("596928")
+                .lunarSolarType(LunarSolarType.LUNAR)
+                .build();
+
+        given(believerRepository.save(any(Believer.class))).willReturn(fixture1);
+
+        //when
+        believerService.appendBeliever(fixtureDTO);
+
+        //then
+        checkEntity(fixtureDTO, fixture1);
     }
 
     @Test

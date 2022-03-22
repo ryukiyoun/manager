@@ -47,7 +47,7 @@ class BelieverControllerTest {
     BelieverDTO fixture1, fixture2;
 
     @BeforeEach
-    void init(){
+    void init() {
         fixture1 = BelieverDTO.builder()
                 .believerId(1)
                 .believerName("홍길동")
@@ -67,7 +67,7 @@ class BelieverControllerTest {
 
     @Test
     @DisplayName("화면 접속 Page 반환 테스트")
-    void accessPage() throws Exception{
+    void accessPage() throws Exception {
         //given, when, then
         mockMvc.perform(get("/believer"))
                 .andExpect(view().name("page/believer"))
@@ -76,7 +76,7 @@ class BelieverControllerTest {
 
     @Test
     @DisplayName("등록된 신도 정보 반환 테스트")
-    void getBelievers() throws Exception{
+    void getBelievers() throws Exception {
         //given
         List<BelieverDTO> fixtureList = new ArrayList<>();
         fixtureList.add(fixture1);
@@ -95,7 +95,7 @@ class BelieverControllerTest {
 
     @Test
     @DisplayName("등록된 신도 이름 Like 검색 정보 반환 테스트")
-    void getBelieversByName() throws Exception{
+    void getBelieversByName() throws Exception {
         //given
         List<BelieverDTO> fixtureList = new ArrayList<>();
         fixtureList.add(fixture1);
@@ -113,8 +113,42 @@ class BelieverControllerTest {
     }
 
     @Test
+    @DisplayName("등록된 신도 이름 생년월일 검색 정보 반환 테스트")
+    void getBelieversByNameAndBirthOfYear() throws Exception {
+        //given
+        given(believerService.getBelieverByNameAndBirtOfYear(anyString(), anyString())).willReturn(fixture1);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixture1);
+
+        mockMvc.perform(get("/believer/search")
+                .with(csrf())
+                .param("believerName", "tester")
+                .param("birthOfYear", "123123"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("신도 추가 테스트")
+    void appendBeliever() throws Exception {
+        //given
+        String content = objectMapper.writeValueAsString(fixture1);
+
+        given(believerService.appendBeliever(any(BelieverDTO.class))).willReturn(fixture1);
+
+        //when, then
+        mockMvc.perform(post("/believer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .with(csrf()))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("특정 신도 수정 테스트")
-    void updateBeliever() throws Exception{
+    void updateBeliever() throws Exception {
         //given
         String content = objectMapper.writeValueAsString(fixture1);
 
@@ -131,7 +165,7 @@ class BelieverControllerTest {
 
     @Test
     @DisplayName("특정 신도 Soft Delete 테스트")
-    void deleteBeliever() throws Exception{
+    void deleteBeliever() throws Exception {
         //given
         doNothing().when(believerService).deleteBeliever(anyLong());
 

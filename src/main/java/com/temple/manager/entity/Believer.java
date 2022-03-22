@@ -4,7 +4,6 @@ import com.temple.manager.converter.AesConverter;
 import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.enumable.LunarSolarType;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -39,6 +38,11 @@ public class Believer {
 
     @Column(nullable = false, length = 14)
     private String active;
+
+    @PrePersist
+    public void prePersist(){
+        this.active = this.active == null ? "99999999999999" : this.active;
+    }
 
     public void update(BelieverDTO believerDTO){
         this.believerName = believerDTO.getBelieverName();
