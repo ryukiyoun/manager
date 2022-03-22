@@ -194,11 +194,11 @@ span.badge {
   margin-right: 3px;
 }
 .customtab2 li a.nav-link.active {
-  background: #1976d2 none repeat scroll 0 0;
+  background: #627cfd none repeat scroll 0 0;
   color: #ffffff;
 }
 .customtab2 li a.nav-link:hover {
-  background: #1976d2 none repeat scroll 0 0;
+  background: #627cfd none repeat scroll 0 0;
   color: #ffffff;
 }
 .modal-dialog {
@@ -214,7 +214,7 @@ span.badge {
   margin-top: 5px;
 }
 .modal-content {
-  border-radius: 3px;
+  border-radius: 1rem;
 }
 .timeline {
   list-style: none;
@@ -892,7 +892,7 @@ a.dt-button.active:not(.disabled) {
   border: 0px;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 /*    Home Chat Widget
 ---------------------------------*/
@@ -4438,6 +4438,9 @@ h6.h1 {
 }
 .flex-1{
   flex: 1;
+}
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+  line-height: calc(1.5em + 1.3rem) !important;
 }
 /*  10 - media screen and (max-width: 320px)
 ---------------------------------------------------------------------- */
