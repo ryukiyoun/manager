@@ -42,7 +42,6 @@ dependencies {
 
 	//Lombok 의존성
 	implementation 'org.projectlombok:lombok:1.18.12'
-	annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
 	//Jasypt 의존성
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:1.17'
@@ -51,7 +50,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java'
 
 	//H2 DB
-	implementation 'com.h2database:h2:2.0.202'
+	implementation 'com.h2database:h2'
 
 	//Jpa 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -59,6 +58,8 @@ dependencies {
 	//Map Struct 의존성 추가
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
 	//QueryDsl 의존성 추가
 	implementation("com.querydsl:querydsl-core")
