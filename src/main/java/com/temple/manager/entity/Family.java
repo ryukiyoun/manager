@@ -48,6 +48,11 @@ public class Family {
     @Column(nullable = false, length = 14)
     private String active;
 
+    @PrePersist
+    public void prePersist(){
+        this.active = this.active == null ? "99999999999999" : this.active;
+    }
+
     public void update(FamilyDTO familyDTO){
         this.familyType = familyDTO.getFamilyType();
         this.etcValue = familyDTO.getEtcValue();

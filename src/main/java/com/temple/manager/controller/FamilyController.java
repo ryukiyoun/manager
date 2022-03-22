@@ -26,6 +26,11 @@ public class FamilyController {
         return ResponseEntity.ok(familyService.getFamiliesByBelieverId(believerId));
     }
 
+    @PostMapping("/family")
+    public ResponseEntity<FamilyDTO> appendFamily(@RequestBody FamilyDTO familyDTO){
+        return ResponseEntity.ok(familyService.appendFamily(familyDTO));
+    }
+
     @PutMapping("/family/{id}")
     public ResponseEntity<String> updateFamily(@PathVariable long id, @RequestBody FamilyDTO familyDTO){
         familyService.updateFamily(id, familyDTO);

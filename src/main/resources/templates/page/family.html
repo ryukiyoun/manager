@@ -193,6 +193,7 @@
 
         let familyAdditionalOption = Object.assign({}, defaultDataTablesOption, {
             select: 'single',
+            scrollY: '450px',
             ajax: {
                 url: '/families/0',
                 type: 'GET',
@@ -209,7 +210,7 @@
                     targets: [0],
                     className: 'dt-head-center dt-body-center',
                     render: function(data){
-                        return paymentTYpeConvert(data);
+                        return familyTypeConvert(data);
                     }
                 },
                 {

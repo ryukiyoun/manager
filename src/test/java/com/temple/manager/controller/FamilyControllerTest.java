@@ -112,6 +112,23 @@ class FamilyControllerTest {
     }
 
     @Test
+    @DisplayName("가족 추가 테스트")
+    void appendBeliever() throws Exception{
+        //given
+        String content = objectMapper.writeValueAsString(fixture1);
+
+        given(familyService.appendFamily(any(FamilyDTO.class))).willReturn(fixture1);
+
+        //when, then
+        mockMvc.perform(post("/family")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                .with(csrf()))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("특정 가족 수정 테스트")
     void updateBeliever() throws Exception{
         //given

@@ -1,5 +1,6 @@
 package com.temple.manager.service;
 
+import com.temple.manager.dto.BelieverDTO;
 import com.temple.manager.dto.FamilyDTO;
 import com.temple.manager.entity.Believer;
 import com.temple.manager.entity.Family;
@@ -22,7 +23,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -86,6 +86,34 @@ class FamilyServiceTest {
         assertThat(result.size(), is(2));
         checkEntity(result.get(0), fixture1);
         checkEntity(result.get(1), fixture2);
+    }
+
+    @Test
+    @DisplayName("가족 추가 테스트")
+    void appendFamily() {
+        //given
+        FamilyDTO fixtureDTO = FamilyDTO.builder()
+                .familyId(1)
+                .familyName("tester1")
+                .familyType(FamilyType.FATHER)
+                .believer(BelieverDTO.builder()
+                        .believerId(1)
+                        .believerName("believer1")
+                        .birthOfYear("111111")
+                        .address("부산")
+                        .build())
+                .lunarSolarType(LunarSolarType.LUNAR)
+                .birthOfYear("111111")
+                .etcValue("etc1")
+                .build();
+
+        given(familyRepository.save(any(Family.class))).willReturn(fixture1);
+
+        //when
+        familyService.appendFamily(fixtureDTO);
+
+        //then
+        checkEntity(fixtureDTO, fixture1);
     }
 
     @Test

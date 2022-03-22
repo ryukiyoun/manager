@@ -22,6 +22,11 @@ public class FamilyService {
     }
 
     @Transactional
+    public FamilyDTO appendFamily(FamilyDTO familyDTO){
+        return FamilyMapper.INSTANCE.entityToDTO(familyRepository.save(FamilyMapper.INSTANCE.DTOToEntity(familyDTO)));
+    }
+
+    @Transactional
     public void updateFamily(long id, FamilyDTO familyDTO){
         Family family = familyRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Family"));
         family.update(familyDTO);

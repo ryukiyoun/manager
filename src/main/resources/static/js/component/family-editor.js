@@ -2,21 +2,23 @@
     let defaults = {
         maxHeight: 680,
         onSaveSuccess: function (element, event) {},
-        onDeleteSuccess: function(element, data) {},
+        onDeleteSuccess: function(element, event) {},
+        onAppendSuccess: function(element, event) {},
     }
 
     function FamilyEditor(element, options)
     {
-        this.familyId       = 0;
+        this.believerId             = 0;
+        this.familyId               = 0;
 
-        this.familyTypeElId = 'familyEditor_familyType';
-        this.familyTypeETCElId = 'familyEditor_familyTypeETC';
-        this.familyNameElId = 'familyEditor_familyName';
-        this.familyBirthElId = 'familyEditor_birth';
-        this.familyLunarSolarElId = 'familyEditor_lunar_solar';
+        this.familyTypeElId         = 'familyEditor_familyType';
+        this.familyTypeETCElId      = 'familyEditor_familyTypeETC';
+        this.familyNameElId         = 'familyEditor_familyName';
+        this.familyBirthElId        = 'familyEditor_birth';
+        this.familyLunarSolarElId   = 'familyEditor_lunar_solar';
 
-        this.element        = element;
-        this.options        = $.extend( true, {}, defaults, options );
+        this.element                = element;
+        this.options                = $.extend( true, {}, defaults, options );
 
         this.load();
     }
@@ -66,12 +68,33 @@
                         }, null);
                 }
             });
+
+            $(instance.element).on('click', '.btn-reset', function () {
+                instance.setEmpty();
+            });
+
+            $(instance.element).on('click', '.btn-append', function () {
+                ajaxPostRequest('/family', JSON.stringify({
+                    believer: { believerId: instance.believerId },
+                    familyType: $('#' + instance.familyTypeElId).val(),
+                    etcValue: $('#' + instance.familyTypeETCElId).val(),
+                    familyName: $('#' + instance.familyNameElId).val(),
+                    birthOfYear: $('#' + instance.familyBirthElId).val(),
+                    lunarSolarType: $('#' + instance.familyLunarSolarElId).val(),
+                }), function (){
+                    //OPTION CALLBACK
+                    if (typeof instance.options.onDeleteSuccess == 'function') {
+                        instance.setEmpty();
+                        instance.options.onAppendSuccess(instance.element, this);
+                    }
+                }, null);
+            });
         },
 
         //Editor Layout Composition
         CompositionLayout: function(instance){
             let buttonGroup = $('<div/>', {
-                class: 'btn-group mb-3 d-flex'
+                class: 'btn-group mb-3 d-flex group-update'
             });
 
             let deleteButton = $('<button/>', {
@@ -99,6 +122,36 @@
             buttonGroup.append(saveButton);
 
             $(instance.element).append(buttonGroup);
+
+            let appendButtonGroup = $('<div/>', {
+                class: 'btn-group mb-3 d-flex group-append hidden'
+            });
+
+            let resetButton = $('<button/>', {
+                class: 'btn btn-default btn-reset',
+                text: '초기화 '
+            });
+
+            let resetIcon = $('<i/>', {
+                class: 'ti-reload'
+            });
+
+            resetButton.append(resetIcon);
+            appendButtonGroup.append(resetButton);
+
+            let appendButton = $('<button/>', {
+                class: 'btn btn-primary btn-append',
+                text: '저장 '
+            });
+
+            let appendIcon = $('<i/>', {
+                class: 'ti-save'
+            });
+
+            appendButton.append(appendIcon);
+            appendButtonGroup.append(appendButton);
+
+            $(instance.element).append(appendButtonGroup);
 
             let container = $('<div/>', {
                 id: 'family_editor_container',
@@ -246,7 +299,23 @@
             $('#family_editor_container select').each(function(index, el){
                 $(el).val('');
             });
-        }
+        },
+
+        showAppend: function(believerId){
+            this.setEmpty();
+
+            this.believerId = believerId;
+
+            $('.group-append').removeClass('hidden');
+            $('.group-update').addClass('hidden');
+        },
+
+        showUpdate: function(){
+            this.setEmpty();
+
+            $('.group-append').addClass('hidden');
+            $('.group-update').removeClass('hidden');
+        },
     };
 
     $.fn.familyEditor = function( options ){
