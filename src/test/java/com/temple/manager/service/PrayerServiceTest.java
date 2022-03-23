@@ -1,13 +1,14 @@
 package com.temple.manager.service;
 
-import com.temple.manager.dto.BelieverDTO;
+import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.dto.CodeDTO;
-import com.temple.manager.dto.PrayerDTO;
-import com.temple.manager.entity.Believer;
+import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.entity.Code;
-import com.temple.manager.entity.Prayer;
+import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.enumable.LunarSolarType;
-import com.temple.manager.repository.PrayerRepository;
+import com.temple.manager.prayer.repository.PrayerRepository;
+import com.temple.manager.prayer.service.PrayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,6 +95,53 @@ class PrayerServiceTest {
         assertThat(result.size(), is(2));
         checkEntity(result.get(0), fixture1);
         checkEntity(result.get(1), fixture2);
+    }
+
+    @Test
+    @DisplayName("등록된 기도 중 특정 신도로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
+    void getPrayersByBelieverId() {
+        //given
+        List<Prayer> fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        given(prayerRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
+
+        //when
+        List<PrayerDTO> result = prayerService.getPrayersByBelieverId(1);
+
+        //then
+        assertThat(result.size(), is(2));
+        checkEntity(result.get(0), fixture1);
+        checkEntity(result.get(1), fixture2);
+    }
+
+    @Test
+    @DisplayName("기도 추가 테스트")
+    void appendPrayer() {
+        //given
+        PrayerDTO fixtureDTO = PrayerDTO.builder()
+                .prayerId(1)
+                .believer(BelieverDTO.builder()
+                        .believerId(1)
+                        .believerName("tester1")
+                        .build())
+                .code(CodeDTO.builder()
+                        .codeId(1)
+                        .codeName("testCode1")
+                        .build())
+                .prayerStartDate(LocalDate.now())
+                .build();
+
+        given(prayerRepository.save(any(Prayer.class))).willReturn(fixture1);
+
+        //when
+        prayerService.appendPrayer(fixtureDTO);
+
+        //then
+        verify(prayerRepository, times(1)).save(any(Prayer.class));
+
+        checkEntity(fixtureDTO, fixture1);
     }
 
     @Test

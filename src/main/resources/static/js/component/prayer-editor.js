@@ -2,18 +2,20 @@
     let defaults = {
         maxHeight: 680,
         onSaveSuccess: function (element, event) {},
-        onDeleteSuccess: function(element, data) {},
+        onDeleteSuccess: function(element, event) {},
+        onAppendSuccess: function(element, event) {},
     }
 
     function PrayerEditor(element, options)
     {
-        this.prayerTypeElId         = 'prayerEditor_prayerType';
-        this.prayerBelieverNameElId = 'prayerEditor_name';
-        this.prayerStartDateElId         = 'prayerEditor_prayerStartDate';
+        this.prayerTypeElId             = 'prayerEditor_prayerType';
+        this.prayerBelieverNameElId     = 'prayerEditor_name';
+        this.prayerStartDateElId        = 'prayerEditor_prayerStartDate';
 
-        this.prayerId       = 0;
-        this.select2        = null;
-        this.datepicker     = null;
+        this.believerId                 = 0
+        this.prayerId                   = 0;
+        this.select2                    = null;
+        this.datepicker                 = null;
 
         this.element        = element;
         this.options        = $.extend( true, {}, defaults, options );
@@ -108,12 +110,30 @@
                         }, null);
                 }
             });
+
+            $(instance.element).on('click', '.btn-reset', function () {
+                instance.setEmpty();
+            });
+
+            $(instance.element).on('click', '.btn-append', function () {
+                ajaxPostRequest('/prayer', JSON.stringify({
+                    believer: { believerId: instance.believerId },
+                    code: { codeId: $('#' + instance.prayerTypeElId).val() },
+                    prayerStartDate: $('#' + instance.prayerStartDateElId).val()
+                }), function (){
+                    //OPTION CALLBACK
+                    if (typeof instance.options.onAppendSuccess == 'function') {
+                        instance.setEmpty();
+                        instance.options.onAppendSuccess(instance.element, this);
+                    }
+                }, null);
+            });
         },
 
         //Editor Layout Composition
         CompositionLayout: function(instance){
-            let buttonGroup = $('<div/>', {
-                class: 'btn-group mb-3 d-flex'
+            let updateButtonGroup = $('<div/>', {
+                class: 'btn-group mb-3 d-flex group-update'
             });
 
             let deleteButton = $('<button/>', {
@@ -126,7 +146,7 @@
             });
 
             deleteButton.append(deleteIcon);
-            buttonGroup.append(deleteButton);
+            updateButtonGroup.append(deleteButton);
 
             let saveButton = $('<button/>', {
                 class: 'btn btn-primary btn-save',
@@ -138,9 +158,39 @@
             });
 
             saveButton.append(saveIcon);
-            buttonGroup.append(saveButton);
+            updateButtonGroup.append(saveButton);
 
-            $(instance.element).append(buttonGroup);
+            $(instance.element).append(updateButtonGroup);
+
+            let appendButtonGroup = $('<div/>', {
+                class: 'btn-group mb-3 d-flex group-append'
+            });
+
+            let resetButton = $('<button/>', {
+                class: 'btn btn-default btn-reset',
+                text: '초기화 '
+            });
+
+            let resetIcon = $('<i/>', {
+                class: 'ti-reload'
+            });
+
+            resetButton.append(resetIcon);
+            appendButtonGroup.append(resetButton);
+
+            let appendButton = $('<button/>', {
+                class: 'btn btn-primary btn-append',
+                text: '저장 '
+            });
+
+            let appendIcon = $('<i/>', {
+                class: 'ti-save'
+            });
+
+            appendButton.append(appendIcon);
+            appendButtonGroup.append(appendButton);
+
+            $(instance.element).append(appendButtonGroup);
 
             let container = $('<div/>', {
                 id: 'prayer_editor_container',
@@ -212,7 +262,7 @@
         loadPrayerType: function(){
             const instance = this;
 
-            ajaxGetRequest('/code/C-1', {}, function(data){
+            ajaxGetRequest('/code/P_PRAYER_TYPE', {}, function(data){
                 $.each(data, function(index, el){
                     $('#' + instance.prayerTypeElId).append(new Option(el.codeName, el.codeId, false, false));
                 });
@@ -235,10 +285,37 @@
         setEmpty: function(){
             this.prayerId = 0;
 
-            $('#' + this.prayerTypeElId).val('');
+            //$('#' + this.prayerTypeElId).val('');
 
-            this.datepicker.datepicker('update', '');
-        }
+            $('#' + this.prayerTypeElId).each(function(index, el){
+                $(el).val($(this).find('option').eq(0).val());
+            });
+
+            this.datepicker.datepicker('update', new Date());
+        },
+
+        showAppend: function(believerId, name, birthOfYear){
+            this.setEmpty();
+
+            this.believerId = believerId;
+
+            let select2Text = name + ' (생년월일: ' + birthOfYear + ')';
+            this.select2.append(new Option(select2Text, believerId, false, true));
+
+            this.select2.prop('disabled', true);
+
+            $('.group-append').removeClass('hidden');
+            $('.group-update').addClass('hidden');
+        },
+
+        showUpdate: function(){
+            this.setEmpty();
+
+            this.select2.prop('disabled', false);
+
+            $('.group-append').addClass('hidden');
+            $('.group-update').removeClass('hidden');
+        },
     };
 
     $.fn.prayerEditor = function( options ){

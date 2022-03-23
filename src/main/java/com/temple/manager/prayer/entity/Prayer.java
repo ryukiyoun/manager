@@ -1,6 +1,8 @@
-package com.temple.manager.entity;
+package com.temple.manager.prayer.entity;
 
-import com.temple.manager.dto.PrayerDTO;
+import com.temple.manager.believer.entity.Believer;
+import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.entity.Code;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
@@ -33,6 +35,11 @@ public class Prayer {
 
     @Column(nullable = false, length = 14)
     String active;
+
+    @PrePersist
+    public void prePersist(){
+        this.active = this.active == null ? "99999999999999" : this.active;
+    }
 
     public void update(PrayerDTO prayerDTO){
         this.prayerStartDate = prayerDTO.getPrayerStartDate();

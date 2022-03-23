@@ -3,10 +3,11 @@ package com.temple.manager.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
-import com.temple.manager.dto.BelieverDTO;
+import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.dto.CodeDTO;
-import com.temple.manager.dto.PrayerDTO;
-import com.temple.manager.service.PrayerService;
+import com.temple.manager.prayer.controller.PrayerController;
+import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.prayer.service.PrayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,6 +102,41 @@ class PrayerControllerTest {
         String content = objectMapper.writeValueAsString(fixtureList);
 
         mockMvc.perform(get("/prayers"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("등록된 가족 신도ID 검색 정보 반환 테스트")
+    void getPrayersByBelieverId() throws Exception {
+        //given
+        List<PrayerDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        given(prayerService.getPrayersByBelieverId(anyLong())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/prayers/1"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("기도 추가 테스트")
+    void appendPrayer() throws Exception{
+        //given
+        String content = objectMapper.writeValueAsString(fixture1);
+
+        given(prayerService.appendPrayer(any(PrayerDTO.class))).willReturn(fixture1);
+
+        //when, then
+        mockMvc.perform(post("/prayer")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
                 .andExpect(content().json(content))
                 .andDo(print());
     }
