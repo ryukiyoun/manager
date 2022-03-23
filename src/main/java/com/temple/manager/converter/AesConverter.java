@@ -17,7 +17,7 @@ public class AesConverter implements AttributeConverter<String, String> {
             return aesUtil.encrypt(attribute);
         }
         catch (Exception e){
-            throw new RuntimeException("Convert Error Entity To DataBase");
+            throw new RuntimeException("Convert Error Entity To DataBase", e);
         }
     }
 
@@ -27,7 +27,7 @@ public class AesConverter implements AttributeConverter<String, String> {
             return aesUtil.decrypt(dbData);
         }
         catch (Exception e){
-            throw new RuntimeException("Convert Error DataBase To Entity");
+            throw new RuntimeException("Convert Error DataBase To Entity", e);
         }
     }
 }
