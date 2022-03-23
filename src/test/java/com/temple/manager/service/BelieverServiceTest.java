@@ -2,10 +2,11 @@ package com.temple.manager.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.believer.entity.Believer;
+import com.temple.manager.believer.mapper.BelieverMapper;
 import com.temple.manager.believer.repository.BelieverRepository;
 import com.temple.manager.believer.service.BelieverService;
-import com.temple.manager.family.entity.Family;
 import com.temple.manager.enumable.LunarSolarType;
+import com.temple.manager.family.entity.Family;
 import com.temple.manager.family.repository.FamilyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,10 +35,19 @@ class BelieverServiceTest {
     @Mock
     FamilyRepository familyRepository;
 
+    @Mock
+    BelieverMapper believerMapper;
+
     @InjectMocks
     BelieverService believerService;
 
     Believer fixture1, fixture2;
+
+    BelieverDTO fixtureDTO1, fixtureDTO2;
+
+    List<Believer> fixtureList;
+
+    List<BelieverDTO> fixtureDTOList;
 
     @BeforeEach
     void init(){
@@ -56,64 +66,12 @@ class BelieverServiceTest {
                 .birthOfYear("598274")
                 .lunarSolarType(LunarSolarType.SOLAR)
                 .build();
-    }
 
-    @Test
-    @DisplayName("등록된 모든 신도 조회 후 Entity에서 DTO 타입으로 변경 테스트")
-    void getBelievers() {
-        //given
-        List<Believer> fixtureList = new ArrayList<>();
+        fixtureList = new ArrayList<>();
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(believerRepository.findAll()).willReturn(fixtureList);
-
-        //when
-        List<BelieverDTO> result = believerService.getAllBelievers();
-
-        //then
-        assertThat(result.size(), is(2));
-        checkEntity(result.get(0), fixture1);
-        checkEntity(result.get(0), fixture1);
-    }
-
-    @Test
-    @DisplayName("등록된 신도 중 특정 이름으로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
-    void getBelieversByName() {
-        //given
-        List<Believer> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
-
-        given(believerRepository.findAllByBelieverNameContains(anyString())).willReturn(fixtureList);
-
-        //when
-        List<BelieverDTO> result = believerService.getBelieversByName("testName");
-
-        //then
-        assertThat(result.size(), is(2));
-        checkEntity(result.get(0), fixture1);
-        checkEntity(result.get(0), fixture1);
-    }
-
-    @Test
-    @DisplayName("등록된 신도 중 특정 이름 생년월일로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
-    void getBelieversByNameAndBirthOfYear() {
-        //given
-        given(believerRepository.findAllByBelieverNameAndBirthOfYear(anyString(), anyString())).willReturn(Optional.of(fixture1));
-
-        //when
-        BelieverDTO result = believerService.getBelieverByNameAndBirtOfYear("testName", "testBirthOfYear");
-
-        //then
-        checkEntity(result, fixture1);
-    }
-
-    @Test
-    @DisplayName("신도 추가 테스트")
-    void appendBeliever(){
-        //given
-        BelieverDTO fixtureDTO = BelieverDTO.builder()
+        fixtureDTO1 = BelieverDTO.builder()
                 .believerId(1)
                 .believerName("홍길동")
                 .address("부산시")
@@ -121,13 +79,78 @@ class BelieverServiceTest {
                 .lunarSolarType(LunarSolarType.LUNAR)
                 .build();
 
-        given(believerRepository.save(any(Believer.class))).willReturn(fixture1);
+        fixtureDTO2 = BelieverDTO.builder()
+                .believerId(2)
+                .believerName("홍길순")
+                .address("서울시")
+                .birthOfYear("598274")
+                .lunarSolarType(LunarSolarType.SOLAR)
+                .build();
+
+        fixtureDTOList = new ArrayList<>();
+        fixtureDTOList.add(fixtureDTO1);
+        fixtureDTOList.add(fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("등록된 모든 신도 조회 후 Entity에서 DTO 타입으로 변경 테스트")
+    void getBelievers() {
+        //given
+        given(believerRepository.findAll()).willReturn(fixtureList);
+        given(believerMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
 
         //when
-        believerService.appendBeliever(fixtureDTO);
+        List<BelieverDTO> result = believerService.getAllBelievers();
 
         //then
-        checkEntity(fixtureDTO, fixture1);
+        assertThat(result.size(), is(2));
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("등록된 신도 중 특정 이름으로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
+    void getBelieversByName() {
+        //given
+        given(believerRepository.findAllByBelieverNameContains(anyString())).willReturn(fixtureList);
+        given(believerMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
+
+        //when
+        List<BelieverDTO> result = believerService.getBelieversByName("testName");
+
+        //then
+        assertThat(result.size(), is(2));
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("등록된 신도 중 특정 이름 생년월일로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
+    void getBelieversByNameAndBirthOfYear() {
+        //given
+        given(believerRepository.findAllByBelieverNameAndBirthOfYear(anyString(), anyString())).willReturn(Optional.of(fixture1));
+        given(believerMapper.entityToDTO(any(Believer.class))).willReturn(fixtureDTO1);
+
+        //when
+        BelieverDTO result = believerService.getBelieverByNameAndBirtOfYear("testName", "testBirthOfYear");
+
+        //then
+        checkEntity(result, fixtureDTO1);
+    }
+
+    @Test
+    @DisplayName("신도 추가 테스트")
+    void appendBeliever(){
+        //given
+        given(believerRepository.save(any(Believer.class))).willReturn(fixture1);
+        given(believerMapper.DTOToEntity(any(BelieverDTO.class))).willReturn(fixture1);
+        given(believerMapper.entityToDTO(any(Believer.class))).willReturn(fixtureDTO1);
+
+        //when
+        BelieverDTO result = believerService.appendBeliever(fixtureDTO1);
+
+        //then
+        checkEntity(result, fixtureDTO1);
     }
 
     @Test
@@ -191,11 +214,11 @@ class BelieverServiceTest {
         assertThrows(RuntimeException.class, () ->believerService.deleteBeliever(1));
     }
 
-    void checkEntity(BelieverDTO resultDTO, Believer fixtureEntity){
-        assertThat(resultDTO.getBelieverId(), is(fixtureEntity.getBelieverId()));
-        assertThat(resultDTO.getAddress(), is(fixtureEntity.getAddress()));
-        assertThat(resultDTO.getBelieverName(), is(fixtureEntity.getBelieverName()));
-        assertThat(resultDTO.getBirthOfYear(), is(fixtureEntity.getBirthOfYear()));
-        assertThat(resultDTO.getLunarSolarType(), is(fixtureEntity.getLunarSolarType()));
+    void checkEntity(BelieverDTO resultDTO, BelieverDTO compareDTO){
+        assertThat(resultDTO.getBelieverId(), is(compareDTO.getBelieverId()));
+        assertThat(resultDTO.getAddress(), is(compareDTO.getAddress()));
+        assertThat(resultDTO.getBelieverName(), is(compareDTO.getBelieverName()));
+        assertThat(resultDTO.getBirthOfYear(), is(compareDTO.getBirthOfYear()));
+        assertThat(resultDTO.getLunarSolarType(), is(compareDTO.getLunarSolarType()));
     }
 }

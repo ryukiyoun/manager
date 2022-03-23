@@ -17,27 +17,28 @@ import java.util.List;
 public class BelieverService {
     private final BelieverRepository believerRepository;
     private final FamilyRepository familyRepository;
+    private final BelieverMapper believerMapper;
 
     public List<BelieverDTO> getAllBelievers() {
         List<Believer> believerList = believerRepository.findAll();
 
-        return BelieverMapper.INSTANCE.entityListToDTOList(believerList);
+        return believerMapper.entityListToDTOList(believerList);
     }
 
     public List<BelieverDTO> getBelieversByName(String name) {
         List<Believer> believerList = believerRepository.findAllByBelieverNameContains(name);
 
-        return BelieverMapper.INSTANCE.entityListToDTOList(believerList);
+        return believerMapper.entityListToDTOList(believerList);
     }
 
     public BelieverDTO getBelieverByNameAndBirtOfYear(String believerName, String birthOfYear) {
         Believer believer = believerRepository.findAllByBelieverNameAndBirthOfYear(believerName, birthOfYear).orElse(Believer.builder().build());
-        return BelieverMapper.INSTANCE.entityToDTO(believer);
+        return believerMapper.entityToDTO(believer);
     }
 
     @Transactional
     public BelieverDTO appendBeliever(BelieverDTO believerDTO) {
-        return BelieverMapper.INSTANCE.entityToDTO(believerRepository.save(BelieverMapper.INSTANCE.DTOToEntity(believerDTO)));
+        return believerMapper.entityToDTO(believerRepository.save(believerMapper.DTOToEntity(believerDTO)));
     }
 
     @Transactional
