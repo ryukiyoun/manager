@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
 import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.dto.CodeDTO;
+import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.expenditure.controller.ExpenditureController;
 import com.temple.manager.expenditure.dto.ExpenditureDTO;
 import com.temple.manager.enumable.PaymentType;

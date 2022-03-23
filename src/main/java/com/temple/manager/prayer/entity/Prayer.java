@@ -2,7 +2,7 @@ package com.temple.manager.prayer.entity;
 
 import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.prayer.dto.PrayerDTO;
-import com.temple.manager.entity.Code;
+import com.temple.manager.code.entity.Code;
 import lombok.*;
 import org.hibernate.annotations.Where;
 

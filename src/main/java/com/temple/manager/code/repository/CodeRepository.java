@@ -1,6 +1,6 @@
-package com.temple.manager.repository;
+package com.temple.manager.code.repository;
 
-import com.temple.manager.entity.Code;
+import com.temple.manager.code.entity.Code;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

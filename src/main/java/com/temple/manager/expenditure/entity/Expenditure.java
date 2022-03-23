@@ -1,7 +1,7 @@
 package com.temple.manager.expenditure.entity;
 
 import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.entity.Code;
+import com.temple.manager.code.entity.Code;
 import com.temple.manager.expenditure.dto.ExpenditureDTO;
 import com.temple.manager.enumable.PaymentType;
 import lombok.*;

@@ -1,9 +1,9 @@
-package com.temple.manager.service;
+package com.temple.manager.code.service;
 
-import com.temple.manager.dto.CodeDTO;
-import com.temple.manager.entity.Code;
-import com.temple.manager.mapper.CodeMapper;
-import com.temple.manager.repository.CodeRepository;
+import com.temple.manager.code.dto.CodeDTO;
+import com.temple.manager.code.entity.Code;
+import com.temple.manager.code.mapper.CodeMapper;
+import com.temple.manager.code.repository.CodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

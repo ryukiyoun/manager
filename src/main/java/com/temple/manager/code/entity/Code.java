@@ -1,4 +1,4 @@
-package com.temple.manager.entity;
+package com.temple.manager.code.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Where;

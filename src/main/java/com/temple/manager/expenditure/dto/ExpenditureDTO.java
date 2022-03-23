@@ -1,7 +1,7 @@
 package com.temple.manager.expenditure.dto;
 
 import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.dto.CodeDTO;
+import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.enumable.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

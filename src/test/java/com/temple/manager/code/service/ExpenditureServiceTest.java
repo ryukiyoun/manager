@@ -1,10 +1,10 @@
-package com.temple.manager.service;
+package com.temple.manager.code.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.dto.CodeDTO;
+import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.expenditure.dto.ExpenditureDTO;
 import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.entity.Code;
+import com.temple.manager.code.entity.Code;
 import com.temple.manager.expenditure.entity.Expenditure;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.expenditure.repository.ExpenditureRepository;

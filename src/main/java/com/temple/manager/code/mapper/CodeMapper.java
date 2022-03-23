@@ -1,7 +1,7 @@
-package com.temple.manager.mapper;
+package com.temple.manager.code.mapper;
 
-import com.temple.manager.dto.CodeDTO;
-import com.temple.manager.entity.Code;
+import com.temple.manager.code.dto.CodeDTO;
+import com.temple.manager.code.entity.Code;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

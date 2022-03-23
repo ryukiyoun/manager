@@ -1,4 +1,4 @@
-package com.temple.manager.dto;
+package com.temple.manager.code.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

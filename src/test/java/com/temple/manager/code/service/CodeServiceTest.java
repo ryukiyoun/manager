@@ -1,8 +1,8 @@
-package com.temple.manager.service;
+package com.temple.manager.code.service;
 
-import com.temple.manager.dto.CodeDTO;
-import com.temple.manager.entity.Code;
-import com.temple.manager.repository.CodeRepository;
+import com.temple.manager.code.dto.CodeDTO;
+import com.temple.manager.code.entity.Code;
+import com.temple.manager.code.repository.CodeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

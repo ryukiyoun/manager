@@ -1,4 +1,4 @@
-package com.temple.manager.service;
+package com.temple.manager.code.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.family.dto.FamilyDTO;

@@ -1,10 +1,10 @@
-package com.temple.manager.service;
+package com.temple.manager.code.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.dto.CodeDTO;
+import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.prayer.dto.PrayerDTO;
 import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.entity.Code;
+import com.temple.manager.code.entity.Code;
 import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.prayer.repository.PrayerRepository;
