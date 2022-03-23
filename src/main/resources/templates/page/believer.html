@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" data-layout-decorate="~{default-layout}">
 <head>
     <title>신도정보</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.css"/>
 </head>
 
 <th:block layout:fragment="content">
@@ -63,6 +64,9 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" src="/static/js/component/believer-editor.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js"></script>
 
     <script type="text/javascript" src="/static/js/util/datatables-util.js"></script>
     <script type="text/javascript" src="/static/js/util/type-util.js"></script>
@@ -143,5 +147,24 @@
                 believerEditor.setEmpty();
             }
         });
+
+        $.contextMenu({
+            selector: 'tr',
+            trigger: 'right',
+            callback: function(key, options) {
+                var row = table.row(options.$trigger)
+                switch (key) {
+                    case 'edit' :
+                        let data = row.data();
+                        location.href = '/registration?believerName=' + data.believerName + '&' + 'birthOfYear=' + data.birthOfYear
+                        break;
+                    default :
+                        break
+                }
+            },
+            items: {
+                edit: {name: "등록화면으로..", icon: "edit"},
+            }
+        })
     </script>
 </th:block>
