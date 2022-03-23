@@ -1,4 +1,4 @@
-package com.temple.manager.code.service;
+package com.temple.manager.service;
 
 import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.code.entity.Code;

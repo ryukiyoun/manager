@@ -1,7 +1,7 @@
 package com.temple.manager.code.controller;
 
 import com.temple.manager.code.dto.CodeDTO;
-import com.temple.manager.code.service.CodeService;
+import com.temple.manager.service.CodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.temple.manager.code.service;
+package com.temple.manager.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.believer.entity.Believer;
