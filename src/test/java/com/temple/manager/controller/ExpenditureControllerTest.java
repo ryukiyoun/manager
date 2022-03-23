@@ -3,11 +3,12 @@ package com.temple.manager.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
-import com.temple.manager.dto.BelieverDTO;
+import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.dto.CodeDTO;
-import com.temple.manager.dto.ExpenditureDTO;
+import com.temple.manager.expenditure.controller.ExpenditureController;
+import com.temple.manager.expenditure.dto.ExpenditureDTO;
 import com.temple.manager.enumable.PaymentType;
-import com.temple.manager.service.ExpenditureService;
+import com.temple.manager.expenditure.service.ExpenditureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,12 +95,47 @@ class ExpenditureControllerTest {
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(expenditureService.getAllExpenditure()).willReturn(fixtureList);
+        given(expenditureService.getAllExpenditures()).willReturn(fixtureList);
 
         //when, then
         String content = objectMapper.writeValueAsString(fixtureList);
 
         mockMvc.perform(get("/expenditures"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("등록된 지출 신도ID 검색 정보 반환 테스트")
+    void getExpenditureByBelieverId() throws Exception{
+        //given
+        List<ExpenditureDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        given(expenditureService.getExpendituresByBelieverId(anyLong())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/expenditures/1"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("지출 추가 테스트")
+    void appendExpenditure() throws Exception{
+        //given
+        String content = objectMapper.writeValueAsString(fixture1);
+
+        given(expenditureService.appendExpenditure(any(ExpenditureDTO.class))).willReturn(fixture1);
+
+        //when, then
+        mockMvc.perform(post("/expenditure")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
                 .andExpect(content().json(content))
                 .andDo(print());
     }

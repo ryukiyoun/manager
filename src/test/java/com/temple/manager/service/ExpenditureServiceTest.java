@@ -1,13 +1,14 @@
 package com.temple.manager.service;
 
-import com.temple.manager.dto.BelieverDTO;
+import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.dto.CodeDTO;
-import com.temple.manager.dto.ExpenditureDTO;
-import com.temple.manager.entity.Believer;
+import com.temple.manager.expenditure.dto.ExpenditureDTO;
+import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.entity.Code;
-import com.temple.manager.entity.Expenditure;
+import com.temple.manager.expenditure.entity.Expenditure;
 import com.temple.manager.enumable.PaymentType;
-import com.temple.manager.repository.ExpenditureRepository;
+import com.temple.manager.expenditure.repository.ExpenditureRepository;
+import com.temple.manager.expenditure.service.ExpenditureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,12 +78,58 @@ class ExpenditureServiceTest {
         given(expenditureRepository.findAll()).willReturn(fixtureList);
 
         //when
-        List<ExpenditureDTO> result = expenditureService.getAllExpenditure();
+        List<ExpenditureDTO> result = expenditureService.getAllExpenditures();
 
         //then
         assertThat(result.size(), is(2));
         checkEntity(result.get(0), fixture1);
         checkEntity(result.get(1), fixture2);
+    }
+
+    @Test
+    @DisplayName("등록된 모든 지출 신도ID 조회 후 Entity에서 DTO 타입으로 변경 테스트")
+    void getExpendituresByBelieverId() {
+        //given
+        List<Expenditure> fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        given(expenditureRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
+
+        //when
+        List<ExpenditureDTO> result = expenditureService.getExpendituresByBelieverId(anyLong());
+
+        //then
+        assertThat(result.size(), is(2));
+        checkEntity(result.get(0), fixture1);
+        checkEntity(result.get(1), fixture2);
+    }
+
+    @Test
+    @DisplayName("지출 추가 테스트")
+    void appendExpenditure() {
+        //given
+        ExpenditureDTO fixtureDTO = ExpenditureDTO.builder()
+                .expenditureId(1)
+                .expenditureDate(LocalDate.now())
+                .cashAmount(111)
+                .cardAmount(222)
+                .bankBookAmount(333)
+                .installment(10)
+                .code(CodeDTO.builder().codeId(1).build())
+                .believer(BelieverDTO.builder().believerId(1).build())
+                .paymentType(PaymentType.BELIEVER)
+                .build();
+
+        given(expenditureRepository.save(any(Expenditure.class))).willReturn(fixture1);
+
+        //when
+        expenditureService.appendExpenditure(fixtureDTO);
+
+        //then
+        verify(expenditureRepository, times(1)).save(any(Expenditure.class));
+
+        checkEntity(fixtureDTO, fixture1);
     }
 
     @Test

@@ -1,6 +1,8 @@
-package com.temple.manager.entity;
+package com.temple.manager.expenditure.entity;
 
-import com.temple.manager.dto.ExpenditureDTO;
+import com.temple.manager.believer.entity.Believer;
+import com.temple.manager.entity.Code;
+import com.temple.manager.expenditure.dto.ExpenditureDTO;
 import com.temple.manager.enumable.PaymentType;
 import lombok.*;
 import org.hibernate.annotations.Where;
@@ -46,6 +48,11 @@ public class Expenditure {
 
     @Column(nullable = false)
     String active;
+
+    @PrePersist
+    public void prePersist(){
+        this.active = this.active == null ? "99999999999999" : this.active;
+    }
 
     public void update(ExpenditureDTO expenditureDTO){
         this.code = Code.builder().codeId(expenditureDTO.getCode().getCodeId()).build();
