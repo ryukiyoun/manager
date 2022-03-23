@@ -1,12 +1,13 @@
 package com.temple.manager.service;
 
-import com.temple.manager.dto.BelieverDTO;
-import com.temple.manager.dto.FamilyDTO;
-import com.temple.manager.entity.Believer;
-import com.temple.manager.entity.Family;
+import com.temple.manager.believer.dto.BelieverDTO;
+import com.temple.manager.family.dto.FamilyDTO;
+import com.temple.manager.believer.entity.Believer;
+import com.temple.manager.family.entity.Family;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
-import com.temple.manager.repository.FamilyRepository;
+import com.temple.manager.family.repository.FamilyRepository;
+import com.temple.manager.family.service.FamilyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

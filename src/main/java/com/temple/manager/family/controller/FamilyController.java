@@ -1,7 +1,7 @@
-package com.temple.manager.controller;
+package com.temple.manager.family.controller;
 
-import com.temple.manager.dto.FamilyDTO;
-import com.temple.manager.service.FamilyService;
+import com.temple.manager.family.dto.FamilyDTO;
+import com.temple.manager.family.service.FamilyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

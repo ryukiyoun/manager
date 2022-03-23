@@ -2,10 +2,10 @@ package com.temple.manager.believer.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.entity.Family;
+import com.temple.manager.family.entity.Family;
 import com.temple.manager.believer.mapper.BelieverMapper;
 import com.temple.manager.believer.repository.BelieverRepository;
-import com.temple.manager.repository.FamilyRepository;
+import com.temple.manager.family.repository.FamilyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

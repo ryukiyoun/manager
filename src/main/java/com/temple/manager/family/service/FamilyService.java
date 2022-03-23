@@ -1,9 +1,9 @@
-package com.temple.manager.service;
+package com.temple.manager.family.service;
 
-import com.temple.manager.dto.FamilyDTO;
-import com.temple.manager.entity.Family;
-import com.temple.manager.mapper.FamilyMapper;
-import com.temple.manager.repository.FamilyRepository;
+import com.temple.manager.family.dto.FamilyDTO;
+import com.temple.manager.family.entity.Family;
+import com.temple.manager.family.mapper.FamilyMapper;
+import com.temple.manager.family.repository.FamilyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

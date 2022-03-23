@@ -1,7 +1,7 @@
-package com.temple.manager.mapper;
+package com.temple.manager.family.mapper;
 
-import com.temple.manager.dto.FamilyDTO;
-import com.temple.manager.entity.Family;
+import com.temple.manager.family.dto.FamilyDTO;
+import com.temple.manager.family.entity.Family;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

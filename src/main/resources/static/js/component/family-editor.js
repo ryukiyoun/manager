@@ -83,7 +83,7 @@
                     lunarSolarType: $('#' + instance.familyLunarSolarElId).val(),
                 }), function (){
                     //OPTION CALLBACK
-                    if (typeof instance.options.onDeleteSuccess == 'function') {
+                    if (typeof instance.options.onAppendSuccess == 'function') {
                         instance.setEmpty();
                         instance.options.onAppendSuccess(instance.element, this);
                     }
@@ -297,7 +297,7 @@
             });
 
             $('#family_editor_container select').each(function(index, el){
-                $(el).val('');
+                $(el).val($(this).find('option').eq(0).val());
             });
         },
 

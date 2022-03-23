@@ -1,6 +1,6 @@
-package com.temple.manager.repository;
+package com.temple.manager.family.repository;
 
-import com.temple.manager.entity.Family;
+import com.temple.manager.family.entity.Family;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

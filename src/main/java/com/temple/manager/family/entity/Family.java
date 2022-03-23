@@ -1,7 +1,8 @@
-package com.temple.manager.entity;
+package com.temple.manager.family.entity;
 
+import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.converter.AesConverter;
-import com.temple.manager.dto.FamilyDTO;
+import com.temple.manager.family.dto.FamilyDTO;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
 import lombok.*;
