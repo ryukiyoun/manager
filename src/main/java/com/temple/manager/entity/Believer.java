@@ -1,7 +1,7 @@
 package com.temple.manager.entity;
 
 import com.temple.manager.converter.AesConverter;
-import com.temple.manager.dto.BelieverDTO;
+import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.enumable.LunarSolarType;
 import lombok.*;
 import org.hibernate.annotations.Where;
