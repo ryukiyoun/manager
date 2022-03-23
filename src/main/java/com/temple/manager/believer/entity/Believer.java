@@ -1,4 +1,4 @@
-package com.temple.manager.entity;
+package com.temple.manager.believer.entity;
 
 import com.temple.manager.converter.AesConverter;
 import com.temple.manager.believer.dto.BelieverDTO;

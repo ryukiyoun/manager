@@ -1,10 +1,10 @@
-package com.temple.manager.service;
+package com.temple.manager.believer.service;
 
-import com.temple.manager.dto.BelieverDTO;
-import com.temple.manager.entity.Believer;
+import com.temple.manager.believer.dto.BelieverDTO;
+import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.entity.Family;
-import com.temple.manager.mapper.BelieverMapper;
-import com.temple.manager.repository.BelieverRepository;
+import com.temple.manager.believer.mapper.BelieverMapper;
+import com.temple.manager.believer.repository.BelieverRepository;
 import com.temple.manager.repository.FamilyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

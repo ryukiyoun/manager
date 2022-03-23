@@ -1,8 +1,7 @@
-package com.temple.manager.controller;
+package com.temple.manager.believer.controller;
 
-import com.temple.manager.dto.BelieverDTO;
-import com.temple.manager.service.BelieverService;
-import com.temple.manager.util.AesUtil;
+import com.temple.manager.believer.dto.BelieverDTO;
+import com.temple.manager.believer.service.BelieverService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

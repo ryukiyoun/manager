@@ -1,4 +1,4 @@
-package com.temple.manager.dto;
+package com.temple.manager.believer.dto;
 
 import com.temple.manager.enumable.LunarSolarType;
 import lombok.AllArgsConstructor;

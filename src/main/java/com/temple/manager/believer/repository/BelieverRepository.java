@@ -1,6 +1,6 @@
-package com.temple.manager.repository;
+package com.temple.manager.believer.repository;
 
-import com.temple.manager.entity.Believer;
+import com.temple.manager.believer.entity.Believer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.temple.manager.mapper;
+package com.temple.manager.believer.mapper;
 
-import com.temple.manager.dto.BelieverDTO;
-import com.temple.manager.entity.Believer;
+import com.temple.manager.believer.dto.BelieverDTO;
+import com.temple.manager.believer.entity.Believer;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

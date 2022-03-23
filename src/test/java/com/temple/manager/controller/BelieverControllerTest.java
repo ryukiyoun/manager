@@ -1,11 +1,12 @@
 package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.temple.manager.believer.controller.BelieverController;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
-import com.temple.manager.dto.BelieverDTO;
+import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.enumable.LunarSolarType;
-import com.temple.manager.service.BelieverService;
+import com.temple.manager.believer.service.BelieverService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
