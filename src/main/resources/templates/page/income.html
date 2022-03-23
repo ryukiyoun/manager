@@ -172,6 +172,9 @@
             if (type === 'row') {
                 $('#table_container').removeClass('col-12').addClass('col-9');
                 $('#editor_container').removeClass('hidden');
+
+                incomeEditor.showUpdate();
+
                 table.draw(false);
 
                 incomeEditor.setValues(table.rows(indexes).data()[0]);

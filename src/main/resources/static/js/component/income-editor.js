@@ -2,23 +2,25 @@
     let defaults = {
         maxHeight: 680,
         onSaveSuccess: function (element, event) {},
-        onDeleteSuccess: function(element, data) {},
+        onDeleteSuccess: function(element, event) {},
+        onAppendSuccess: function(element, event) {},
     }
 
     function IncomeEditor(element, options)
     {
-        this.incomeDateElId = 'incomeEditor_incomeDate'
-        this.incomeTypeElId = 'incomeEditor_incomeType'
-        this.incomeCashAmountElId = 'incomeEditor_CashAmount'
-        this.incomeCardAmountElId = 'incomeEditor_CardAmount'
-        this.incomeBankBookAmountElId = 'incomeEditor_BankBookAmount'
-        this.incomeInstallmentElId = 'incomeEditor_Installment'
+        this.incomeDateElId             = 'incomeEditor_incomeDate'
+        this.incomeTypeElId             = 'incomeEditor_incomeType'
+        this.incomeCashAmountElId       = 'incomeEditor_CashAmount'
+        this.incomeCardAmountElId       = 'incomeEditor_CardAmount'
+        this.incomeBankBookAmountElId   = 'incomeEditor_BankBookAmount'
+        this.incomeInstallmentElId      = 'incomeEditor_Installment'
 
-        this.incomeId       = 0;
-        this.datepicker     = null;
+        this.believerId                 = 0;
+        this.incomeId                   = 0;
+        this.datepicker                 = null;
 
-        this.element        = element;
-        this.options        = $.extend( true, {}, defaults, options );
+        this.element                    = element;
+        this.options                    = $.extend( true, {}, defaults, options );
 
         this.load();
     }
@@ -69,12 +71,35 @@
                         }, null);
                 }
             });
+
+            $(instance.element).on('click', '.btn-reset', function () {
+                instance.setEmpty();
+            });
+
+            $(instance.element).on('click', '.btn-append', function () {
+                ajaxPostRequest('/income', JSON.stringify({
+                    believer: { believerId: instance.believerId },
+                    code: {codeId: $('#' + instance.incomeTypeElId).val() },
+                    cashAmount: $('#' + instance.incomeCashAmountElId).val(),
+                    cardAmount: $('#' + instance.incomeCardAmountElId).val(),
+                    bankBookAmount: $('#' + instance.incomeBankBookAmountElId).val(),
+                    installment: $('#' + instance.incomeInstallmentElId).val(),
+                    incomeDate: $('#' + instance.incomeDateElId).val(),
+                    paymentType: 'BELIEVER'
+                }), function (){
+                    //OPTION CALLBACK
+                    if (typeof instance.options.onAppendSuccess == 'function') {
+                        instance.setEmpty();
+                        instance.options.onAppendSuccess(instance.element, this);
+                    }
+                }, null);
+            });
         },
 
         //Editor Layout Composition
         CompositionLayout: function(instance){
             let buttonGroup = $('<div/>', {
-                class: 'btn-group mb-3 d-flex'
+                class: 'btn-group mb-3 d-flex group-update'
             });
 
             let deleteButton = $('<button/>', {
@@ -102,6 +127,36 @@
             buttonGroup.append(saveButton);
 
             $(instance.element).append(buttonGroup);
+
+            let appendButtonGroup = $('<div/>', {
+                class: 'btn-group mb-3 d-flex group-append'
+            });
+
+            let resetButton = $('<button/>', {
+                class: 'btn btn-default btn-reset',
+                text: '초기화 '
+            });
+
+            let resetIcon = $('<i/>', {
+                class: 'ti-reload'
+            });
+
+            resetButton.append(resetIcon);
+            appendButtonGroup.append(resetButton);
+
+            let appendButton = $('<button/>', {
+                class: 'btn btn-primary btn-append',
+                text: '저장 '
+            });
+
+            let appendIcon = $('<i/>', {
+                class: 'ti-save'
+            });
+
+            appendButton.append(appendIcon);
+            appendButtonGroup.append(appendButton);
+
+            $(instance.element).append(appendButtonGroup);
 
             let container = $('<div/>', {
                 id: 'income_editor_container',
@@ -247,7 +302,7 @@
         loadIncomeType: function(){
             const instance = this;
 
-            ajaxGetRequest('/code/C-1', {}, function(data){
+            ajaxGetRequest('/code/P_INCOME_TYPE', {}, function(data){
                 $.each(data, function(index, el){
                     $('#' + instance.incomeTypeElId).append(new Option(el.codeName, el.codeId, false, false));
                 });
@@ -274,15 +329,31 @@
             this.incomeId = 0;
 
             $('#income_editor_container select').each(function(index, el){
-                $(el).val('');
+                $(el).val($(this).find('option').eq(0).val());
             });
 
             $('#income_editor_container input.form-control').each(function(index, el){
                 $(el).val('');
             });
 
-            this.datepicker.datepicker('update', '');
-        }
+            this.datepicker.datepicker('update', new Date());
+        },
+
+        showAppend: function(believerId){
+            this.setEmpty();
+
+            this.believerId = believerId;
+
+            $('.group-append').removeClass('hidden');
+            $('.group-update').addClass('hidden');
+        },
+
+        showUpdate: function(){
+            this.setEmpty();
+
+            $('.group-append').addClass('hidden');
+            $('.group-update').removeClass('hidden');
+        },
     };
 
     $.fn.incomeEditor = function( options ){
