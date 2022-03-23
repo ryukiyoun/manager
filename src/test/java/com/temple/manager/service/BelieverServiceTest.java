@@ -1,12 +1,11 @@
 package com.temple.manager.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.believer.service.BelieverService;
 import com.temple.manager.believer.entity.Believer;
+import com.temple.manager.believer.repository.BelieverRepository;
+import com.temple.manager.believer.service.BelieverService;
 import com.temple.manager.entity.Family;
 import com.temple.manager.enumable.LunarSolarType;
-import com.temple.manager.mapper.BelieverMapperImpl;
-import com.temple.manager.believer.repository.BelieverRepository;
 import com.temple.manager.repository.FamilyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -35,9 +33,6 @@ class BelieverServiceTest {
 
     @Mock
     FamilyRepository familyRepository;
-
-    @Spy
-    BelieverMapperImpl believerMapper;
 
     @InjectMocks
     BelieverService believerService;
