@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" data-layout-decorate="~{default-layout}">
+<head>
+    <title>신도정보</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+    <style>
+        .datepicker td, .datepicker th {
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 0.85rem;
+        }
+
+        .datepicker {
+            margin-bottom: 3rem;
+        }
+        .select2-container--bootstrap4 .select2-selection--single{
+            height: 42px !important;
+        }
+        .select2-container--bootstrap4 .select2-results__option--highlighted, .select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
+            color: #fff;
+            background-color: #6D85FB;
+        }
+    </style>
+</head>
+
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6 col-sm-7 p-r-0">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>일괄등록</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-sm-5 p-l-0">
+                <div class="page-header">
+                    <div class="page-title">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">Registration</li>
+                            <li class="breadcrumb-item active">등록</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" data-keyboard="false" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">신도</h5>
+                        <p class="m-b-0 m-t-4">기존 또는 신규 신도를 조회합니다.</p>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group col-12">
+                            <label for="searchBelieverName">이름</label>
+                            <input type="text" class="input-default form-control" id="searchBelieverName" maxlength="10"
+                                   th:value="${believerName}">
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="searchBelieverBirth">생년월일</label>
+                            <input type="text" class="input-default form-control" id="searchBelieverBirth"
+                                   maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1')"
+                                   th:value="${birthOfYear}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="history.back()">뒤로가기</button>
+                        <button type="button" class="btn btn-primary" id="searchBelieverBtn">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="main-content" class="hidden">
+            <div class="row">
+                <div id="believer_base_container" class="col-12">
+                    <div class="card">
+                        <div class="row mb-3">
+                            <div class="col-11">
+                                <h6 style="color: #BDBDC7;">
+                                    신도정보
+                                </h6>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn btn-sm btn-primary float-right" id="believerSaveBtn">수정 <i class="ti-save"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-12 col-md-3 mb-0">
+                                <label for="believerName">이름</label>
+                                <input type="text" class="input-default form-control" id="believerName" disabled="disabled">
+                            </div>
+                            <div class="form-group col-12 col-md-3 mb-0">
+                                <label for="believerBirthOfYear">생년월일</label>
+                                <input type="text" class="input-default form-control" id="believerBirthOfYear" disabled="disabled">
+                            </div>
+                            <div class="form-group col-12 col-md-3 mb-0">
+                                <label for="believerLunarSolar">음력/양력</label>
+                                <select type="text" class="input-default form-control" id="believerLunarSolar">
+                                    <option value="LUNAR">음력</option>
+                                    <option value="SOLAR">양력</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-12 col-md-3 mb-0">
+                                <label for="believerAddress">주소</label>
+                                <input type="text" class="input-default form-control" id="believerAddress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="table_container" class="col-12">
+                    <div class="card">
+                        <div class="row mb-3">
+                            <div class="col-11">
+                                <h6 style="color: #BDBDC7;">
+                                    <span id="believerNameSpan">홍길동</span> 신도님의 상세 내역
+                                </h6>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn btn-sm btn-primary float-right" id="appendBtn">추가 <i class="ti-plus"></i></button>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs customtab2" role="tablist" id="infoTab">
+                            <li class="nav-item">
+                                <a class="nav-link active show" data-toggle="tab" data-editor="familyEditor" href="#familyPanel" role="tab" aria-selected="true">
+                                    <span class="hidden-sm-up"><i class="ti-user"></i></span>
+                                    <span class="hidden-xs-down">가족 정보</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-editor="prayerEditor" href="#prayerPanel" role="tab" aria-selected="true">
+                                    <span class="hidden-sm-up"><i class="ti-hand-drag"></i></span>
+                                    <span class="hidden-xs-down">기도 정보</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-editor="incomeEditor" href="#incomePanel" role="tab" aria-selected="true">
+                                    <span class="hidden-sm-up"><i class="ti-stats-up"></i></span>
+                                    <span class="hidden-xs-down">수입 정보</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-editor="expenditureEditor" href="#expenditurePanel" role="tab" aria-selected="true">
+                                    <span class="hidden-sm-up"><i class="ti-stats-down"></i></span>
+                                    <span class="hidden-xs-down">지출 정보</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active show" id="familyPanel" role="tabpanel">
+                                <table id="familyTB" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    <tr class="familyTB filters">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="prayerPanel" role="tabpanel">
+                                <table id="prayerTB" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    <tr class="prayerTB filters">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="incomePanel" role="tabpanel">
+                                <table id="incomeTB" class="table table-striped table-bordered hover" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr class="incomeTB filters">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="expenditurePanel" role="tabpanel">
+                                <table id="expenditureTB" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr class="expenditureTB filters">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="editor_container" class="col-3 hidden">
+                    <div class="card">
+                        <div id="familyEditor" class="hidden editor">
+                        </div>
+                        <div id="prayerEditor" class="hidden editor">
+                        </div>
+                        <div id="incomeEditor" class="hidden editor">
+                        </div>
+                        <div id="expenditureEditor" class="hidden editor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script>
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/component/family-editor.js"></script>
+    <script src="/static/js/component/prayer-editor.js"></script>
+    <script type="text/javascript" src="/static/js/component/income-editor.js"></script>
+    <script type="text/javascript" src="/static/js/component/expenditure-editor.js"></script>
+
+    <script type="text/javascript" src="/static/js/util/datatables-util.js"></script>
+    <script type="text/javascript" src="/static/js/util/type-util.js"></script>
+
+    <script th:inline="javascript">
+        let believerId;
+
+        let familyTable;
+        let familyEditor;
+        let prayerTable;
+        let prayerEditor;
+        let incomeTable;
+        let incomeEditor;
+        let expenditureTable;
+        let expenditureEditor;
+
+        let believerName = [[${believerName}]];
+        let believerBirthOfYear = [[${birthOfYear}]];
+
+        $(function() {
+            if(believerName !== '' && believerBirthOfYear != '')
+                $('#searchBelieverBtn').click();
+            else
+                $('#staticBackdrop').modal('show');
+        });
+
+        $(document).on('click', '#infoTab a', function() {
+            $('#table_container').addClass('col-12').removeClass('col-9');
+            $('#editor_container').addClass('hidden');
+
+            redrawAll();
+            deselectAll();
+        });
+
+        $(document).on('click', '#searchBelieverBtn', function(){
+            ajaxGetRequest('/believer/search', {
+                believerName: $('#searchBelieverName').val(),
+                birthOfYear: $('#searchBelieverBirth').val()
+            }, function(data){
+                if(data.believerId !== 0) {
+                    $('#staticBackdrop').modal('hide');
+                    $('#main-content').removeClass('hidden');
+
+                    setPage(data);
+                }
+                else {
+                    let confirm_result = confirm("신규 신도입니다. 등록하시겠습니까?");
+
+                    if(confirm_result) {
+                        ajaxPostRequest('/believer', JSON.stringify({
+                            believerName: $('#searchBelieverName').val(),
+                            birthOfYear: $('#searchBelieverBirth').val(),
+                            lunarSolarType: 'LUNAR',
+                            address: ''
+                        }), function(data){
+                            $('#staticBackdrop').modal('hide');
+                            $('#main-content').removeClass('hidden');
+
+                            setPage({
+                                believerId: data.believerId,
+                                believerName: data.believerName,
+                                birthOfYear: data.birthOfYear,
+                                lunarSolarType: data.lunarSolarType,
+                                address: data.address
+                            });
+                        }, null)
+                    }
+                }
+            }, null);
+        });
+
+        $(document).on('click', '#believerSaveBtn', function(){
+            ajaxPutRequest('/believer/' + believerId, JSON.stringify({
+                believerId: believerId,
+                believerName: $('#believerName').val(),
+                birthOfYear: $('#believerBirthOfYear').val(),
+                lunarSolarType: $('#believerLunarSolar').val(),
+                address: $('#believerAddress').val()
+            }), null, null);
+        });
+
+        $(document).on('click', '#appendBtn', function(){
+            deselectAll();
+
+            $('#table_container').removeClass('col-12').addClass('col-9');
+            $('#editor_container').removeClass('hidden');
+
+            redrawAll();
+
+            familyEditor.showAppend(believerId);
+            prayerEditor.showAppend(believerId, $('#believerName').val(), $('#believerBirthOfYear').val());
+            incomeEditor.showAppend(believerId);
+            expenditureEditor.showAppend(believerId);
+
+            showEditor($('.customtab2 li a.active').data('editor'));
+        });
+
+        function setPage(believerData) {
+            believerId = believerData.believerId;
+
+            $('#believerNameSpan').text(believerData.believerName);
+
+            $('#believerName').val(believerData.believerName);
+            $('#believerBirthOfYear').val(believerData.birthOfYear);
+            $('#believerLunarSolar').val(believerData.lunarSolarType);
+            $('#believerAddress').val(believerData.address);
+
+            let familyAdditionalOption = Object.assign({}, defaultDataTablesOption, {
+                select: 'single',
+                scrollY: '230px',
+                ajax: {
+                    url: '/families/' + believerData.believerId,
+                    type: 'GET',
+                    dataSrc: ''
+                },
+                columns: [
+                    {data: 'familyType', title: '가족관계', width: '10%'},
+                    {data: 'familyName', title: '이름', width: '20%'},
+                    {data: 'birthOfYear', title: '생년월일', width: '20%'},
+                    {data: 'lunarSolarType', title: '음력/양력', width: '10%'},
+                ],
+                columnDefs: [
+                    {
+                        targets: [0],
+                        className: 'dt-head-center dt-body-center',
+                        render: function (data) {
+                            return familyTypeConvert(data);
+                        }
+                    },
+                    {
+                        targets: [1, 2],
+                        className: 'dt-head-center dt-body-center'
+                    },
+                    {
+                        targets: [3],
+                        className: 'dt-head-center dt-body-center',
+                        render: function (data) {
+                            return lunarSolarConvert(data);
+                        }
+                    }
+                ],
+                initComplete: function () {
+                    let api = this.api();
+
+                    api.columns().eq(0).each(function (colIdx) {
+                        let cell = $('.familyTB.filters th').eq($(api.column(colIdx).header()).index());
+
+                        cell.addClass('p-r-8');
+
+                        let searchInput = $('<input/>', {
+                            type: 'text',
+                            class: 'input-default form-control input-sm',
+                            style: 'padding-right: 0px;',
+                            placeholder: '검색어 입력'
+                        });
+
+                        $(cell).append(searchInput);
+
+                        $('input', $('.familyTB.filters th').eq($(api.column(colIdx).header()).index())).off('keyup change')
+                            .on('keyup change', function (e) {
+                                e.stopPropagation();
+
+                                let regexr = '({search})';
+
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+
+                                familyTable.rows('.selected').deselect();
+                            });
+                    });
+                }
+            });
+
+            familyTable = $('#familyTB').DataTable(familyAdditionalOption);
+
+            familyEditor = $('#familyEditor').familyEditor({
+                onSaveSuccess: function () {
+                    let selectedIndex = familyTable.rows('.selected').indexes()[0];
+                    familyTable.ajax.reload(function () {
+                        familyTable.rows(selectedIndex).select();
+                    }, false);
+                },
+
+                onDeleteSuccess: function () {
+                    familyTable.ajax.reload(function () {
+                        familyTable.rows('.selected').deselect();
+                        $('#table_container').addClass('col-12').removeClass('col-9');
+                        $('#editor_container').addClass('hidden');
+                        familyTable.draw();
+
+                        familyEditor.setEmpty();
+                    }, true);
+                },
+
+                onAppendSuccess: function () {
+                    familyTable.ajax.reload(function () {
+
+                    }, false);
+                },
+            });
+
+            familyTable.on('select', function (e, dt, type, indexes) {
+                $('#table_container').removeClass('col-12').addClass('col-9');
+                $('#editor_container').removeClass('hidden');
+
+                familyEditor.showUpdate();
+
+                showEditor('familyEditor');
+
+                familyTable.columns.adjust().draw();
+
+                familyEditor.setValues(familyTable.rows(indexes).data()[0]);
+            });
+
+            familyTable.on('deselect', function () {
+                $('#table_container').addClass('col-12').removeClass('col-9');
+                $('#editor_container').addClass('hidden');
+
+                redrawAll();
+
+                familyEditor.setEmpty();
+            });
+
+            let prayerAdditionalOption = Object.assign({}, defaultDataTablesOption, {
+                select: 'single',
+                scrollY: '230px',
+                ajax: {
+                    url: '/prayers/' + believerData.believerId,
+                    type: 'GET',
+                    dataSrc: ''
+                },
+                columns: [
+                    {data: 'believer.believerName', title: '신도명', width: '30%'},
+                    {data: 'code.codeName', title: '기도종류', width: '30%'},
+                    {data: 'prayerStartDate', title: '기도시작일', width: '40%'}
+                ],
+                columnDefs: [
+                    {
+                        targets: [0, 1, 2],
+                        className: 'dt-head-center dt-body-center'
+                    }
+                ],
+                initComplete: function () {
+                    let api = this.api();
+
+                    api.columns().eq(0).each(function (colIdx) {
+                        let cell = $('.prayerTB.filters th').eq($(api.column(colIdx).header()).index());
+
+                        cell.addClass('p-r-8');
+
+                        let searchInput = $('<input/>', {
+                            type: 'text',
+                            class: 'input-default form-control input-sm',
+                            style: 'padding-right: 0px;',
+                            placeholder: '검색어 입력'
+                        });
+
+                        $(cell).append(searchInput);
+
+                        $('input', $('.prayerTB.filters th').eq($(api.column(colIdx).header()).index())).off('keyup change')
+                            .on('keyup change', function (e) {
+                                e.stopPropagation();
+
+                                let regexr = '({search})';
+
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+                            });
+                    });
+                }
+            });
+
+            prayerTable = $('#prayerTB').DataTable(prayerAdditionalOption);
+
+            prayerEditor = $('#prayerEditor').prayerEditor({
+                onSaveSuccess: function () {
+                    let selectedIndex = prayerTable.rows('.selected').indexes()[0];
+                    prayerTable.ajax.reload(function () {
+                        prayerTable.rows(selectedIndex).select();
+                    }, false);
+                },
+
+                onDeleteSuccess: function () {
+                    prayerTable.ajax.reload(function () {
+                        prayerTable.rows('.selected').deselect();
+                        $('#table_container').addClass('col-12').removeClass('col-9');
+                        $('#editor_container').addClass('hidden');
+                        prayerTable.draw();
+
+                        believerEditor.setEmpty();
+                    }, true);
+                },
+
+                onAppendSuccess: function () {
+                    prayerTable.ajax.reload(function () {
+
+                    }, false);
+                },
+            });
+
+            prayerTable.on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    $('#table_container').removeClass('col-12').addClass('col-9');
+                    $('#editor_container').removeClass('hidden');
+
+                    prayerEditor.showUpdate();
+
+                    showEditor('prayerEditor');
+                    prayerTable.columns.adjust().draw();
+
+                    prayerEditor.setValues(prayerTable.rows(indexes).data()[0]);
+                }
+            });
+
+            prayerTable.on('deselect', function (e, dt, type) {
+                if (type === 'row') {
+                    $('#table_container').addClass('col-12').removeClass('col-9');
+                    $('#editor_container').addClass('hidden');
+
+                    redrawAll();
+
+                    prayerEditor.setEmpty();
+                }
+            });
+
+            let incomeAdditionalOption = Object.assign({}, defaultDataTablesOption, {
+                select: 'single',
+                scrollY: '230px',
+                ajax: {
+                    url: '/incomes/' + believerData.believerId,
+                    type: 'GET',
+                    dataSrc: ''
+                },
+                columns: [
+                    {data: 'paymentType', title: '수입원', width: '10%'},
+                    {data: 'code.codeName', title: '수입종류', width: '20%'},
+                    {data: 'cashAmount', title: '현금 결제액', width: '10%'},
+                    {data: 'cardAmount', title: '카드 결제액', width: '10%'},
+                    {data: 'bankBookAmount', title: '통장 결제액', width: '10%'},
+                    {data: 'installment', title: '할부개월', width: '10%'},
+                    {data: 'believer.believerName', title: '결제 신도', width: '20%'},
+                    {data: 'incomeDate', title: '결제일', width: '20%'}
+                ],
+                columnDefs: [
+                    {
+                        targets: [0],
+                        className: 'dt-head-center dt-body-center',
+                        render: function (data) {
+                            return paymentTYpeConvert(data);
+                        },
+                    },
+                    {
+                        targets: [1, 6, 7],
+                        className: 'dt-head-center dt-body-center',
+                    },
+                    {
+                        targets: [2, 3, 4],
+                        className: 'dt-head-center dt-body-right',
+                        render: $.fn.dataTable.render.number(',', '.', 0, '', '원'),
+                    },
+                    {
+                        targets: [5],
+                        className: 'dt-head-center dt-body-right',
+                        render: function (data) {
+                            if (data === 0)
+                                return '일시불'
+                            else
+                                return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 개월';
+                        },
+                        createdCell: function (td) {
+                            if ($(td).text() === '일시불')
+                                $(td).css('text-align', 'center');
+                        }
+                    }
+                ],
+                initComplete: function () {
+                    let api = this.api();
+                    api.columns().eq(0).each(function (colIdx) {
+                        let cell = $('.incomeTB.filters th').eq($(api.column(colIdx).header()).index());
+
+                        cell.addClass('p-r-8');
+
+                        let searchInput = $('<input/>', {
+                            type: 'text',
+                            class: 'input-default form-control input-sm',
+                            style: 'padding-right: 0px;',
+                            placeholder: '검색어 입력'
+                        });
+
+                        $(cell).append(searchInput);
+
+                        $('input', $('.incomeTB.filters th').eq($(api.column(colIdx).header()).index())).off('keyup change')
+                            .on('keyup change', function (e) {
+                                e.stopPropagation();
+
+                                let regexr = '({search})';
+
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+
+                            });
+                    });
+                }
+            });
+
+            incomeTable = $('#incomeTB').DataTable(incomeAdditionalOption);
+
+            incomeEditor = $('#incomeEditor').incomeEditor({
+                onSaveSuccess: function () {
+                    let selectedIndex = incomeTable.rows('.selected').indexes()[0];
+                    incomeTable.ajax.reload(function () {
+                        incomeTable.rows(selectedIndex).select();
+                    }, false);
+                },
+
+                onDeleteSuccess: function () {
+                    incomeTable.ajax.reload(function () {
+                        incomeTable.rows('.selected').deselect();
+                        $('#table_container').addClass('col-12').removeClass('col-9');
+                        $('#editor_container').addClass('hidden');
+                        incomeTable.draw();
+
+                        incomeEditor.setEmpty();
+                    }, true);
+                },
+
+                onAppendSuccess: function () {
+                    incomeTable.ajax.reload(function () {
+
+                    }, false);
+                }
+            });
+
+            incomeTable.on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    $('#table_container').removeClass('col-12').addClass('col-9');
+                    $('#editor_container').removeClass('hidden');
+
+                    incomeEditor.showUpdate();
+
+                    showEditor('incomeEditor');
+
+                    incomeTable.columns.adjust().draw();
+
+                    incomeEditor.setValues(incomeTable.rows(indexes).data()[0]);
+                }
+            });
+
+            incomeTable.on('deselect', function (e, dt, type) {
+                if (type === 'row') {
+                    $('#table_container').addClass('col-12').removeClass('col-9');
+                    $('#editor_container').addClass('hidden');
+
+                    redrawAll();
+
+                    incomeEditor.setEmpty();
+                }
+            });
+
+            let expenditureAdditionalOption = Object.assign({}, defaultDataTablesOption, {
+                select: 'single',
+                scrollY: '230px',
+                ajax: {
+                    url: '/expenditures/' + believerData.believerId,
+                    type: 'GET',
+                    dataSrc: ''
+                },
+                columns: [
+                    {data: 'paymentType', title: '지출원', width: '10%'},
+                    {data: 'code.codeName', title: '지출종류', width: '20%'},
+                    {data: 'cashAmount', title: '현금 결제액', width: '10%'},
+                    {data: 'cardAmount', title: '카드 결제액', width: '10%'},
+                    {data: 'bankBookAmount', title: '통장 결제액', width: '10%'},
+                    {data: 'installment', title: '할부개월', width: '10%'},
+                    {data: 'believer.believerName', title: '결제 신도', width: '20%'},
+                    {data: 'expenditureDate', title: '결제일', width: '20%'}
+                ],
+                columnDefs: [
+                    {
+                        targets: [0],
+                        className: 'dt-head-center dt-body-center',
+                        render: function (data) {
+                            return paymentTYpeConvert(data);
+                        }
+                    },
+                    {
+                        targets: [1, 6, 7],
+                        className: 'dt-head-center dt-body-center'
+                    },
+                    {
+                        targets: [2, 3, 4],
+                        className: 'dt-head-center dt-body-right',
+                        render: $.fn.dataTable.render.number(',', '.', 0, '', '원')
+                    },
+                    {
+                        targets: [5],
+                        className: 'dt-head-center dt-body-right',
+                        render: function (data) {
+                            if (data === 0)
+                                return '일시불'
+                            else
+                                return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 개월';
+                        },
+                        createdCell: function (td) {
+                            if ($(td).text() === '일시불')
+                                $(td).css('text-align', 'center');
+                        }
+                    }
+                ],
+                initComplete: function () {
+                    let api = this.api();
+                    api.columns().eq(0).each(function (colIdx) {
+                        let cell = $('.expenditureTB.filters th').eq($(api.column(colIdx).header()).index());
+
+                        cell.addClass('p-r-8');
+
+                        let searchInput = $('<input/>', {
+                            type: 'text',
+                            class: 'input-default form-control input-sm',
+                            style: 'padding-right: 0px;',
+                            placeholder: '검색어 입력'
+                        });
+
+                        $(cell).append(searchInput);
+
+                        $('input', $('.expenditureTB.filters th').eq($(api.column(colIdx).header()).index())).off('keyup change')
+                            .on('keyup change', function (e) {
+                                e.stopPropagation();
+
+                                let regexr = '({search})';
+
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+
+                            });
+                    });
+                }
+            });
+
+            expenditureTable = $('#expenditureTB').DataTable(expenditureAdditionalOption);
+
+            expenditureEditor = $('#expenditureEditor').expenditureEditor({
+                onSaveSuccess: function () {
+                    let selectedIndex = expenditureTable.rows('.selected').indexes()[0];
+                    expenditureTable.ajax.reload(function () {
+                        expenditureTable.rows(selectedIndex).select();
+                    }, false);
+                },
+
+                onDeleteSuccess: function () {
+                    expenditureTable.ajax.reload(function () {
+                        expenditureTable.rows('.selected').deselect();
+                        $('#table_container').addClass('col-12').removeClass('col-9');
+                        $('#editor_container').addClass('hidden');
+                        expenditureTable.draw();
+
+                        expenditureEditor.setEmpty();
+                    }, true);
+                },
+
+                onAppendSuccess: function () {
+                    expenditureTable.ajax.reload(function () {
+
+                    }, false);
+                }
+            });
+
+            expenditureTable.on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    $('#table_container').removeClass('col-12').addClass('col-9');
+                    $('#editor_container').removeClass('hidden');
+
+                    expenditureEditor.showUpdate();
+
+                    showEditor('expenditureEditor');
+
+                    expenditureTable.columns.adjust().draw();
+
+                    expenditureEditor.setValues(expenditureTable.rows(indexes).data()[0]);
+                }
+            });
+
+            expenditureTable.on('deselect', function (e, dt, type) {
+                if (type === 'row') {
+                    $('#table_container').addClass('col-12').removeClass('col-9');
+                    $('#editor_container').addClass('hidden');
+
+                    redrawAll();
+
+                    expenditureEditor.setEmpty();
+                }
+            });
+
+            redrawAll();
+        }
+
+        function redrawAll(){
+            familyTable.columns.adjust().draw();
+            prayerTable.columns.adjust().draw();
+            incomeTable.columns.adjust().draw();
+            expenditureTable.columns.adjust().draw();
+        }
+
+        function deselectAll(){
+            familyTable.rows('.selected').deselect();
+            prayerTable.rows('.selected').deselect();
+            incomeTable.rows('.selected').deselect();
+            expenditureTable.rows('.selected').deselect();
+        }
+
+        function showEditor(editorId){
+            $('#editor_container .card div.editor').each(function(index, el){
+                if($(el).attr('id') !== editorId)
+                    $(el).addClass('hidden');
+                else
+                    $(el).removeClass('hidden');
+            });
+        }
+    </script>
+</th:block>
