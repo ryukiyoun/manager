@@ -14,22 +14,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PrayerService {
     private final PrayerRepository prayerRepository;
+    private final PrayerMapper prayerMapper;
 
     public List<PrayerDTO> getAllPrayers() {
-        List<Prayer> prayerList = prayerRepository.findAll();
-
-        return PrayerMapper.INSTANCE.entityListToDTOList(prayerList);
+        return prayerMapper.entityListToDTOList(prayerRepository.findAll());
     }
 
     public List<PrayerDTO> getPrayersByBelieverId(long believerId) {
-        List<Prayer> prayerList = prayerRepository.findAllByBeliever_BelieverId(believerId);
-
-        return PrayerMapper.INSTANCE.entityListToDTOList(prayerList);
+        return prayerMapper.entityListToDTOList(prayerRepository.findAllByBeliever_BelieverId(believerId));
     }
 
     @Transactional
     public PrayerDTO appendPrayer(PrayerDTO prayerDTO) {
-        return PrayerMapper.INSTANCE.entityToDTO(prayerRepository.save(PrayerMapper.INSTANCE.DTOToEntity(prayerDTO)));
+        return prayerMapper.entityToDTO(prayerRepository.save(prayerMapper.DTOToEntity(prayerDTO)));
     }
 
     @Transactional

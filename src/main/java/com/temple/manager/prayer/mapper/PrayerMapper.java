@@ -8,10 +8,8 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PrayerMapper {
-    PrayerMapper INSTANCE = Mappers.getMapper(PrayerMapper.class);
-
     PrayerDTO entityToDTO(Prayer prayer);
 
     Prayer DTOToEntity(PrayerDTO prayerDTO);

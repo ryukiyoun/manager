@@ -7,6 +7,7 @@ import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.code.entity.Code;
 import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.enumable.LunarSolarType;
+import com.temple.manager.prayer.mapper.PrayerMapper;
 import com.temple.manager.prayer.repository.PrayerRepository;
 import com.temple.manager.prayer.service.PrayerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,10 +35,19 @@ class PrayerServiceTest {
     @Mock
     PrayerRepository prayerRepository;
 
+    @Mock
+    PrayerMapper prayerMapper;
+
     @InjectMocks
     PrayerService prayerService;
 
     Prayer fixture1, fixture2;
+
+    PrayerDTO fixtureDTO1, fixtureDTO2;
+
+    List<Prayer> fixtureList;
+
+    List<PrayerDTO> fixtureDTOList;
 
     @BeforeEach
     void init(){
@@ -76,72 +86,99 @@ class PrayerServiceTest {
                         .parentCodeValue("P-1")
                         .build())
                 .build();
+
+        fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        fixtureDTO1 = PrayerDTO.builder()
+                .prayerId(1)
+                .prayerStartDate(LocalDate.now())
+                .believer(BelieverDTO.builder()
+                        .believerId(1)
+                        .believerName("tester1")
+                        .birthOfYear("120512")
+                        .address("서울시")
+                        .lunarSolarType(LunarSolarType.LUNAR)
+                        .build())
+                .code(CodeDTO.builder()
+                        .codeId(1)
+                        .codeName("testCode1")
+                        .codeValue("C-1")
+                        .parentCodeValue("P-1")
+                        .build())
+                .build();
+
+        fixtureDTO2 = PrayerDTO.builder()
+                .prayerId(1)
+                .prayerStartDate(LocalDate.now())
+                .believer(BelieverDTO.builder()
+                        .believerId(2)
+                        .believerName("tester2")
+                        .birthOfYear("194512")
+                        .address("부산시")
+                        .lunarSolarType(LunarSolarType.SOLAR)
+                        .build())
+                .code(CodeDTO.builder()
+                        .codeId(2)
+                        .codeName("testCode2")
+                        .codeValue("C-2")
+                        .parentCodeValue("P-1")
+                        .build())
+                .build();
+
+        fixtureDTOList = new ArrayList<>();
+        fixtureDTOList.add(fixtureDTO1);
+        fixtureDTOList.add(fixtureDTO2);
     }
 
     @Test
     @DisplayName("등록된 모든 기도 조회 후 Entity에서 DTO 타입으로 변경 테스트")
     void getAllPrayers() {
         //given
-        List<Prayer> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
-
         given(prayerRepository.findAll()).willReturn(fixtureList);
+        given(prayerMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
 
         //when
         List<PrayerDTO> result = prayerService.getAllPrayers();
 
         //then
         assertThat(result.size(), is(2));
-        checkEntity(result.get(0), fixture1);
-        checkEntity(result.get(1), fixture2);
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
     }
 
     @Test
     @DisplayName("등록된 기도 중 특정 신도로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
     void getPrayersByBelieverId() {
         //given
-        List<Prayer> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
-
         given(prayerRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
+        given(prayerMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
 
         //when
         List<PrayerDTO> result = prayerService.getPrayersByBelieverId(1);
 
         //then
         assertThat(result.size(), is(2));
-        checkEntity(result.get(0), fixture1);
-        checkEntity(result.get(1), fixture2);
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
     }
 
     @Test
     @DisplayName("기도 추가 테스트")
     void appendPrayer() {
         //given
-        PrayerDTO fixtureDTO = PrayerDTO.builder()
-                .prayerId(1)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester1")
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode1")
-                        .build())
-                .prayerStartDate(LocalDate.now())
-                .build();
-
         given(prayerRepository.save(any(Prayer.class))).willReturn(fixture1);
+        given(prayerMapper.DTOToEntity(any(PrayerDTO.class))).willReturn(fixture1);
+        given(prayerMapper.entityToDTO(any(Prayer.class))).willReturn(fixtureDTO1);
 
         //when
-        prayerService.appendPrayer(fixtureDTO);
+        PrayerDTO result = prayerService.appendPrayer(fixtureDTO1);
 
         //then
         verify(prayerRepository, times(1)).save(any(Prayer.class));
 
-        checkEntity(fixtureDTO, fixture1);
+        checkEntity(result, fixtureDTO1);
     }
 
     @Test
@@ -213,10 +250,10 @@ class PrayerServiceTest {
         assertThrows(RuntimeException.class, () -> prayerService.deletePrayer(0));
     }
 
-    void checkEntity(PrayerDTO resultDTO, Prayer fixtureEntity){
-        assertThat(resultDTO.getPrayerId(), is(fixtureEntity.getPrayerId()));
-        assertThat(resultDTO.getPrayerStartDate(), is(fixtureEntity.getPrayerStartDate()));
-        assertThat(resultDTO.getBeliever().getBelieverId(), is(fixtureEntity.getBeliever().getBelieverId()));
-        assertThat(resultDTO.getCode().getCodeId(), is(fixtureEntity.getCode().getCodeId()));
+    void checkEntity(PrayerDTO resultDTO, PrayerDTO compareDTO){
+        assertThat(resultDTO.getPrayerId(), is(compareDTO.getPrayerId()));
+        assertThat(resultDTO.getPrayerStartDate(), is(compareDTO.getPrayerStartDate()));
+        assertThat(resultDTO.getBeliever().getBelieverId(), is(compareDTO.getBeliever().getBelieverId()));
+        assertThat(resultDTO.getCode().getCodeId(), is(compareDTO.getCode().getCodeId()));
     }
 }
