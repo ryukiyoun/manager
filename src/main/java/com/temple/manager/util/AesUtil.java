@@ -14,9 +14,9 @@ import java.util.Base64;
 public class AesUtil {
     private static final Charset ENCODING_TYPE = StandardCharsets.UTF_8;
     private static final String INSTANCE_TYPE = "AES/CBC/PKCS5Padding";
-    private SecretKeySpec secretKeySpec;
-    private Cipher cipher;
-    private IvParameterSpec ivParameterSpec;
+    private final SecretKeySpec secretKeySpec;
+    private final Cipher cipher;
+    private final IvParameterSpec ivParameterSpec;
 
     public AesUtil(Environment environment) throws Exception {
         byte[] byteKey = environment.getProperty("aes.encryptor.password").getBytes();
