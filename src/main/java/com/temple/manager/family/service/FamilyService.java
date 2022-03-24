@@ -14,16 +14,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FamilyService {
     private final FamilyRepository familyRepository;
+    private final FamilyMapper familyMapper;
 
     public List<FamilyDTO> getFamiliesByBelieverId(long believerId){
-        List<Family> familyList = familyRepository.findAllByBeliever_BelieverId(believerId);
-
-        return FamilyMapper.INSTANCE.entityListToDTOList(familyList);
+        return familyMapper.entityListToDTOList(familyRepository.findAllByBeliever_BelieverId(believerId));
     }
 
     @Transactional
     public FamilyDTO appendFamily(FamilyDTO familyDTO){
-        return FamilyMapper.INSTANCE.entityToDTO(familyRepository.save(FamilyMapper.INSTANCE.DTOToEntity(familyDTO)));
+        return familyMapper.entityToDTO(familyRepository.save(familyMapper.DTOToEntity(familyDTO)));
     }
 
     @Transactional

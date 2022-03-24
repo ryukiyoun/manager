@@ -6,6 +6,7 @@ import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.family.entity.Family;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
+import com.temple.manager.family.mapper.FamilyMapper;
 import com.temple.manager.family.repository.FamilyRepository;
 import com.temple.manager.family.service.FamilyService;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,10 +33,19 @@ class FamilyServiceTest {
     @Mock
     FamilyRepository familyRepository;
 
+    @Mock
+    FamilyMapper familyMapper;
+
     @InjectMocks
     FamilyService familyService;
 
     Family fixture1, fixture2;
+
+    FamilyDTO fixtureDTO1, fixtureDTO2;
+
+    List<Family> fixtureList;
+
+    List<FamilyDTO> fixtureDTOList;
 
     @BeforeEach
     void init(){
@@ -68,32 +78,12 @@ class FamilyServiceTest {
                 .birthOfYear("222222")
                 .etcValue("etc2")
                 .build();
-    }
 
-    @Test
-    @DisplayName("등록된 모든 가족 조회 후 Entity에서 DTO 타입으로 변경 테스트")
-    void getFamiliesByBelieverId() {
-        //given
-        List<Family> fixtureList = new ArrayList<>();
+        fixtureList = new ArrayList<>();
         fixtureList.add(fixture1);
         fixtureList.add(fixture2);
 
-        given(familyRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
-
-        //when
-        List<FamilyDTO> result = familyService.getFamiliesByBelieverId(1);
-
-        //then
-        assertThat(result.size(), is(2));
-        checkEntity(result.get(0), fixture1);
-        checkEntity(result.get(1), fixture2);
-    }
-
-    @Test
-    @DisplayName("가족 추가 테스트")
-    void appendFamily() {
-        //given
-        FamilyDTO fixtureDTO = FamilyDTO.builder()
+        fixtureDTO1 = FamilyDTO.builder()
                 .familyId(1)
                 .familyName("tester1")
                 .familyType(FamilyType.FATHER)
@@ -108,13 +98,55 @@ class FamilyServiceTest {
                 .etcValue("etc1")
                 .build();
 
-        given(familyRepository.save(any(Family.class))).willReturn(fixture1);
+        fixtureDTO2 = FamilyDTO.builder()
+                .familyId(2)
+                .familyName("tester2")
+                .familyType(FamilyType.MOTHER)
+                .believer(BelieverDTO.builder()
+                        .believerId(1)
+                        .believerName("believer2")
+                        .birthOfYear("222222")
+                        .address("서울")
+                        .build())
+                .lunarSolarType(LunarSolarType.SOLAR)
+                .birthOfYear("222222")
+                .etcValue("etc2")
+                .build();
+
+        fixtureDTOList = new ArrayList<>();
+        fixtureDTOList.add(fixtureDTO1);
+        fixtureDTOList.add(fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("등록된 모든 가족 조회 후 Entity에서 DTO 타입으로 변경 테스트")
+    void getFamiliesByBelieverId() {
+        //given
+        given(familyRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
+        given(familyMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
 
         //when
-        familyService.appendFamily(fixtureDTO);
+        List<FamilyDTO> result = familyService.getFamiliesByBelieverId(1);
 
         //then
-        checkEntity(fixtureDTO, fixture1);
+        assertThat(result.size(), is(2));
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("가족 추가 테스트")
+    void appendFamily() {
+        //given
+        given(familyRepository.save(any(Family.class))).willReturn(fixture1);
+        given(familyMapper.DTOToEntity(any(FamilyDTO.class))).willReturn(fixture1);
+        given(familyMapper.entityToDTO(any(Family.class))).willReturn(fixtureDTO1);
+
+        //when
+        FamilyDTO result = familyService.appendFamily(fixtureDTO1);
+
+        //then
+        checkEntity(result, fixtureDTO1);
     }
 
     @Test
@@ -169,13 +201,13 @@ class FamilyServiceTest {
         assertThrows(RuntimeException.class, () ->familyService.deleteFamily(1));
     }
 
-    void checkEntity(FamilyDTO resultDTO, Family fixtureEntity){
-        assertThat(resultDTO.getFamilyId(), is(fixtureEntity.getFamilyId()));
-        assertThat(resultDTO.getFamilyName(), is(fixtureEntity.getFamilyName()));
-        assertThat(resultDTO.getFamilyType(), is(fixtureEntity.getFamilyType()));
-        assertThat(resultDTO.getLunarSolarType(), is(fixtureEntity.getLunarSolarType()));
-        assertThat(resultDTO.getBirthOfYear(), is(fixtureEntity.getBirthOfYear()));
-        assertThat(resultDTO.getEtcValue(), is(fixtureEntity.getEtcValue()));
-        assertThat(resultDTO.getBeliever().getBelieverId(), is(fixtureEntity.getBeliever().getBelieverId()));
+    void checkEntity(FamilyDTO resultDTO, FamilyDTO compareDTO){
+        assertThat(resultDTO.getFamilyId(), is(compareDTO.getFamilyId()));
+        assertThat(resultDTO.getFamilyName(), is(compareDTO.getFamilyName()));
+        assertThat(resultDTO.getFamilyType(), is(compareDTO.getFamilyType()));
+        assertThat(resultDTO.getLunarSolarType(), is(compareDTO.getLunarSolarType()));
+        assertThat(resultDTO.getBirthOfYear(), is(compareDTO.getBirthOfYear()));
+        assertThat(resultDTO.getEtcValue(), is(compareDTO.getEtcValue()));
+        assertThat(resultDTO.getBeliever().getBelieverId(), is(compareDTO.getBeliever().getBelieverId()));
     }
 }
