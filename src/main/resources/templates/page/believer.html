@@ -3,6 +3,13 @@
 <head>
     <title>신도정보</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.css"/>
+
+    <style>
+        .context-menu-item.context-menu-hover {
+            color: #ffffff;
+            background-color: #627cfc;
+        }
+    </style>
 </head>
 
 <th:block layout:fragment="content">
@@ -60,9 +67,6 @@
     </div>
 </th:block>
 <th:block layout:fragment="script">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" src="/static/js/component/believer-editor.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.js"></script>

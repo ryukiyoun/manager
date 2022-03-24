@@ -26,7 +26,7 @@ table.dataTable tbody tr:hover {
 }
 
 .pagination li {
-    margin-right: 5px;
+    margin-right: 7px;
 }
 
 .pagination a {
@@ -34,7 +34,12 @@ table.dataTable tbody tr:hover {
     color: #333;
     box-shadow: none !important;
 }
-
+.pagination li a{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    padding-top: 12px;
+}
 li.paginate_button.page-item:not(.previous):not(.next) .page-link{
     border-radius: 50%;
 }
