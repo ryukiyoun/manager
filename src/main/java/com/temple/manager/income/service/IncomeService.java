@@ -14,22 +14,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IncomeService {
     private final IncomeRepository incomeRepository;
+    private final IncomeMapper incomeMapper;
 
     public List<IncomeDTO> getAllIncomes() {
         List<Income> incomeList = incomeRepository.findAll();
 
-        return IncomeMapper.INSTANCE.entityListToDTOList(incomeList);
+        return incomeMapper.entityListToDTOList(incomeList);
     }
 
     public List<IncomeDTO> getIncomesByBelieverId(long believerId) {
         List<Income> incomeList = incomeRepository.findAllByBeliever_BelieverId(believerId);
 
-        return IncomeMapper.INSTANCE.entityListToDTOList(incomeList);
+        return incomeMapper.entityListToDTOList(incomeList);
     }
 
     @Transactional
     public IncomeDTO appendIncome(IncomeDTO incomeDTO) {
-        return IncomeMapper.INSTANCE.entityToDTO(incomeRepository.save(IncomeMapper.INSTANCE.DTOToEntity(incomeDTO)));
+        return incomeMapper.entityToDTO(incomeRepository.save(incomeMapper.DTOToEntity(incomeDTO)));
     }
 
     @Transactional

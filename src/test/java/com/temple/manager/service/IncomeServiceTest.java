@@ -1,12 +1,13 @@
 package com.temple.manager.service;
 
 import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.code.dto.CodeDTO;
-import com.temple.manager.income.dto.IncomeDTO;
 import com.temple.manager.believer.entity.Believer;
+import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.code.entity.Code;
-import com.temple.manager.income.entity.Income;
 import com.temple.manager.enumable.PaymentType;
+import com.temple.manager.income.dto.IncomeDTO;
+import com.temple.manager.income.entity.Income;
+import com.temple.manager.income.mapper.IncomeMapper;
 import com.temple.manager.income.repository.IncomeRepository;
 import com.temple.manager.income.service.IncomeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,10 +35,19 @@ class IncomeServiceTest {
     @Mock
     IncomeRepository incomeRepository;
 
+    @Mock
+    IncomeMapper incomeMapper;
+
     @InjectMocks
     IncomeService incomeService;
 
     Income fixture1, fixture2;
+
+    IncomeDTO fixtureDTO1, fixtureDTO2;
+
+    List<Income> fixtureList;
+
+    List<IncomeDTO> fixtureDTOList;
 
     @BeforeEach
     void init(){
@@ -64,17 +74,54 @@ class IncomeServiceTest {
                 .believer(Believer.builder().believerId(2).build())
                 .paymentType(PaymentType.TEMPLE)
                 .build();
+
+        fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        fixtureDTO1 = IncomeDTO.builder()
+                .incomeId(1)
+                .incomeDate(LocalDate.now())
+                .cashAmount(111)
+                .cardAmount(222)
+                .bankBookAmount(333)
+                .installment(10)
+                .code(CodeDTO.builder()
+                        .codeId(1)
+                        .build())
+                .believer(BelieverDTO.builder()
+                        .believerId(1)
+                        .build())
+                .paymentType(PaymentType.BELIEVER)
+                .build();
+
+        fixtureDTO2 = IncomeDTO.builder()
+                .incomeId(2)
+                .incomeDate(LocalDate.now())
+                .cashAmount(444)
+                .cardAmount(555)
+                .bankBookAmount(666)
+                .installment(3)
+                .code(CodeDTO.builder()
+                        .codeId(2)
+                        .build())
+                .believer(BelieverDTO.builder()
+                        .believerId(2)
+                        .build())
+                .paymentType(PaymentType.TEMPLE)
+                .build();
+
+        fixtureDTOList = new ArrayList<>();
+        fixtureDTOList.add(fixtureDTO1);
+        fixtureDTOList.add(fixtureDTO2);
     }
 
     @Test
     @DisplayName("등록된 모든 수입 조회 후 Entity에서 DTO 타입으로 변경 테스트")
     void getAllIncomeByActive() {
         //given
-        List<Income> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
-
         given(incomeRepository.findAll()).willReturn(fixtureList);
+        given(incomeMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
 
         //when
         List<IncomeDTO> result = incomeService.getAllIncomes();
@@ -82,19 +129,16 @@ class IncomeServiceTest {
         //then
         assertThat(result.size(), is(2));
 
-        checkEntity(result.get(0), fixture1);
-        checkEntity(result.get(1), fixture2);
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
     }
 
     @Test
     @DisplayName("등록된 모든 수입 신도ID 조회 후 Entity에서 DTO 타입으로 변경 테스트")
     void getIncomesByBelieverId() {
         //given
-        List<Income> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
-
         given(incomeRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
+        given(incomeMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
 
         //when
         List<IncomeDTO> result = incomeService.getIncomesByBelieverId(1);
@@ -102,34 +146,24 @@ class IncomeServiceTest {
         //then
         assertThat(result.size(), is(2));
 
-        checkEntity(result.get(0), fixture1);
-        checkEntity(result.get(1), fixture2);
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
     }
 
     @Test
     @DisplayName("수입 추가 테스트")
     void appendIncome() {
         //given
-        IncomeDTO fixtureDTO = IncomeDTO.builder()
-                .incomeId(1)
-                .incomeDate(LocalDate.now())
-                .cashAmount(111)
-                .cardAmount(222)
-                .bankBookAmount(333)
-                .installment(10)
-                .code(CodeDTO.builder().codeId(1).build())
-                .believer(BelieverDTO.builder().believerId(1).build())
-                .paymentType(PaymentType.BELIEVER)
-                .build();
-
         given(incomeRepository.save(any(Income.class))).willReturn(fixture1);
+        given(incomeMapper.DTOToEntity(any(IncomeDTO.class))).willReturn(fixture1);
+        given(incomeMapper.entityToDTO(any(Income.class))).willReturn(fixtureDTO1);
 
         //when
-        incomeService.appendIncome(fixtureDTO);
+        IncomeDTO result = incomeService.appendIncome(fixtureDTO1);
 
         //then
         verify(incomeRepository, times(1)).save(any(Income.class));
-        checkEntity(fixtureDTO, fixture1);
+        checkEntity(result, fixtureDTO1);
     }
 
     @Test
@@ -201,15 +235,15 @@ class IncomeServiceTest {
         assertThrows(RuntimeException.class, () -> incomeService.deleteIncome(1));
     }
 
-    void checkEntity(IncomeDTO resultDTO, Income fixtureEntity){
-        assertThat(resultDTO.getIncomeId(), is(fixtureEntity.getIncomeId()));
-        assertThat(resultDTO.getIncomeDate(), is(fixtureEntity.getIncomeDate()));
-        assertThat(resultDTO.getCashAmount(), is(fixtureEntity.getCashAmount()));
-        assertThat(resultDTO.getCardAmount(), is(fixtureEntity.getCardAmount()));
-        assertThat(resultDTO.getBankBookAmount(), is(fixtureEntity.getBankBookAmount()));
-        assertThat(resultDTO.getInstallment(), is(fixtureEntity.getInstallment()));
-        assertThat(resultDTO.getPaymentType(), is(fixtureEntity.getPaymentType()));
-        assertThat(resultDTO.getBeliever().getBelieverId(), is(fixtureEntity.getBeliever().getBelieverId()));
-        assertThat(resultDTO.getCode().getCodeId(), is(fixtureEntity.getCode().getCodeId()));
+    void checkEntity(IncomeDTO resultDTO, IncomeDTO compareDTO){
+        assertThat(resultDTO.getIncomeId(), is(compareDTO.getIncomeId()));
+        assertThat(resultDTO.getIncomeDate(), is(compareDTO.getIncomeDate()));
+        assertThat(resultDTO.getCashAmount(), is(compareDTO.getCashAmount()));
+        assertThat(resultDTO.getCardAmount(), is(compareDTO.getCardAmount()));
+        assertThat(resultDTO.getBankBookAmount(), is(compareDTO.getBankBookAmount()));
+        assertThat(resultDTO.getInstallment(), is(compareDTO.getInstallment()));
+        assertThat(resultDTO.getPaymentType(), is(compareDTO.getPaymentType()));
+        assertThat(resultDTO.getBeliever().getBelieverId(), is(compareDTO.getBeliever().getBelieverId()));
+        assertThat(resultDTO.getCode().getCodeId(), is(compareDTO.getCode().getCodeId()));
     }
 }
