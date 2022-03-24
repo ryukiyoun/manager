@@ -1,7 +1,6 @@
-package com.temple.manager.service;
+package com.temple.manager.code.service;
 
 import com.temple.manager.code.dto.CodeDTO;
-import com.temple.manager.code.entity.Code;
 import com.temple.manager.code.mapper.CodeMapper;
 import com.temple.manager.code.repository.CodeRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +12,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CodeService {
     private final CodeRepository codeRepository;
+    private final CodeMapper codeMapper;
 
     public List<CodeDTO> getCodeByParentCodeValue(String parentCodeValue){
-        List<Code> codeList = codeRepository.findAllByParentCodeValue(parentCodeValue);
-        return CodeMapper.INSTANCE.entityListToDTOList(codeList);
+        return codeMapper.entityListToDTOList(codeRepository.findAllByParentCodeValue(parentCodeValue));
     }
 }

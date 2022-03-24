@@ -3,13 +3,13 @@ package com.temple.manager.code.mapper;
 import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.code.entity.Code;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CodeMapper {
-    CodeMapper INSTANCE = Mappers.getMapper(CodeMapper.class);
+    CodeDTO entityToDTO(Code believer);
 
     List<CodeDTO> entityListToDTOList(List<Code> entityList);
 }
