@@ -89,6 +89,7 @@ tasks.withType(JavaCompile) {
 
 tasks.named('test') {
 	systemProperty "jasypt.encryptor.password", System.getProperty("jasypt.encryptor.password")
+	systemProperty "aes.encryptor.password", System.getProperty("aes.encryptor.password")
 	useJUnitPlatform()
 	finalizedBy jacocoTestReport
 }

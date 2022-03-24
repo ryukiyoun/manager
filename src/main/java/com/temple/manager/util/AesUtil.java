@@ -1,45 +1,29 @@
 package com.temple.manager.util;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @Component
 public class AesUtil {
     private static final Charset ENCODING_TYPE = StandardCharsets.UTF_8;
     private static final String INSTANCE_TYPE = "AES/CBC/PKCS5Padding";
-    private SecretKeySpec secretKeySpec;
-    private Cipher cipher;
-    private IvParameterSpec ivParameterSpec;
+    private final SecretKeySpec secretKeySpec;
+    private final Cipher cipher;
+    private final IvParameterSpec ivParameterSpec;
 
-    public AesUtil(@Value("${custom.path.file}") String keyPath){
-        try{
-            File keyFile = new File(keyPath);
-            BufferedReader br = new BufferedReader(new FileReader(keyFile));
-            String key;
-            key = br.readLine();
-            byte[] keyByte = key.getBytes(ENCODING_TYPE);
-            secretKeySpec = new SecretKeySpec(keyByte, "AES");
-            cipher = Cipher.getInstance(INSTANCE_TYPE);
-            ivParameterSpec = new IvParameterSpec(keyByte);
+    public AesUtil(Environment environment) throws Exception {
+        byte[] byteKey = environment.getProperty("aes.encryptor.password").getBytes();
 
-            br.close();
-        }
-        catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException e){
-            e.printStackTrace();
-        }
+        secretKeySpec = new SecretKeySpec(byteKey, "AES");
+        cipher = Cipher.getInstance(INSTANCE_TYPE);
+        ivParameterSpec = new IvParameterSpec(byteKey);
     }
 
     public String encrypt(String str) throws Exception {

@@ -26,10 +26,6 @@ jasypt:
   encryptor:
     bean: jasyptEncryptor
 
-custom:
-  path:
-    file: ENC(+4ScDYVNWQMs62WykKoJWAREdYzfBugP)
-
 logging:
   level:
     org:
