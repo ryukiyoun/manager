@@ -20,20 +20,15 @@ public class BelieverService {
     private final BelieverMapper believerMapper;
 
     public List<BelieverDTO> getAllBelievers() {
-        List<Believer> believerList = believerRepository.findAll();
-
-        return believerMapper.entityListToDTOList(believerList);
+        return believerMapper.entityListToDTOList(believerRepository.findAll());
     }
 
     public List<BelieverDTO> getBelieversByName(String name) {
-        List<Believer> believerList = believerRepository.findAllByBelieverNameContains(name);
-
-        return believerMapper.entityListToDTOList(believerList);
+        return believerMapper.entityListToDTOList(believerRepository.findAllByBelieverNameContains(name));
     }
 
     public BelieverDTO getBelieverByNameAndBirtOfYear(String believerName, String birthOfYear) {
-        Believer believer = believerRepository.findAllByBelieverNameAndBirthOfYear(believerName, birthOfYear).orElse(Believer.builder().build());
-        return believerMapper.entityToDTO(believer);
+        return believerMapper.entityToDTO(believerRepository.findAllByBelieverNameAndBirthOfYear(believerName, birthOfYear).orElse(Believer.builder().build()));
     }
 
     @Transactional
