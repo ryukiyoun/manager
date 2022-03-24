@@ -41,7 +41,7 @@ public class Believer {
 
     @PrePersist
     public void prePersist(){
-        this.active = this.active == null ? "99999999999999" : this.active;
+        this.active = "99999999999999";
     }
 
     public void update(BelieverDTO believerDTO){
