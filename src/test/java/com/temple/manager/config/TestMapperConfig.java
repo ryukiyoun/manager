@@ -2,6 +2,7 @@ package com.temple.manager.config;
 
 import com.temple.manager.believer.mapper.BelieverMapper;
 import com.temple.manager.code.mapper.CodeMapper;
+import com.temple.manager.expenditure.mapper.ExpenditureMapper;
 import com.temple.manager.family.mapper.FamilyMapper;
 import com.temple.manager.income.mapper.IncomeMapper;
 import com.temple.manager.prayer.mapper.PrayerMapper;
@@ -34,5 +35,10 @@ public class TestMapperConfig {
     @Bean
     public IncomeMapper incomeMapper(){
         return Mappers.getMapper(IncomeMapper.class);
+    }
+
+    @Bean
+    public ExpenditureMapper expenditureMapper(){
+        return Mappers.getMapper(ExpenditureMapper.class);
     }
 }

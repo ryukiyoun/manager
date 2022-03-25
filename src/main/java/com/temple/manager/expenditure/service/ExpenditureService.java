@@ -14,22 +14,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenditureService {
     private final ExpenditureRepository expenditureRepository;
+    private final ExpenditureMapper expenditureMapper;
 
     public List<ExpenditureDTO> getAllExpenditures() {
-        List<Expenditure> expenditureList = expenditureRepository.findAll();
-
-        return ExpenditureMapper.INSTANCE.entityListToDTOList(expenditureList);
+        return expenditureMapper.entityListToDTOList(expenditureRepository.findAll());
     }
 
     public List<ExpenditureDTO> getExpendituresByBelieverId(long believerId) {
-        List<Expenditure> expenditureList = expenditureRepository.findAllByBeliever_BelieverId(believerId);
-
-        return ExpenditureMapper.INSTANCE.entityListToDTOList(expenditureList);
+        return expenditureMapper.entityListToDTOList(expenditureRepository.findAllByBeliever_BelieverId(believerId));
     }
 
     @Transactional
     public ExpenditureDTO appendExpenditure(ExpenditureDTO expenditureDTO) {
-        return ExpenditureMapper.INSTANCE.entityToDTO(expenditureRepository.save(ExpenditureMapper.INSTANCE.DTOToEntity(expenditureDTO)));
+        return expenditureMapper.entityToDTO(expenditureRepository.save(expenditureMapper.DTOToEntity(expenditureDTO)));
     }
 
     @Transactional

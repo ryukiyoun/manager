@@ -8,10 +8,8 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ExpenditureMapper {
-    ExpenditureMapper INSTANCE = Mappers.getMapper(ExpenditureMapper.class);
-
     ExpenditureDTO entityToDTO(Expenditure expenditure);
 
     Expenditure DTOToEntity(ExpenditureDTO expenditureDTO);
