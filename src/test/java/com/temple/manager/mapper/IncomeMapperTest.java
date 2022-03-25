@@ -10,7 +10,6 @@ import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.dto.IncomeDTO;
 import com.temple.manager.income.entity.Income;
 import com.temple.manager.income.mapper.IncomeMapper;
-import com.temple.manager.prayer.dto.PrayerDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -114,6 +113,8 @@ public class IncomeMapperTest {
         assertThat(result.getCashAmount(), is(100L));
         assertThat(result.getCardAmount(), is(200L));
         assertThat(result.getBankBookAmount(), is(300L));
+        assertThat(result.getInstallment(), is(3));
+        assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
         assertThat(result.getBeliever().getBelieverId(), is(1L));
         assertThat(result.getBeliever().getBelieverName(), is("tester"));
@@ -173,6 +174,8 @@ public class IncomeMapperTest {
         assertThat(result.getCashAmount(), is(100L));
         assertThat(result.getCardAmount(), is(200L));
         assertThat(result.getBankBookAmount(), is(300L));
+        assertThat(result.getInstallment(), is(3));
+        assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
         assertThat(result.getBeliever(), is(nullValue()));
 
@@ -216,6 +219,8 @@ public class IncomeMapperTest {
         assertThat(result.getCashAmount(), is(100L));
         assertThat(result.getCardAmount(), is(200L));
         assertThat(result.getBankBookAmount(), is(300L));
+        assertThat(result.getInstallment(), is(3));
+        assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
         assertThat(result.getBeliever().getBelieverId(), is(1L));
         assertThat(result.getBeliever().getBelieverName(), is("tester"));
@@ -238,6 +243,8 @@ public class IncomeMapperTest {
         assertThat(result.getCashAmount(), is(100L));
         assertThat(result.getCardAmount(), is(200L));
         assertThat(result.getBankBookAmount(), is(300L));
+        assertThat(result.getInstallment(), is(3));
+        assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
         assertThat(result.getBeliever().getBelieverId(), is(1L));
         assertThat(result.getBeliever().getBelieverName(), is("tester"));
@@ -297,6 +304,8 @@ public class IncomeMapperTest {
         assertThat(result.getCashAmount(), is(100L));
         assertThat(result.getCardAmount(), is(200L));
         assertThat(result.getBankBookAmount(), is(300L));
+        assertThat(result.getInstallment(), is(3));
+        assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
         assertThat(result.getBeliever(), is(nullValue()));
 
@@ -340,6 +349,8 @@ public class IncomeMapperTest {
         assertThat(result.getCashAmount(), is(100L));
         assertThat(result.getCardAmount(), is(200L));
         assertThat(result.getBankBookAmount(), is(300L));
+        assertThat(result.getInstallment(), is(3));
+        assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
         assertThat(result.getBeliever().getBelieverId(), is(1L));
         assertThat(result.getBeliever().getBelieverName(), is("tester"));
@@ -362,6 +373,8 @@ public class IncomeMapperTest {
         assertThat(result.get(0).getCashAmount(), is(100L));
         assertThat(result.get(0).getCardAmount(), is(200L));
         assertThat(result.get(0).getBankBookAmount(), is(300L));
+        assertThat(result.get(0).getInstallment(), is(3));
+        assertThat(result.get(0).getPaymentType(), is(PaymentType.BELIEVER));
 
         assertThat(result.get(0).getBeliever().getBelieverId(), is(1L));
         assertThat(result.get(0).getBeliever().getBelieverName(), is("tester"));
