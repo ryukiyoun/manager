@@ -1,56 +1,50 @@
 language: java
 jdk:
-  - openjdk11
-
+- openjdk11
 branches:
   only:
-    - master
-
+  - master
 before_install:
-  - chmod +x gradlew
-
+- chmod +x gradlew
 cache:
   directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.gradle'
-
+  - "$HOME/.m2/repository"
+  - "$HOME/.gradle"
 script:
-  - ./gradlew clean build -Djasypt.encryptor.password=testjasyptencodepass -Daes.encryptor.password=testaespasswords
-
+- "./gradlew clean build -Djasypt.encryptor.password=testjasyptencodepass -Daes.encryptor.password=testaespasswords"
 before_deploy:
-  - zip -r springboot-temple-manager *
-  - mkdir -p deploy
-  - mv springboot-temple-manager.zip deploy/springboot-temple-manager.zip
-
+- zip -r springboot-temple-manager *
+- mkdir -p deploy
+- mv springboot-temple-manager.zip deploy/springboot-temple-manager.zip
 notifications:
   email:
     recipients:
-      - ryukiyoun@naver.com
-
+    - ryukiyoun@naver.com
+  slack:
+    secure: ubfCSMYULYUK03PN5Ltzc+/U1otM5nNIp0NLY5hK3GDbJm1XYuEwLugKUIORqn55qAiy+59yD78qO9YbOR8OQnLo7O8uAU5lGNOI9zxOZhSO7QO/RWPs2f8/gep6CR4aF/5WYCp6QiFtoC2r9jYCmwiTVj7WEMc+Q4w2Dxcq8ON96oo+bNistOZMKww67vlobB0wrRKDvEL0NrmomLLvOKvVZRXH2hj3o+mXxQsQuhBQ1jm0FVNz1kEE4qjsPFJ07mCbgPIzBGmUeMnWpMTabPtH+7Nrc0dOwRNLddfo/b+8W0wAgTpZ9QXpkLjEHrU9e82ot0jiSExLs2jlYr1PXosXvZEEl377sdOWbIthbLaqUDscC9CcHNjw1se9q0VKxQFQNnNBcFWjgqL9rEhIl3b8NTFqE+OUQyPKYJi2UyjrlquiA1F3wf8kQ0Y7ZZ9IaDNtv1ZdjIfDjiXnwPKRR+6OE5757QRy9fhkfYUFalJMC+kWqAjulhfK4E5ZKQMwEU3/Rz1nvKxW3jVZVABHscQmEhe396wP3XoFfBmNtJFISaE2IJwfuijMji8hsJWIne68hMBexm2Gav51v54wyzYwVVWRW7eBUgYZCNLz1/nXOJ/t6Gt21L7rZz4mv0QLNTZmk+29jY0kvOuvRFHUqHoe6NhQtzXsPPi/OIAMgPI=
 deploy:
-  - provider: s3
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    bucket: springboottest-deploy
-    region: ap-northeast-2
-    skip_cleanup: true
-    acl: private
-    local_dir: deploy
-    wait-until-deployed: true
-    on:
-      repo: ryukiyoun/manager
-      branch: master
-
-  - provider: codedeploy
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    bucket: springboottest-deploy
-    key: springboot-temple-manager.zip
-    bundle_type: zip
-    application: springboot-temple-manager
-    deployment_group: springboot-temple-manager
-    region: ap-northeast-2
-    wait-until-deployed: true
-    on:
-      repo: ryukiyoun/manager
-      branch: master
+- provider: s3
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  bucket: springboottest-deploy
+  region: ap-northeast-2
+  skip_cleanup: true
+  acl: private
+  local_dir: deploy
+  wait-until-deployed: true
+  on:
+    repo: ryukiyoun/manager
+    branch: master
+- provider: codedeploy
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  bucket: springboottest-deploy
+  key: springboot-temple-manager.zip
+  bundle_type: zip
+  application: springboot-temple-manager
+  deployment_group: springboot-temple-manager
+  region: ap-northeast-2
+  wait-until-deployed: true
+  on:
+    repo: ryukiyoun/manager
+    branch: master
