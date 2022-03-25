@@ -17,9 +17,6 @@ before_deploy:
 - mkdir -p deploy
 - mv springboot-temple-manager.zip deploy/springboot-temple-manager.zip
 notifications:
-  email:
-    recipients:
-    - ryukiyoun@naver.com
   slack:
     secure: ubfCSMYULYUK03PN5Ltzc+/U1otM5nNIp0NLY5hK3GDbJm1XYuEwLugKUIORqn55qAiy+59yD78qO9YbOR8OQnLo7O8uAU5lGNOI9zxOZhSO7QO/RWPs2f8/gep6CR4aF/5WYCp6QiFtoC2r9jYCmwiTVj7WEMc+Q4w2Dxcq8ON96oo+bNistOZMKww67vlobB0wrRKDvEL0NrmomLLvOKvVZRXH2hj3o+mXxQsQuhBQ1jm0FVNz1kEE4qjsPFJ07mCbgPIzBGmUeMnWpMTabPtH+7Nrc0dOwRNLddfo/b+8W0wAgTpZ9QXpkLjEHrU9e82ot0jiSExLs2jlYr1PXosXvZEEl377sdOWbIthbLaqUDscC9CcHNjw1se9q0VKxQFQNnNBcFWjgqL9rEhIl3b8NTFqE+OUQyPKYJi2UyjrlquiA1F3wf8kQ0Y7ZZ9IaDNtv1ZdjIfDjiXnwPKRR+6OE5757QRy9fhkfYUFalJMC+kWqAjulhfK4E5ZKQMwEU3/Rz1nvKxW3jVZVABHscQmEhe396wP3XoFfBmNtJFISaE2IJwfuijMji8hsJWIne68hMBexm2Gav51v54wyzYwVVWRW7eBUgYZCNLz1/nXOJ/t6Gt21L7rZz4mv0QLNTZmk+29jY0kvOuvRFHUqHoe6NhQtzXsPPi/OIAMgPI=
 deploy:
