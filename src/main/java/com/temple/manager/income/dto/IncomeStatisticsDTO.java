@@ -1,6 +1,6 @@
 package com.temple.manager.income.dto;
 
-public interface IncomeDailyStatisticsDTO {
+public interface IncomeStatisticsDTO {
     String getDay();
     long getAmount();
 }
