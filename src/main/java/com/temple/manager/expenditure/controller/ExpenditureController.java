@@ -1,9 +1,8 @@
 package com.temple.manager.expenditure.controller;
 
 import com.temple.manager.expenditure.dto.ExpenditureDTO;
-import com.temple.manager.expenditure.dto.ExpenditureDailyStatisticsDTO;
+import com.temple.manager.expenditure.dto.ExpenditureStatisticsDTO;
 import com.temple.manager.expenditure.service.ExpenditureService;
-import com.temple.manager.income.dto.IncomeDailyStatisticsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,8 +33,18 @@ public class ExpenditureController {
     }
 
     @GetMapping("/expenditure/chart/statistics/daily/{date}")
-    public ResponseEntity<List<ExpenditureDailyStatisticsDTO>> getIncomeDailyStatistics(@PathVariable String date){
-        return ResponseEntity.ok(expenditureService.getIncomeDailyStatistics(date));
+    public ResponseEntity<List<ExpenditureStatisticsDTO>> getIncomeDailyStatistics(@PathVariable String date){
+        return ResponseEntity.ok(expenditureService.getExpenditureDailyStatistics(date));
+    }
+
+    @GetMapping("/expenditure/chart/statistics/month/{date}")
+    public ResponseEntity<List<ExpenditureStatisticsDTO>> getIncomeMonthStatistics(@PathVariable String date){
+        return ResponseEntity.ok(expenditureService.getExpenditureMonthStatistics(date));
+    }
+
+    @GetMapping("/expenditure/chart/statistics/year/{date}")
+    public ResponseEntity<List<ExpenditureStatisticsDTO>> getIncomeYearStatistics(@PathVariable String date){
+        return ResponseEntity.ok(expenditureService.getExpenditureYearStatistics(date));
     }
 
     @PostMapping("/expenditure")

@@ -1,7 +1,7 @@
 package com.temple.manager.expenditure.service;
 
 import com.temple.manager.expenditure.dto.ExpenditureDTO;
-import com.temple.manager.expenditure.dto.ExpenditureDailyStatisticsDTO;
+import com.temple.manager.expenditure.dto.ExpenditureStatisticsDTO;
 import com.temple.manager.expenditure.entity.Expenditure;
 import com.temple.manager.expenditure.mapper.ExpenditureMapper;
 import com.temple.manager.expenditure.repository.ExpenditureRepository;
@@ -27,8 +27,16 @@ public class ExpenditureService {
         return expenditureMapper.entityListToDTOList(expenditureRepository.findAllByBeliever_BelieverId(believerId));
     }
 
-    public List<ExpenditureDailyStatisticsDTO> getIncomeDailyStatistics(String date){
+    public List<ExpenditureStatisticsDTO> getExpenditureDailyStatistics(String date){
         return expenditureRepository.getDailyStatistics(LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyyMMdd")));
+    }
+
+    public List<ExpenditureStatisticsDTO> getExpenditureMonthStatistics(String date){
+        return expenditureRepository.getMonthStatistics(LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyyMMdd")));
+    }
+
+    public List<ExpenditureStatisticsDTO> getExpenditureYearStatistics(String date){
+        return expenditureRepository.getYearStatistics(LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyyMMdd")));
     }
 
     @Transactional

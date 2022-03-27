@@ -1,6 +1,6 @@
 package com.temple.manager.expenditure.dto;
 
-public interface ExpenditureDailyStatisticsDTO {
+public interface ExpenditureStatisticsDTO {
     String getDay();
     long getAmount();
 }
