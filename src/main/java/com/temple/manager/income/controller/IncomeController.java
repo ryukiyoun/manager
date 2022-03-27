@@ -1,6 +1,7 @@
 package com.temple.manager.income.controller;
 
 import com.temple.manager.income.dto.IncomeDTO;
+import com.temple.manager.income.dto.IncomeDailyStatisticsDTO;
 import com.temple.manager.income.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +31,11 @@ public class IncomeController {
     @GetMapping("/incomes/{believerId}")
     public ResponseEntity<List<IncomeDTO>> getIncomeByBelieverId(@PathVariable long believerId) {
         return ResponseEntity.ok(incomeService.getIncomesByBelieverId(believerId));
+    }
+
+    @GetMapping("/income/chart/statistics/daily/{date}")
+    public ResponseEntity<List<IncomeDailyStatisticsDTO>> getIncomeDailyStatistics(@PathVariable String date){
+        return ResponseEntity.ok(incomeService.getIncomeDailyStatistics(date));
     }
 
     @PostMapping("/income")
