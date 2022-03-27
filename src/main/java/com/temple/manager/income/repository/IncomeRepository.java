@@ -17,6 +17,6 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
     @Query("from Income i join fetch i.believer b join fetch i.code c where i.believer.believerId = :believerId")
     List<Income> findAllByBeliever_BelieverId(long believerId);
 
-    @Query(value = "CALL DailyStatistics(:date);", nativeQuery = true)
+    @Query(value = "CALL IncomeDailyStatistics(:date);", nativeQuery = true)
     List<IncomeDailyStatisticsDTO> getDailyStatistics(@Param("date") LocalDate date);
 }
