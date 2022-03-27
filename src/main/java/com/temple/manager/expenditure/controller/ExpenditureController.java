@@ -1,7 +1,9 @@
 package com.temple.manager.expenditure.controller;
 
 import com.temple.manager.expenditure.dto.ExpenditureDTO;
+import com.temple.manager.expenditure.dto.ExpenditureDailyStatisticsDTO;
 import com.temple.manager.expenditure.service.ExpenditureService;
+import com.temple.manager.income.dto.IncomeDailyStatisticsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,11 @@ public class ExpenditureController {
     @GetMapping("/expenditures/{believerId}")
     public ResponseEntity<List<ExpenditureDTO>> getExpenditureByBelieverId(@PathVariable long believerId) {
         return ResponseEntity.ok(expenditureService.getExpendituresByBelieverId(believerId));
+    }
+
+    @GetMapping("/expenditure/chart/statistics/daily/{date}")
+    public ResponseEntity<List<ExpenditureDailyStatisticsDTO>> getIncomeDailyStatistics(@PathVariable String date){
+        return ResponseEntity.ok(expenditureService.getIncomeDailyStatistics(date));
     }
 
     @PostMapping("/expenditure")
