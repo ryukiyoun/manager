@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Objects;
 
 @Component
 public class AesUtil {
@@ -19,11 +20,12 @@ public class AesUtil {
     private final IvParameterSpec ivParameterSpec;
 
     public AesUtil(Environment environment) throws Exception {
-        byte[] byteKey = environment.getProperty("aes.encryptor.password").getBytes();
+        byte[] byteKey = Objects.requireNonNull(environment.getProperty("aes.encryptor.password")).getBytes();
 
         secretKeySpec = new SecretKeySpec(byteKey, "AES");
-        cipher = Cipher.getInstance(INSTANCE_TYPE);
         ivParameterSpec = new IvParameterSpec(byteKey);
+
+        cipher = Cipher.getInstance(INSTANCE_TYPE);
     }
 
     public String encrypt(String str) throws Exception {
