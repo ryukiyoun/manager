@@ -1,9 +1,11 @@
 package com.temple.manager.prayer.service;
 
 import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.prayer.mapper.PrayerMapper;
 import com.temple.manager.prayer.repository.PrayerRepository;
+import com.temple.manager.prayer.repository.PrayerRepositorySupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PrayerService {
     private final PrayerRepository prayerRepository;
+    private final PrayerRepositorySupport prayerRepositorySupport;
     private final PrayerMapper prayerMapper;
 
     public List<PrayerDTO> getAllPrayers() {
@@ -22,6 +25,10 @@ public class PrayerService {
 
     public List<PrayerDTO> getPrayersByBelieverId(long believerId) {
         return prayerMapper.entityListToDTOList(prayerRepository.findAllByBeliever_BelieverId(believerId));
+    }
+
+    public List<PrayerTypeGroupCntDTO> getPrayersTypeGroupCnt() {
+        return prayerRepositorySupport.getPrayersTypeGroupCnt();
     }
 
     @Transactional

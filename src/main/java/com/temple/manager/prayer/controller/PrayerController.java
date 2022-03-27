@@ -1,6 +1,7 @@
 package com.temple.manager.prayer.controller;
 
 import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.service.PrayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,11 @@ public class PrayerController {
     @GetMapping("/prayers/{believerId}")
     public ResponseEntity<List<PrayerDTO>> getPrayersByBelieverId(@PathVariable long believerId) {
         return ResponseEntity.ok(prayerService.getPrayersByBelieverId(believerId));
+    }
+
+    @GetMapping("/prayers/chart/count")
+    public ResponseEntity<List<PrayerTypeGroupCntDTO>> getPrayersTypeGroupCnt() {
+        return ResponseEntity.ok(prayerService.getPrayersTypeGroupCnt());
     }
 
     @PostMapping("/prayer")
