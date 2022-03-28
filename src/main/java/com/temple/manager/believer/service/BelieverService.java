@@ -44,10 +44,9 @@ public class BelieverService {
 
     @Transactional
     public void deleteBeliever(long id) {
-        Believer believer = believerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Fount Believer"));
-        believer.delete();
+        believerRepository.deleteById(id);
 
-        List<Family> families = familyRepository.findAllByBeliever_BelieverId(believer.getBelieverId());
+        List<Family> families = familyRepository.findAllByBeliever_BelieverId(id);
 
         for (Family family : families)
             family.delete();
