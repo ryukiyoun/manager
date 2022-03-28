@@ -303,16 +303,19 @@ span.badge {
   background-color: #5873fe !important;
 }
 .timeline-badge.success {
-  background-color: #28a745 !important;
+  background-color: #86c09c !important;
 }
 .timeline-badge.warning {
   background-color: #e7b63a !important;
 }
 .timeline-badge.danger {
-  background-color: #dc3545 !important;
+  background-color: #ff8787c7 !important;
 }
 .timeline-badge.info {
   background-color: #03a9f4 !important;
+}
+.timeline-badge.believer {
+  background-color: #85889a !important;
 }
 .bootstrap-data-table-panel .dataTables_filter {
   text-align: right;
@@ -2475,16 +2478,16 @@ ul {
   background-color: #5873fe;
 }
 .progress-bar-success {
-  background-color: #28a745;
+  background-color: #86c09c;
 }
 .progress-bar-info {
   background-color: #03a9f4;
 }
 .progress-bar-danger {
-  background-color: #dc3545;
+  background-color: #ff8787c7;
 }
 .progress-bar-warning {
-  background-color: #e7b63a;
+  background-color: #facd52cf;
 }
 .progress-bar-pink {
   background-color: #e6a1f2;
@@ -2514,9 +2517,9 @@ ul {
   transform: rotate(180deg);
 }
 .progress-animated {
-  animation-duration: 5s;
+  animation-duration: 1s;
   animation-name: myanimation;
-  transition: all 5s ease 0s;
+  transition: all 1s ease 0s;
 }
 @keyframes myanimation {
   0% {
