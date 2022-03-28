@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface BelieverRepository extends JpaRepository<Believer, Long> {
     List<Believer> findAllByBelieverNameContains(String name);
+    List<Believer> findTop5ByOrderByBelieverIdDesc();
     Optional<Believer> findAllByBelieverNameAndBirthOfYear(String name, String birthOfYear);
 }

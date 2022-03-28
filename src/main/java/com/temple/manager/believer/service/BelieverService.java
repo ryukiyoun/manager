@@ -27,6 +27,10 @@ public class BelieverService {
         return believerMapper.entityListToDTOList(believerRepository.findAllByBelieverNameContains(name));
     }
 
+    public List<BelieverDTO> getRecent5Believers() {
+        return believerMapper.entityListToDTOList(believerRepository.findTop5ByOrderByBelieverIdDesc());
+    }
+
     public BelieverDTO getBelieverByNameAndBirtOfYear(String believerName, String birthOfYear) {
         return believerMapper.entityToDTO(believerRepository.findAllByBelieverNameAndBirthOfYear(believerName, birthOfYear).orElse(Believer.builder().build()));
     }

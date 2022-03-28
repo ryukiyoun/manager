@@ -32,6 +32,11 @@ public class BelieverController {
         return ResponseEntity.ok(believerService.getAllBelievers());
     }
 
+    @GetMapping("/believers/top/5")
+    public ResponseEntity<List<BelieverDTO>> getRecent5Believer() {
+        return ResponseEntity.ok(believerService.getRecent5Believers());
+    }
+
     @GetMapping("/believers/{name}")
     public ResponseEntity<List<BelieverDTO>> getBelieversByName(@PathVariable String name) {
         return ResponseEntity.ok(believerService.getBelieversByName(name));
