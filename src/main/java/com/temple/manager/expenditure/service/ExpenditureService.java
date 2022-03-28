@@ -6,6 +6,7 @@ import com.temple.manager.expenditure.entity.Expenditure;
 import com.temple.manager.expenditure.mapper.ExpenditureMapper;
 import com.temple.manager.expenditure.repository.ExpenditureRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,10 @@ public class ExpenditureService {
 
     public List<ExpenditureDTO> getExpendituresByBelieverId(long believerId) {
         return expenditureMapper.entityListToDTOList(expenditureRepository.findAllByBeliever_BelieverId(believerId));
+    }
+
+    public List<ExpenditureDTO> getRecent5Expenditures() {
+        return expenditureMapper.entityListToDTOList(expenditureRepository.findTop5ByOrderByExpenditureIdDesc(PageRequest.of(0, 5)));
     }
 
     public List<ExpenditureStatisticsDTO> getExpenditureDailyStatistics(String date){
@@ -52,7 +57,6 @@ public class ExpenditureService {
 
     @Transactional
     public void deleteExpenditure(long id) {
-        Expenditure expenditure = expenditureRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Expenditure"));
-        expenditure.delete();
+        expenditureRepository.deleteById(id);
     }
 }

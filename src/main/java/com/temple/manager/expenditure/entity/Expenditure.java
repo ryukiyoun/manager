@@ -2,23 +2,28 @@ package com.temple.manager.expenditure.entity;
 
 import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.code.entity.Code;
-import com.temple.manager.expenditure.dto.ExpenditureDTO;
+import com.temple.manager.common.entity.BaseEntity;
 import com.temple.manager.enumable.PaymentType;
-import lombok.*;
+import com.temple.manager.expenditure.dto.ExpenditureDTO;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "update expenditure set active = date_format(now(), '%Y%m%d%H%k%s') where expenditure_id = ?")
 @Where(clause = "active=99999999999999")
-public class Expenditure {
+public class Expenditure extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long expenditureId;
@@ -46,12 +51,10 @@ public class Expenditure {
     @Column(nullable = false)
     private LocalDate expenditureDate;
 
-    @Column(nullable = false)
-    String active;
-
-    @PrePersist
-    public void prePersist(){
-        this.active = "99999999999999";
+    @PostLoad
+    public void postLoad(){
+        if(this.believer == null)
+            this.believer = Believer.builder().believerId(0).believerName("해심").build();
     }
 
     public void update(ExpenditureDTO expenditureDTO){
@@ -61,9 +64,8 @@ public class Expenditure {
         this.bankBookAmount = expenditureDTO.getBankBookAmount();
         this.installment = expenditureDTO.getInstallment();
         this.expenditureDate = expenditureDTO.getExpenditureDate();
-    }
 
-    public void delete(){
-        this.active = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        if(expenditureDTO.getBeliever() == null)
+            this.believer = null;
     }
 }

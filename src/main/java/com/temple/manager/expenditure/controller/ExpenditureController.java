@@ -32,6 +32,11 @@ public class ExpenditureController {
         return ResponseEntity.ok(expenditureService.getExpendituresByBelieverId(believerId));
     }
 
+    @GetMapping("/expenditures/top/5")
+    public ResponseEntity<List<ExpenditureDTO>> getRecent5Expenditures() {
+        return ResponseEntity.ok(expenditureService.getRecent5Expenditures());
+    }
+
     @GetMapping("/expenditure/chart/statistics/daily/{date}")
     public ResponseEntity<List<ExpenditureStatisticsDTO>> getIncomeDailyStatistics(@PathVariable String date){
         return ResponseEntity.ok(expenditureService.getExpenditureDailyStatistics(date));
