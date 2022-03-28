@@ -2,23 +2,28 @@ package com.temple.manager.income.entity;
 
 import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.code.entity.Code;
+import com.temple.manager.common.entity.BaseEntity;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.dto.IncomeDTO;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "update income set active = date_format(now(), '%Y%m%d%H%k%s') where income_id = ?")
 @Where(clause = "active=99999999999999")
-public class Income {
+public class Income extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long incomeId;
@@ -46,12 +51,10 @@ public class Income {
     @Column(nullable = false)
     private LocalDate incomeDate;
 
-    @Column(nullable = false)
-    String active;
-
-    @PrePersist
-    public void prePersist(){
-        this.active = "99999999999999";
+    @PostLoad
+    public void postLoad() {
+        if(this.believer == null)
+            this.believer = Believer.builder().believerName("해심").build();
     }
 
     public void update(IncomeDTO incomeDTO){
@@ -61,9 +64,8 @@ public class Income {
         this.bankBookAmount = incomeDTO.getBankBookAmount();
         this.installment = incomeDTO.getInstallment();
         this.incomeDate = incomeDTO.getIncomeDate();
-    }
 
-    public void delete(){
-        this.active = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        if(incomeDTO.getBeliever() == null)
+            this.believer = null;
     }
 }

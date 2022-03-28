@@ -32,6 +32,11 @@ public class IncomeController {
         return ResponseEntity.ok(incomeService.getIncomesByBelieverId(believerId));
     }
 
+    @GetMapping("/incomes/top/5")
+    public ResponseEntity<List<IncomeDTO>> getRecent5Incomes() {
+        return ResponseEntity.ok(incomeService.getRecent5Incomes());
+    }
+
     @GetMapping("/income/chart/statistics/daily/{date}")
     public ResponseEntity<List<IncomeStatisticsDTO>> getIncomeDailyStatistics(@PathVariable String date){
         return ResponseEntity.ok(incomeService.getIncomeDailyStatistics(date));

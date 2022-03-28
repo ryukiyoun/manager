@@ -6,6 +6,7 @@ import com.temple.manager.income.entity.Income;
 import com.temple.manager.income.mapper.IncomeMapper;
 import com.temple.manager.income.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +21,15 @@ public class IncomeService {
     private final IncomeMapper incomeMapper;
 
     public List<IncomeDTO> getAllIncomes() {
-        List<Income> incomeList = incomeRepository.findAll();
-
-        return incomeMapper.entityListToDTOList(incomeList);
+        return incomeMapper.entityListToDTOList(incomeRepository.findAll());
     }
 
     public List<IncomeDTO> getIncomesByBelieverId(long believerId) {
-        List<Income> incomeList = incomeRepository.findAllByBeliever_BelieverId(believerId);
+        return incomeMapper.entityListToDTOList(incomeRepository.findAllByBeliever_BelieverId(believerId));
+    }
 
-        return incomeMapper.entityListToDTOList(incomeList);
+    public List<IncomeDTO> getRecent5Incomes(){
+        return incomeMapper.entityListToDTOList(incomeRepository.findTop5ByOrderByIncomeIdDesc(PageRequest.of(0, 5)));
     }
 
     public List<IncomeStatisticsDTO> getIncomeDailyStatistics(String date) {
@@ -68,7 +69,6 @@ public class IncomeService {
 
     @Transactional
     public void deleteIncome(long id) {
-        Income income = incomeRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Income"));
-        income.delete();
+        incomeRepository.deleteById(id);
     }
 }
