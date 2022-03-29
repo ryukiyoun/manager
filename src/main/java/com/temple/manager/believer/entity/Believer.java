@@ -1,10 +1,13 @@
 package com.temple.manager.believer.entity;
 
+import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.common.entity.BaseEntity;
 import com.temple.manager.converter.AesConverter;
-import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.enumable.LunarSolarType;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;

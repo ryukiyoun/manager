@@ -50,9 +50,6 @@ public class BelieverService {
     public void deleteBeliever(long id) {
         believerRepository.deleteById(id);
 
-        List<Family> families = familyRepository.findAllByBeliever_BelieverId(id);
-
-        for (Family family : families)
-            family.delete();
+        familyRepository.deleteByBeliever_BelieverId(id);
     }
 }

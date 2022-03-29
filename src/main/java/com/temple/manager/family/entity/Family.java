@@ -1,11 +1,17 @@
 package com.temple.manager.family.entity;
 
 import com.temple.manager.believer.entity.Believer;
+import com.temple.manager.common.entity.BaseEntity;
 import com.temple.manager.converter.AesConverter;
-import com.temple.manager.family.dto.FamilyDTO;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
-import lombok.*;
+import com.temple.manager.family.dto.FamilyDTO;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -14,11 +20,12 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "update family set active = date_format(now(), '%Y%m%d%H%k%s') where family_id = ?")
 @Where(clause = "active=99999999999999")
-public class Family {
+public class Family extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long familyId;

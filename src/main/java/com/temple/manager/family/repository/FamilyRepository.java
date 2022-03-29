@@ -9,4 +9,6 @@ import java.util.List;
 public interface FamilyRepository extends JpaRepository<Family, Long> {
     @Query("from Family f join fetch f.believer b where b.believerId = :believerId")
     List<Family> findAllByBeliever_BelieverId(long believerId);
+
+    long deleteByBeliever_BelieverId(long believerId);
 }
