@@ -183,35 +183,15 @@ class BelieverServiceTest {
     @DisplayName("특정 신도 Soft Delete 테스트")
     void deleteBeliever(){
         //given
-        Believer spyBeliever = spy(Believer.class);
-        Family spyFamily1 = spy(Family.class);
-        Family spyFamily2 = spy(Family.class);
-
-        List<Family> fixtureList = new ArrayList<>();
-        fixtureList.add(spyFamily1);
-        fixtureList.add(spyFamily2);
-
-        given(believerRepository.findById(anyLong())).willReturn(Optional.of(spyBeliever));
-        given(familyRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
+        doNothing().when(believerRepository).deleteById(anyLong());
+        given(familyRepository.deleteByBeliever_BelieverId(anyLong())).willReturn(2L);
 
         //when
         believerService.deleteBeliever(1);
 
         //then
-        verify(believerRepository, times(1)).findById(anyLong());
-        verify(spyBeliever, times(1)).delete();
-        verify(spyFamily1, times(1)).delete();
-        verify(spyFamily2, times(1)).delete();
-    }
-
-    @Test
-    @DisplayName("특정 신도 삭제 조회 시 Empty 테스트")
-    void deleteBelieverEmpty(){
-        //given
-        given(believerRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        //when, then
-        assertThrows(RuntimeException.class, () ->believerService.deleteBeliever(1));
+        verify(believerRepository, times(1)).deleteById(anyLong());
+        verify(familyRepository, times(1)).deleteByBeliever_BelieverId(anyLong());
     }
 
     void checkEntity(BelieverDTO resultDTO, BelieverDTO compareDTO){

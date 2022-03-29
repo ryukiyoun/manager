@@ -214,25 +214,13 @@ class IncomeServiceTest {
     @DisplayName("특정 수입 Soft Delete 테스트")
     void deleteIncome() {
         //given
-        Income spyIncome = spy(Income.class);
-        given(incomeRepository.findById(anyLong())).willReturn(Optional.of(spyIncome));
+        doNothing().when(incomeRepository).deleteById(anyLong());
 
         //when
         incomeService.deleteIncome(1);
 
         //then
-        verify(incomeRepository, times(1)).findById(anyLong());
-        verify(spyIncome, times(1)).delete();
-    }
-
-    @Test
-    @DisplayName("특정 수입 삭제 조회 시 Empty 테스트")
-    void deleteIncomeEmpty() {
-        //given
-        given(incomeRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        //when, then
-        assertThrows(RuntimeException.class, () -> incomeService.deleteIncome(1));
+        verify(incomeRepository, times(1)).deleteById(anyLong());
     }
 
     void checkEntity(IncomeDTO resultDTO, IncomeDTO compareDTO){

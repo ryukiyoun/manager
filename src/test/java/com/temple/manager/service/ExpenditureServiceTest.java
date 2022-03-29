@@ -226,26 +226,13 @@ class ExpenditureServiceTest {
     @DisplayName("특정 지출 Soft Delete 테스트")
     void deleteExpenditure() {
         //given
-        Expenditure spyExpenditure = spy(Expenditure.class);
-
-        given(expenditureRepository.findById(anyLong())).willReturn(Optional.of(spyExpenditure));
+        doNothing().when(expenditureRepository).deleteById(anyLong());
 
         //when
         expenditureService.deleteExpenditure(1);
 
         //then
-        verify(expenditureRepository, times(1)).findById(anyLong());
-        verify(spyExpenditure, times(1)).delete();
-    }
-
-    @Test
-    @DisplayName("특정 지출 삭제 조회 시 Empty 테스트")
-    void deleteExpenditureEmpty(){
-        //given
-        given(expenditureRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        //when, then
-        assertThrows(RuntimeException.class, () -> expenditureService.deleteExpenditure(1));
+        verify(expenditureRepository, times(1)).deleteById(anyLong());
     }
 
     void checkEntity(ExpenditureDTO resultDTO, ExpenditureDTO compareDTO){

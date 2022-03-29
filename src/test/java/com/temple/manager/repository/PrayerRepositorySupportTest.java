@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
@@ -33,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 @ExtendWith(SpringExtension.class)
 @Import({AesUtil.class, RedisConfig.class, QuerydslConfig.class, RedisProperties.class, PrayerRepositorySupport.class})
 @DataJpaTest
+@WithMockUser(username = "user")
 public class PrayerRepositorySupportTest {
     @PersistenceContext
     EntityManager em;
