@@ -47,11 +47,11 @@
             </div>
         </div>
 
-        <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" data-keyboard="false" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="believerRegistrationModal" data-backdrop="static" tabindex="-1" data-keyboard="false" role="dialog" aria-labelledby="believerRegistrationModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">신도</h5>
+                        <h5 class="modal-title" id="believerRegistrationModalLabel">신도</h5>
                         <p class="m-b-0 m-t-4">기존 또는 신규 신도를 조회합니다.</p>
                     </div>
                     <div class="modal-body">
@@ -269,7 +269,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"></script>
 
     <script type="text/javascript" src="/static/js/component/family-editor.js"></script>
-    <script src="/static/js/component/prayer-editor.js"></script>
+    <script type="text/javascript" src="/static/js/component/prayer-editor.js"></script>
     <script type="text/javascript" src="/static/js/component/income-editor.js"></script>
     <script type="text/javascript" src="/static/js/component/expenditure-editor.js"></script>
 
@@ -295,7 +295,7 @@
             if(believerName !== '' && believerBirthOfYear != '')
                 $('#searchBelieverBtn').click();
             else
-                $('#staticBackdrop').modal('show');
+                $('#believerRegistrationModal').modal('show');
         });
 
         $(document).on('click', '#infoTab a', function() {
@@ -307,40 +307,42 @@
         });
 
         $(document).on('click', '#searchBelieverBtn', function(){
-            ajaxGetRequest('/believer/search', {
+            let believerInfo = {
                 believerName: $('#searchBelieverName').val(),
-                birthOfYear: $('#searchBelieverBirth').val()
-            }, function(data){
-                if(data.believerId !== 0) {
-                    $('#staticBackdrop').modal('hide');
-                    $('#main-content').removeClass('hidden');
+                birthOfYear: $('#searchBelieverBirth').val(),
+                lunarSolarType: 'LUNAR',
+                address: ''
+            };
 
-                    setPage(data);
-                }
-                else {
-                    let confirm_result = confirm("신규 신도입니다. 등록하시겠습니까?");
+            if(validationCheck(believerInfo)) {
+                ajaxGetRequest('/believer/search', {
+                    believerName: $('#searchBelieverName').val(),
+                    birthOfYear: $('#searchBelieverBirth').val()
+                }, function (data) {
+                    if (data.believerId !== 0) {
+                        $('#believerRegistrationModal').modal('hide');
+                        $('#main-content').removeClass('hidden');
 
-                    if(confirm_result) {
-                        ajaxPostRequest('/believer', JSON.stringify({
-                            believerName: $('#searchBelieverName').val(),
-                            birthOfYear: $('#searchBelieverBirth').val(),
-                            lunarSolarType: 'LUNAR',
-                            address: ''
-                        }), function(data){
-                            $('#staticBackdrop').modal('hide');
-                            $('#main-content').removeClass('hidden');
+                        setPage(data);
+                    } else {
+                        let confirm_result = confirm("신규 신도입니다. 등록하시겠습니까?");
+                        if (confirm_result) {
+                            ajaxPostRequest('/believer', JSON.stringify(believerInfo), function (data) {
+                                $('#believerRegistrationModal').modal('hide');
+                                $('#main-content').removeClass('hidden');
 
-                            setPage({
-                                believerId: data.believerId,
-                                believerName: data.believerName,
-                                birthOfYear: data.birthOfYear,
-                                lunarSolarType: data.lunarSolarType,
-                                address: data.address
-                            });
-                        }, null)
+                                setPage({
+                                    believerId: data.believerId,
+                                    believerName: data.believerName,
+                                    birthOfYear: data.birthOfYear,
+                                    lunarSolarType: data.lunarSolarType,
+                                    address: data.address
+                                });
+                            }, null)
+                        }
                     }
-                }
-            }, null);
+                }, null);
+            }
         });
 
         $(document).on('click', '#believerSaveBtn', function(){
@@ -921,6 +923,15 @@
                 else
                     $(el).removeClass('hidden');
             });
+        }
+
+        function validationCheck(believerInfo){
+            if(believerInfo.believerName === '' || believerInfo.believerName === null || believerInfo.believerName === undefined)
+                return false;
+            else if(believerInfo.birthOfYear === '' || believerInfo.birthOfYear === null || believerInfo.birthOfYear === undefined || believerInfo.birthOfYear.length !== 6)
+                return false;
+
+            return true;
         }
     </script>
 </th:block>
