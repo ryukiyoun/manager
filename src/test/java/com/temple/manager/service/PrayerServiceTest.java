@@ -5,10 +5,12 @@ import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.prayer.dto.PrayerDTO;
 import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.code.entity.Code;
+import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.prayer.mapper.PrayerMapper;
 import com.temple.manager.prayer.repository.PrayerRepository;
+import com.temple.manager.prayer.repository.PrayerRepositorySupport;
 import com.temple.manager.prayer.service.PrayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +39,9 @@ class PrayerServiceTest {
 
     @Mock
     PrayerMapper prayerMapper;
+
+    @Mock
+    PrayerRepositorySupport prayerRepositorySupport;
 
     @InjectMocks
     PrayerService prayerService;
@@ -162,6 +167,16 @@ class PrayerServiceTest {
         assertThat(result.size(), is(2));
         checkEntity(result.get(0), fixtureDTO1);
         checkEntity(result.get(1), fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("등록된 기도 Group DTO 타입으로 조회 테스트")
+    void getPrayersTypeGroupCnt() {
+        //when
+        List<PrayerTypeGroupCntDTO> result = prayerService.getPrayersTypeGroupCnt();
+
+        //then
+        verify(prayerRepositorySupport, times(1)).getPrayersTypeGroupCnt();
     }
 
     @Test

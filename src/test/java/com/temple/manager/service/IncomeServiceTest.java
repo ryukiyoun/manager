@@ -6,6 +6,7 @@ import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.code.entity.Code;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.dto.IncomeDTO;
+import com.temple.manager.income.dto.IncomeStatisticsDTO;
 import com.temple.manager.income.entity.Income;
 import com.temple.manager.income.mapper.IncomeMapper;
 import com.temple.manager.income.repository.IncomeRepository;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -148,6 +150,269 @@ class IncomeServiceTest {
 
         checkEntity(result.get(0), fixtureDTO1);
         checkEntity(result.get(1), fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("최근 등록 수입 5건 DTO 타입으로 조회 테스트")
+    void getRecent5Incomes() {
+        //given
+        given(incomeRepository.findTop5ByOrderByIncomeIdDesc(any(Pageable.class))).willReturn(fixtureList);
+        given(incomeMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
+
+        //when
+        List<IncomeDTO> result = incomeService.getRecent5Incomes();
+
+        //then
+        assertThat(result.size(), is(2));
+
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
+    }
+
+    @Test
+    @DisplayName("이번달 일자별 통계 조회 테스트")
+    void getIncomeDailyStatistics() {
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 1000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "02";
+            }
+
+            @Override
+            public long getAmount() {
+                return 3000;
+            }
+        });
+
+        given(incomeRepository.getDailyStatistics(any(LocalDate.class))).willReturn(fixtureList);
+
+        //when
+        List<IncomeStatisticsDTO> result = incomeService.getIncomeDailyStatistics("20220101");
+
+        //then
+        assertThat(result.size(), is(2));
+        assertThat(result.get(0).getDay(), is("01"));
+        assertThat(result.get(0).getAmount(), is(1000L));
+        assertThat(result.get(1).getDay(), is("02"));
+        assertThat(result.get(1).getAmount(), is(3000L));
+    }
+
+    @Test
+    @DisplayName("1년전부터 매월 통계 조회 테스트")
+    void getIncomeMonthStatistics() {
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022-01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 1000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021-12";
+            }
+
+            @Override
+            public long getAmount() {
+                return 3000;
+            }
+        });
+
+        given(incomeRepository.getMonthStatistics(any(LocalDate.class))).willReturn(fixtureList);
+
+        //when
+        List<IncomeStatisticsDTO> result = incomeService.getIncomeMonthStatistics("20220101");
+
+        //then
+        assertThat(result.size(), is(2));
+        assertThat(result.get(0).getDay(), is("2022-01"));
+        assertThat(result.get(0).getAmount(), is(1000L));
+        assertThat(result.get(1).getDay(), is("2021-12"));
+        assertThat(result.get(1).getAmount(), is(3000L));
+    }
+
+    @Test
+    @DisplayName("10년전부터 매년 통계 조회 테스트")
+    void getIncomeYearStatistics() {
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022";
+            }
+
+            @Override
+            public long getAmount() {
+                return 1000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021";
+            }
+
+            @Override
+            public long getAmount() {
+                return 3000;
+            }
+        });
+
+        given(incomeRepository.getYearStatistics(any(LocalDate.class))).willReturn(fixtureList);
+
+        //when
+        List<IncomeStatisticsDTO> result = incomeService.getIncomeYearStatistics("20220101");
+
+        //then
+        assertThat(result.size(), is(2));
+        assertThat(result.get(0).getDay(), is("2022"));
+        assertThat(result.get(0).getAmount(), is(1000L));
+        assertThat(result.get(1).getDay(), is("2021"));
+        assertThat(result.get(1).getAmount(), is(3000L));
+    }
+
+    @Test
+    @DisplayName("오늘과 어제 수입 비교 조회 테스트")
+    void getIncomeCompareToDay() {
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "31";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeRepository.getCompareToDay()).willReturn(fixtureList);
+
+        //when
+        List<IncomeStatisticsDTO> result = incomeService.getIncomeCompareToDay();
+
+        //then
+        assertThat(result.size(), is(2));
+        assertThat(result.get(0).getDay(), is("01"));
+        assertThat(result.get(0).getAmount(), is(10000L));
+        assertThat(result.get(1).getDay(), is("31"));
+        assertThat(result.get(1).getAmount(), is(20000L));
+    }
+
+    @Test
+    @DisplayName("이번달과 저번달 수입 비교 조회 테스트")
+    void getIncomeCompareThisMonth() {
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022-01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021-12";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeRepository.getCompareThisMonth()).willReturn(fixtureList);
+
+        //when
+        List<IncomeStatisticsDTO> result = incomeService.getIncomeCompareThisMonth();
+
+        //then
+        assertThat(result.size(), is(2));
+        assertThat(result.get(0).getDay(), is("2022-01"));
+        assertThat(result.get(0).getAmount(), is(10000L));
+        assertThat(result.get(1).getDay(), is("2021-12"));
+        assertThat(result.get(1).getAmount(), is(20000L));
+    }
+
+    @Test
+    @DisplayName("올해와 작년 수입 비교 조회 테스트")
+    void getIncomeCompareThisYear() {
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeRepository.getCompareThisYear()).willReturn(fixtureList);
+
+        //when
+        List<IncomeStatisticsDTO> result = incomeService.getIncomeCompareThisYear();
+
+        //then
+        assertThat(result.size(), is(2));
+        assertThat(result.get(0).getDay(), is("2022"));
+        assertThat(result.get(0).getAmount(), is(10000L));
+        assertThat(result.get(1).getDay(), is("2021"));
+        assertThat(result.get(1).getAmount(), is(20000L));
     }
 
     @Test

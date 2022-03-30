@@ -139,6 +139,21 @@ class BelieverServiceTest {
     }
 
     @Test
+    @DisplayName("최근 등록 신도 5건 조회 후 DTO 타입으로 변경 테스트")
+    void getRecent5Believers() {
+        //given
+        given(believerRepository.findTop5ByOrderByBelieverIdDesc()).willReturn(fixtureList);
+        given(believerMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
+
+        //when
+        List<BelieverDTO> result = believerService.getRecent5Believers();
+
+        //then
+        checkEntity(result.get(0), fixtureDTO1);
+        checkEntity(result.get(1), fixtureDTO2);
+    }
+
+    @Test
     @DisplayName("신도 추가 테스트")
     void appendBeliever(){
         //given

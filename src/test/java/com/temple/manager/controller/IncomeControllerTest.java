@@ -8,6 +8,7 @@ import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.income.dto.IncomeDTO;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.controller.IncomeController;
+import com.temple.manager.income.dto.IncomeStatisticsDTO;
 import com.temple.manager.income.service.IncomeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +27,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -119,6 +119,252 @@ class IncomeControllerTest {
         String content = objectMapper.writeValueAsString(fixtureList);
 
         mockMvc.perform(get("/incomes/1"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("최근 등록 수입 5건 조회 테스트")
+    void getRecent5Incomes() throws Exception{
+        //given
+        List<IncomeDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        given(incomeService.getRecent5Incomes()).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/incomes/top/5"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이번달 일자별 통계 조회 테스트")
+    void getIncomeDailyStatistics() throws Exception{
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "02";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeService.getIncomeDailyStatistics(anyString())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/income/chart/statistics/daily/20220101"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("1년전부터 매월 통계 조회 테스트")
+    void getIncomeMonthStatistics() throws Exception{
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022-01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021-12";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeService.getIncomeMonthStatistics(anyString())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/income/chart/statistics/month/20220101"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("10년전부터 매년 통계 조회 테스트")
+    void getIncomeYearStatistics() throws Exception{
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeService.getIncomeYearStatistics(anyString())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/income/chart/statistics/year/20220101"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("오늘과 어제 수입 비교 조회 테스트")
+    void getIncomeCompareToDay() throws Exception{
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022-01-01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021-12-31";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeService.getIncomeCompareToDay()).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/income/compare/today"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이번달과 저번달 수입 비교 조회 테스트")
+    void getIncomeCompareThisMonth() throws Exception{
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022-01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021-12";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeService.getIncomeCompareThisMonth()).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/income/compare/thismonth"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("올해와 작년 수입 비교 조회 테스트")
+    void getIncomeCompareThisYear() throws Exception{
+        //given
+        List<IncomeStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022";
+            }
+
+            @Override
+            public long getAmount() {
+                return 10000;
+            }
+        });
+        fixtureList.add(new IncomeStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021";
+            }
+
+            @Override
+            public long getAmount() {
+                return 20000;
+            }
+        });
+
+        given(incomeService.getIncomeCompareThisYear()).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/income/compare/thisyear"))
                 .andExpect(content().json(content))
                 .andDo(print());
     }

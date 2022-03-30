@@ -7,6 +7,7 @@ import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.prayer.controller.PrayerController;
 import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.service.PrayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -120,6 +121,31 @@ class PrayerControllerTest {
         String content = objectMapper.writeValueAsString(fixtureList);
 
         mockMvc.perform(get("/prayers/1"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("")
+    void getPrayersTypeGroupCnt() throws Exception {
+        //given
+        List<PrayerTypeGroupCntDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(PrayerTypeGroupCntDTO.builder()
+                .prayerName("testPrayer1")
+                .prayerCnt(10)
+                .build());
+
+        fixtureList.add(PrayerTypeGroupCntDTO.builder()
+                .prayerName("testPrayer1")
+                .prayerCnt(20)
+                .build());
+
+        given(prayerService.getPrayersTypeGroupCnt()).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/prayers/chart/count"))
                 .andExpect(content().json(content))
                 .andDo(print());
     }

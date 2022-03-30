@@ -8,6 +8,7 @@ import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.expenditure.controller.ExpenditureController;
 import com.temple.manager.expenditure.dto.ExpenditureDTO;
 import com.temple.manager.enumable.PaymentType;
+import com.temple.manager.expenditure.dto.ExpenditureStatisticsDTO;
 import com.temple.manager.expenditure.service.ExpenditureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +27,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -119,6 +119,141 @@ class ExpenditureControllerTest {
         String content = objectMapper.writeValueAsString(fixtureList);
 
         mockMvc.perform(get("/expenditures/1"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("최근 등록 지출 5건 조회 테스트")
+    void getRecent5Expenditures() throws Exception{
+        //given
+        List<ExpenditureDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        given(expenditureService.getRecent5Expenditures()).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/expenditures/top/5"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이번달 일자별 통계 조회 테스트")
+    void getIncomeDailyStatistics() throws Exception{
+        //given
+        List<ExpenditureStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new ExpenditureStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 1000;
+            }
+        });
+
+        fixtureList.add(new ExpenditureStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "02";
+            }
+
+            @Override
+            public long getAmount() {
+                return 2000;
+            }
+        });
+
+        given(expenditureService.getExpenditureDailyStatistics(anyString())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/expenditure/chart/statistics/daily/20220101"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("1년전부터 매월 통계 조회 테스트")
+    void getIncomeMonthStatistics() throws Exception{
+        //given
+        List<ExpenditureStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new ExpenditureStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022-01";
+            }
+
+            @Override
+            public long getAmount() {
+                return 1000;
+            }
+        });
+
+        fixtureList.add(new ExpenditureStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021-12";
+            }
+
+            @Override
+            public long getAmount() {
+                return 2000;
+            }
+        });
+
+        given(expenditureService.getExpenditureMonthStatistics(anyString())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/expenditure/chart/statistics/month/20220101"))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("10년전부터 매년 통계 조회 테스트")
+    void getIncomeYearStatistics() throws Exception{
+        //given
+        List<ExpenditureStatisticsDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new ExpenditureStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2022";
+            }
+
+            @Override
+            public long getAmount() {
+                return 1000;
+            }
+        });
+
+        fixtureList.add(new ExpenditureStatisticsDTO() {
+            @Override
+            public String getDay() {
+                return "2021";
+            }
+
+            @Override
+            public long getAmount() {
+                return 2000;
+            }
+        });
+
+        given(expenditureService.getExpenditureYearStatistics(anyString())).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/expenditure/chart/statistics/year/20220101"))
                 .andExpect(content().json(content))
                 .andDo(print());
     }

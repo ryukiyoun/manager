@@ -181,24 +181,11 @@ class FamilyServiceTest {
         //given
         Family spyFamily = spy(Family.class);
 
-        given(familyRepository.findById(anyLong())).willReturn(Optional.of(spyFamily));
-
         //when
         familyService.deleteFamily(1);
 
         //then
-        verify(familyRepository, times(1)).findById(anyLong());
-        verify(spyFamily, times(1)).delete();
-    }
-
-    @Test
-    @DisplayName("특정 가족 삭제 조회 시 Empty 테스트")
-    void deleteFamilyEmpty(){
-        //given
-        given(familyRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        //when, then
-        assertThrows(RuntimeException.class, () ->familyService.deleteFamily(1));
+        verify(familyRepository, times(1)).deleteById(anyLong());
     }
 
     void checkEntity(FamilyDTO resultDTO, FamilyDTO compareDTO){

@@ -131,6 +131,25 @@ class BelieverControllerTest {
     }
 
     @Test
+    @DisplayName("최근 등록 신도 5건 조회 테스트")
+    void getRecent5Believer() throws Exception {
+        //given
+        List<BelieverDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(fixture1);
+        fixtureList.add(fixture2);
+
+        given(believerService.getRecent5Believers()).willReturn(fixtureList);
+
+        //when, then
+        String content = objectMapper.writeValueAsString(fixtureList);
+
+        mockMvc.perform(get("/believers/top/5")
+                .with(csrf()))
+                .andExpect(content().json(content))
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("신도 추가 테스트")
     void appendBeliever() throws Exception {
         //given
