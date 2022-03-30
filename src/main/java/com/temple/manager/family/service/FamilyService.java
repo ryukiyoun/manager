@@ -33,7 +33,6 @@ public class FamilyService {
 
     @Transactional
     public void deleteFamily(long id){
-        Family family = familyRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Family"));
-        family.delete();
+        familyRepository.deleteById(id);
     }
 }

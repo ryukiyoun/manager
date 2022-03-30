@@ -53,23 +53,11 @@ public class Family extends BaseEntity {
     @JoinColumn(name = "BELIEVER_ID", nullable = false)
     private Believer believer;
 
-    @Column(nullable = false, length = 14)
-    private String active;
-
-    @PrePersist
-    public void prePersist(){
-        this.active = "99999999999999";
-    }
-
     public void update(FamilyDTO familyDTO){
         this.familyType = familyDTO.getFamilyType();
         this.etcValue = familyDTO.getEtcValue();
         this.familyName = familyDTO.getFamilyName();
         this.birthOfYear = familyDTO.getBirthOfYear();
         this.lunarSolarType = familyDTO.getLunarSolarType();
-    }
-
-    public void delete(){
-        this.active = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
     }
 }
