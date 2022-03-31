@@ -5,10 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -41,32 +39,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/static/**");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/static/**").permitAll()
                 .antMatchers("/profile").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
                 .formLogin()
                 .permitAll()
                 .and()
-                /*.loginPage("/login")
-                .loginProcessingUrl("/login/process")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .successHandler(new CustomLoginSuccessHandler(loggingRepository))
-                .permitAll()
-                .and()*/
+
                 //.addFilterAfter(new CustomAjaxSessionTimeoutFilter(), ExceptionTranslationFilter.class)
-                .csrf().ignoringAntMatchers("/h2-console/**")
+                .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
 
                 .headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                .and()
+
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login/process")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                //.successHandler(new CustomLoginSuccessHandler(loggingRepository))
+                .permitAll()
                 .and()
 
                 .logout()
