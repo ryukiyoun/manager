@@ -78,14 +78,14 @@
 
             $(instance.element).on('click', '.btn-append', function () {
                 ajaxPostRequest('/expenditure', JSON.stringify({
-                    believer: { believerId: instance.believerId },
+                    believer: instance.believerId === 0 ? null : { believerId: instance.believerId },
                     code: {codeId: $('#' + instance.expenditureTypeElId).val() },
                     cashAmount: $('#' + instance.expenditureCashAmountElId).val(),
                     cardAmount: $('#' + instance.expenditureCardAmountElId).val(),
                     bankBookAmount: $('#' + instance.expenditureBankBookAmountElId).val(),
                     installment: $('#' + instance.expenditureInstallmentElId).val(),
                     expenditureDate: $('#' + instance.expenditureDateElId).val(),
-                    paymentType: 'BELIEVER'
+                    paymentType: instance.believerId === 0 ? 'TEMPLE' : 'BELIEVER'
                 }), function (){
                     //OPTION CALLBACK
                     if (typeof instance.options.onAppendSuccess == 'function') {
@@ -187,7 +187,7 @@
             });
 
             let expenditureCashAmountFormGroup = $('<div/>', {
-                class: 'form-group m-r-10'
+                class: 'form-group m-r-10 flex-1'
             });
 
             let expenditureCashAmountLabel = $('<label/>', {
@@ -207,7 +207,7 @@
             cashCardFormGroup.append(expenditureCashAmountFormGroup);
 
             let expenditureCardAmountFormGroup = $('<div/>', {
-                class: 'form-group'
+                class: 'form-group flex-1'
             });
 
             let expenditureCardAmountLabel = $('<label/>', {
@@ -233,7 +233,7 @@
             });
 
             let expenditureBankBookAmountFormGroup = $('<div/>', {
-                class: 'form-group m-r-10'
+                class: 'form-group m-r-10 flex-1'
             });
 
             let expenditureBankBookAmountLabel = $('<label/>', {
@@ -253,7 +253,7 @@
             bankBookInstallmentFormGroup.append(expenditureBankBookAmountFormGroup);
 
             let expenditureInstallmentFormGroup = $('<div/>', {
-                class: 'form-group'
+                class: 'form-group flex-1'
             });
 
             let expenditureInstallmentLabel = $('<label/>', {

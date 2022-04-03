@@ -78,14 +78,14 @@
 
             $(instance.element).on('click', '.btn-append', function () {
                 ajaxPostRequest('/income', JSON.stringify({
-                    believer: { believerId: instance.believerId },
+                    believer: instance.believerId === 0 ? null : { believerId: instance.believerId },
                     code: {codeId: $('#' + instance.incomeTypeElId).val() },
                     cashAmount: $('#' + instance.incomeCashAmountElId).val(),
                     cardAmount: $('#' + instance.incomeCardAmountElId).val(),
                     bankBookAmount: $('#' + instance.incomeBankBookAmountElId).val(),
                     installment: $('#' + instance.incomeInstallmentElId).val(),
                     incomeDate: $('#' + instance.incomeDateElId).val(),
-                    paymentType: 'BELIEVER'
+                    paymentType: instance.believerId === 0 ? 'TEMPLE' : 'BELIEVER'
                 }), function (){
                     //OPTION CALLBACK
                     if (typeof instance.options.onAppendSuccess == 'function') {
@@ -187,7 +187,7 @@
             });
 
             let incomeCashAmountFormGroup = $('<div/>', {
-                class: 'form-group m-r-10'
+                class: 'form-group m-r-10 flex-1'
             });
 
             let incomeCashAmountLabel = $('<label/>', {
@@ -207,7 +207,7 @@
             cashCardFormGroup.append(incomeCashAmountFormGroup);
 
             let incomeCardAmountFormGroup = $('<div/>', {
-                class: 'form-group'
+                class: 'form-group flex-1'
             });
 
             let incomeCardAmountLabel = $('<label/>', {
@@ -233,7 +233,7 @@
             });
 
             let incomeBankBookAmountFormGroup = $('<div/>', {
-                class: 'form-group m-r-10'
+                class: 'form-group m-r-10 flex-1'
             });
 
             let incomeBankBookAmountLabel = $('<label/>', {
@@ -253,7 +253,7 @@
             bankBookInstallmentFormGroup.append(incomeBankBookAmountFormGroup);
 
             let incomeInstallmentFormGroup = $('<div/>', {
-                class: 'form-group'
+                class: 'form-group flex-1'
             });
 
             let incomeInstallmentLabel = $('<label/>', {
