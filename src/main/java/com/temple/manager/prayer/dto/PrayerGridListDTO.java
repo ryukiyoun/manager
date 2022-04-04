@@ -23,7 +23,6 @@ public class PrayerGridListDTO {
     private String prayerTypeCodeName;
 
     @QueryProjection
-
     public PrayerGridListDTO(long prayerId, LocalDate prayerStartDate, long believerId, String birthOfYear, String believerName, long codeId, String prayerTypeCodeName) {
         this.prayerId = prayerId;
         this.prayerStartDate = prayerStartDate;
