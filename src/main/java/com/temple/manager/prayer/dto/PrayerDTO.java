@@ -1,7 +1,5 @@
 package com.temple.manager.prayer.dto;
 
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.code.dto.CodeDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +16,7 @@ public class PrayerDTO {
 
     private LocalDate prayerStartDate;
 
-    private BelieverDTO believer;
+    private long believerId;
 
-    private CodeDTO code;
+    private long prayerTypeCodeId;
 }

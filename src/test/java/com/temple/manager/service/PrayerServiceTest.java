@@ -1,13 +1,8 @@
 package com.temple.manager.service;
 
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.prayer.dto.PrayerDTO;
-import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.code.entity.Code;
-import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
+import com.temple.manager.prayer.dto.PrayerGridListDTO;
 import com.temple.manager.prayer.entity.Prayer;
-import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.prayer.mapper.PrayerMapper;
 import com.temple.manager.prayer.repository.PrayerRepository;
 import com.temple.manager.prayer.repository.PrayerRepositorySupport;
@@ -59,37 +54,15 @@ class PrayerServiceTest {
         fixture1 = Prayer.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("tester1")
-                        .birthOfYear("120512")
-                        .address("서울시")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .build())
-                .code(Code.builder()
-                        .codeId(1)
-                        .codeName("testCode1")
-                        .codeValue("C-1")
-                        .parentCodeValue("P-1")
-                        .build())
+                .believerId(1)
+                .prayerTypeCodeId(1)
                 .build();
 
         fixture2 = Prayer.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(Believer.builder()
-                        .believerId(2)
-                        .believerName("tester2")
-                        .birthOfYear("194512")
-                        .address("부산시")
-                        .lunarSolarType(LunarSolarType.SOLAR)
-                        .build())
-                .code(Code.builder()
-                        .codeId(2)
-                        .codeName("testCode2")
-                        .codeValue("C-2")
-                        .parentCodeValue("P-1")
-                        .build())
+                .believerId(2)
+                .prayerTypeCodeId(2)
                 .build();
 
         fixtureList = new ArrayList<>();
@@ -99,37 +72,15 @@ class PrayerServiceTest {
         fixtureDTO1 = PrayerDTO.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester1")
-                        .birthOfYear("120512")
-                        .address("서울시")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode1")
-                        .codeValue("C-1")
-                        .parentCodeValue("P-1")
-                        .build())
+                .believerId(1)
+                .prayerTypeCodeId(1)
                 .build();
 
         fixtureDTO2 = PrayerDTO.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(BelieverDTO.builder()
-                        .believerId(2)
-                        .believerName("tester2")
-                        .birthOfYear("194512")
-                        .address("부산시")
-                        .lunarSolarType(LunarSolarType.SOLAR)
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(2)
-                        .codeName("testCode2")
-                        .codeValue("C-2")
-                        .parentCodeValue("P-1")
-                        .build())
+                .believerId(2)
+                .prayerTypeCodeId(2)
                 .build();
 
         fixtureDTOList = new ArrayList<>();
@@ -141,39 +92,71 @@ class PrayerServiceTest {
     @DisplayName("등록된 모든 기도 조회 후 Entity에서 DTO 타입으로 변경 테스트")
     void getAllPrayers() {
         //given
-        given(prayerRepository.findAll()).willReturn(fixtureList);
-        given(prayerMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
+        List<PrayerGridListDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new PrayerGridListDTO(1, LocalDate.now(), 1, "111111", "tester", 1, "testCodeName"));
+        fixtureList.add(new PrayerGridListDTO(2, LocalDate.now(), 2, "222222", "tester2", 2, "testCodeName2"));
+
+        given(prayerRepositorySupport.getPrayers()).willReturn(fixtureList);
 
         //when
-        List<PrayerDTO> result = prayerService.getAllPrayers();
+        List<PrayerGridListDTO> result = prayerService.getAllPrayers();
 
         //then
         assertThat(result.size(), is(2));
-        checkEntity(result.get(0), fixtureDTO1);
-        checkEntity(result.get(1), fixtureDTO2);
+        assertThat(result.get(0).getPrayerId(), is(1L));
+        assertThat(result.get(0).getPrayerStartDate(), is(LocalDate.now()));
+        assertThat(result.get(0).getBelieverId(), is(1L));
+        assertThat(result.get(0).getBelieverName(), is("tester"));
+        assertThat(result.get(0).getBirthOfYear(), is("111111"));
+        assertThat(result.get(0).getCodeId(), is(1L));
+        assertThat(result.get(0).getPrayerTypeCodeName(), is("testCodeName"));
+
+        assertThat(result.get(1).getPrayerId(), is(2L));
+        assertThat(result.get(1).getPrayerStartDate(), is(LocalDate.now()));
+        assertThat(result.get(1).getBelieverId(), is(2L));
+        assertThat(result.get(1).getBelieverName(), is("tester2"));
+        assertThat(result.get(1).getBirthOfYear(), is("222222"));
+        assertThat(result.get(1).getCodeId(), is(2L));
+        assertThat(result.get(1).getPrayerTypeCodeName(), is("testCodeName2"));
     }
 
     @Test
     @DisplayName("등록된 기도 중 특정 신도로 조회 후 Entity에서 DTO 타입으로 변경 테스트")
     void getPrayersByBelieverId() {
         //given
-        given(prayerRepository.findAllByBeliever_BelieverId(anyLong())).willReturn(fixtureList);
-        given(prayerMapper.entityListToDTOList(anyList())).willReturn(fixtureDTOList);
+        List<PrayerGridListDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new PrayerGridListDTO(1, LocalDate.now(), 1, "111111", "tester", 1, "testCodeName"));
+        fixtureList.add(new PrayerGridListDTO(2, LocalDate.now(), 2, "222222", "tester2", 2, "testCodeName2"));
+
+        given(prayerRepositorySupport.getPrayersByBelieverId(anyLong())).willReturn(fixtureList);
 
         //when
-        List<PrayerDTO> result = prayerService.getPrayersByBelieverId(1);
+        List<PrayerGridListDTO> result = prayerService.getPrayersByBelieverId(1);
 
         //then
         assertThat(result.size(), is(2));
-        checkEntity(result.get(0), fixtureDTO1);
-        checkEntity(result.get(1), fixtureDTO2);
+        assertThat(result.get(0).getPrayerId(), is(1L));
+        assertThat(result.get(0).getPrayerStartDate(), is(LocalDate.now()));
+        assertThat(result.get(0).getBelieverId(), is(1L));
+        assertThat(result.get(0).getBelieverName(), is("tester"));
+        assertThat(result.get(0).getBirthOfYear(), is("111111"));
+        assertThat(result.get(0).getCodeId(), is(1L));
+        assertThat(result.get(0).getPrayerTypeCodeName(), is("testCodeName"));
+
+        assertThat(result.get(1).getPrayerId(), is(2L));
+        assertThat(result.get(1).getPrayerStartDate(), is(LocalDate.now()));
+        assertThat(result.get(1).getBelieverId(), is(2L));
+        assertThat(result.get(1).getBelieverName(), is("tester2"));
+        assertThat(result.get(1).getBirthOfYear(), is("222222"));
+        assertThat(result.get(1).getCodeId(), is(2L));
+        assertThat(result.get(1).getPrayerTypeCodeName(), is("testCodeName2"));
     }
 
     @Test
     @DisplayName("등록된 기도 Group DTO 타입으로 조회 테스트")
     void getPrayersTypeGroupCnt() {
         //when
-        List<PrayerTypeGroupCntDTO> result = prayerService.getPrayersTypeGroupCnt();
+        prayerService.getPrayersTypeGroupCnt();
 
         //then
         verify(prayerRepositorySupport, times(1)).getPrayersTypeGroupCnt();
@@ -204,14 +187,8 @@ class PrayerServiceTest {
 
         PrayerDTO fixture = PrayerDTO.builder()
                 .prayerId(1)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester1")
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode1")
-                        .build())
+                .believerId(1)
+                .prayerTypeCodeId(1)
                 .prayerStartDate(LocalDate.now())
                 .build();
 
@@ -224,8 +201,8 @@ class PrayerServiceTest {
         verify(prayerRepository, times(1)).findById(anyLong());
         verify(spyPrayer, times(1)).update(any(PrayerDTO.class));
 
-        assertThat(spyPrayer.getBeliever().getBelieverId(), is(fixture.getBeliever().getBelieverId()));
-        assertThat(spyPrayer.getCode().getCodeId(), is(fixture.getCode().getCodeId()));
+        assertThat(spyPrayer.getBelieverId(), is(fixture.getBelieverId()));
+        assertThat(spyPrayer.getPrayerTypeCodeId(), is(fixture.getPrayerTypeCodeId()));
         assertThat(spyPrayer.getPrayerStartDate(), is(fixture.getPrayerStartDate()));
     }
 
@@ -268,7 +245,7 @@ class PrayerServiceTest {
     void checkEntity(PrayerDTO resultDTO, PrayerDTO compareDTO){
         assertThat(resultDTO.getPrayerId(), is(compareDTO.getPrayerId()));
         assertThat(resultDTO.getPrayerStartDate(), is(compareDTO.getPrayerStartDate()));
-        assertThat(resultDTO.getBeliever().getBelieverId(), is(compareDTO.getBeliever().getBelieverId()));
-        assertThat(resultDTO.getCode().getCodeId(), is(compareDTO.getCode().getCodeId()));
+        assertThat(resultDTO.getBelieverId(), is(compareDTO.getBelieverId()));
+        assertThat(resultDTO.getPrayerTypeCodeId(), is(compareDTO.getPrayerTypeCodeId()));
     }
 }

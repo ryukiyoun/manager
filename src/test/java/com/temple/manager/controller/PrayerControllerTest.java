@@ -3,10 +3,9 @@ package com.temple.manager.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.prayer.controller.PrayerController;
 import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.prayer.dto.PrayerGridListDTO;
 import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.service.PrayerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,27 +54,15 @@ class PrayerControllerTest {
     void init(){
         fixture1 = PrayerDTO.builder()
                 .prayerId(1)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester1")
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode1")
-                        .build())
+                .believerId(1)
+                .prayerTypeCodeId(1)
                 .prayerStartDate(LocalDate.now())
                 .build();
 
         fixture2 = PrayerDTO.builder()
                 .prayerId(2)
-                .believer(BelieverDTO.builder()
-                        .believerId(2)
-                        .believerName("tester2")
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(2)
-                        .codeName("testCode2")
-                        .build())
+                .believerId(2)
+                .prayerTypeCodeId(2)
                 .prayerStartDate(LocalDate.now())
                 .build();
     }
@@ -93,9 +80,9 @@ class PrayerControllerTest {
     @DisplayName("등록된 기도 정보 반환 테스트")
     void getAllPrayers() throws Exception{
         //given
-        List<PrayerDTO> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
+        List<PrayerGridListDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new PrayerGridListDTO(1, LocalDate.now(), 1, "111111", "tester", 1, "testCodeName"));
+        fixtureList.add(new PrayerGridListDTO(2, LocalDate.now(), 2, "222222", "tester2", 2, "testCodeName2"));
 
         given(prayerService.getAllPrayers()).willReturn(fixtureList);
 
@@ -108,12 +95,12 @@ class PrayerControllerTest {
     }
 
     @Test
-    @DisplayName("등록된 가족 신도ID 검색 정보 반환 테스트")
+    @DisplayName("등록된 기도 신도ID 검색 정보 반환 테스트")
     void getPrayersByBelieverId() throws Exception {
         //given
-        List<PrayerDTO> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
+        List<PrayerGridListDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new PrayerGridListDTO(1, LocalDate.now(), 1, "111111", "tester", 1, "testCodeName"));
+        fixtureList.add(new PrayerGridListDTO(2, LocalDate.now(), 2, "222222", "tester2", 2, "testCodeName2"));
 
         given(prayerService.getPrayersByBelieverId(anyLong())).willReturn(fixtureList);
 
@@ -126,7 +113,7 @@ class PrayerControllerTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("기도별 등록 건수 정보 반환 테스트")
     void getPrayersTypeGroupCnt() throws Exception {
         //given
         List<PrayerTypeGroupCntDTO> fixtureList = new ArrayList<>();

@@ -79,20 +79,20 @@ public class PrayerRepositorySupportTest {
 
         prayerRepository.save(Prayer.builder()
                 .prayerStartDate(LocalDate.now())
-                .believer(saveBeliever)
-                .code(code1)
+                .believerId(saveBeliever.getBelieverId())
+                .prayerTypeCodeId(code1.getCodeId())
                 .build());
 
         prayerRepository.save(Prayer.builder()
                 .prayerStartDate(LocalDate.now())
-                .believer(saveBeliever)
-                .code(code2)
+                .believerId(saveBeliever.getBelieverId())
+                .prayerTypeCodeId(code2.getCodeId())
                 .build());
 
         prayerRepository.save(Prayer.builder()
                 .prayerStartDate(LocalDate.now())
-                .believer(saveBeliever)
-                .code(code2)
+                .believerId(saveBeliever.getBelieverId())
+                .prayerTypeCodeId(code2.getCodeId())
                 .build());
 
         em.clear();

@@ -1,6 +1,7 @@
 package com.temple.manager.prayer.service;
 
 import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.prayer.dto.PrayerGridListDTO;
 import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.prayer.mapper.PrayerMapper;
@@ -19,12 +20,12 @@ public class PrayerService {
     private final PrayerRepositorySupport prayerRepositorySupport;
     private final PrayerMapper prayerMapper;
 
-    public List<PrayerDTO> getAllPrayers() {
-        return prayerMapper.entityListToDTOList(prayerRepository.findAll());
+    public List<PrayerGridListDTO> getAllPrayers() {
+        return prayerRepositorySupport.getPrayers();
     }
 
-    public List<PrayerDTO> getPrayersByBelieverId(long believerId) {
-        return prayerMapper.entityListToDTOList(prayerRepository.findAllByBeliever_BelieverId(believerId));
+    public List<PrayerGridListDTO> getPrayersByBelieverId(long believerId) {
+        return prayerRepositorySupport.getPrayersByBelieverId(believerId);
     }
 
     public List<PrayerTypeGroupCntDTO> getPrayersTypeGroupCnt() {

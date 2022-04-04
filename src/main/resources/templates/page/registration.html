@@ -383,7 +383,7 @@
 
             let familyAdditionalOption = Object.assign({}, defaultDataTablesOption, {
                 select: 'single',
-                scrollY: '230px',
+                scrollY: '220px',
                 ajax: {
                     url: '/families/' + believerData.believerId,
                     type: 'GET',
@@ -507,15 +507,15 @@
 
             let prayerAdditionalOption = Object.assign({}, defaultDataTablesOption, {
                 select: 'single',
-                scrollY: '230px',
+                scrollY: '220px',
                 ajax: {
                     url: '/prayers/' + believerData.believerId,
                     type: 'GET',
                     dataSrc: ''
                 },
                 columns: [
-                    {data: 'believer.believerName', title: '신도명', width: '30%'},
-                    {data: 'code.codeName', title: '기도종류', width: '30%'},
+                    {data: 'believerName', title: '신도명', width: '30%'},
+                    {data: 'prayerTypeCodeName', title: '기도종류', width: '30%'},
                     {data: 'prayerStartDate', title: '기도시작일', width: '40%'}
                 ],
                 columnDefs: [
@@ -617,7 +617,7 @@
 
             let incomeAdditionalOption = Object.assign({}, defaultDataTablesOption, {
                 select: 'single',
-                scrollY: '230px',
+                scrollY: '220px',
                 ajax: {
                     url: '/incomes/' + believerData.believerId,
                     type: 'GET',
@@ -759,7 +759,7 @@
 
             let expenditureAdditionalOption = Object.assign({}, defaultDataTablesOption, {
                 select: 'single',
-                scrollY: '230px',
+                scrollY: '220px',
                 ajax: {
                     url: '/expenditures/' + believerData.believerId,
                     type: 'GET',

@@ -1,6 +1,7 @@
 package com.temple.manager.prayer.controller;
 
 import com.temple.manager.prayer.dto.PrayerDTO;
+import com.temple.manager.prayer.dto.PrayerGridListDTO;
 import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.service.PrayerService;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,12 @@ public class PrayerController {
     }
 
     @GetMapping("/prayers")
-    public ResponseEntity<List<PrayerDTO>> getAllPrayers() {
+    public ResponseEntity<List<PrayerGridListDTO>> getAllPrayers() {
         return ResponseEntity.ok(prayerService.getAllPrayers());
     }
 
     @GetMapping("/prayers/{believerId}")
-    public ResponseEntity<List<PrayerDTO>> getPrayersByBelieverId(@PathVariable long believerId) {
+    public ResponseEntity<List<PrayerGridListDTO>> getPrayersByBelieverId(@PathVariable long believerId) {
         return ResponseEntity.ok(prayerService.getPrayersByBelieverId(believerId));
     }
 

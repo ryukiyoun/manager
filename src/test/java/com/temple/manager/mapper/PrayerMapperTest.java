@@ -1,13 +1,6 @@
 package com.temple.manager.mapper;
 
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.code.dto.CodeDTO;
-import com.temple.manager.code.entity.Code;
 import com.temple.manager.config.TestMapperConfig;
-import com.temple.manager.enumable.FamilyType;
-import com.temple.manager.enumable.LunarSolarType;
-import com.temple.manager.family.dto.FamilyDTO;
 import com.temple.manager.prayer.dto.PrayerDTO;
 import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.prayer.mapper.PrayerMapper;
@@ -47,22 +40,8 @@ public class PrayerMapperTest {
         fixture = Prayer.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("부산")
-                        .build())
-                .code(Code.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .believerId(1)
+                .prayerTypeCodeId(1)
                 .build();
 
         fixtureList = new ArrayList<>();
@@ -71,22 +50,8 @@ public class PrayerMapperTest {
         fixtureDTO = PrayerDTO.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("부산")
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .believerId(2)
+                .prayerTypeCodeId(2)
                 .build();
 
         fixtureDTOList = new ArrayList<>();
@@ -103,19 +68,9 @@ public class PrayerMapperTest {
         assertThat(result.getPrayerId(), is(1L));
         assertThat(result.getPrayerStartDate(), is(LocalDate.now()));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("부산"));
+        assertThat(result.getBelieverId(), is(1L));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getPrayerTypeCodeId(), is(1L));
     }
 
     @Test
@@ -135,16 +90,8 @@ public class PrayerMapperTest {
         Prayer fixture = Prayer.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(null)
-                .code(Code.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .believerId(0L)
+                .prayerTypeCodeId(1)
                 .build();
 
         //when
@@ -154,15 +101,9 @@ public class PrayerMapperTest {
         assertThat(result.getPrayerId(), is(1L));
         assertThat(result.getPrayerStartDate(), is(LocalDate.now()));
 
-        assertThat(result.getBeliever(), is(nullValue()));
+        assertThat(result.getBelieverId(), is(0L));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getPrayerTypeCodeId(), is(1L));
     }
 
     @Test
@@ -172,14 +113,8 @@ public class PrayerMapperTest {
         Prayer fixture = Prayer.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("부산")
-                        .build())
-                .code(null)
+                .believerId(1L)
+                .prayerTypeCodeId(0L)
                 .build();
 
         //when
@@ -189,13 +124,9 @@ public class PrayerMapperTest {
         assertThat(result.getPrayerId(), is(1L));
         assertThat(result.getPrayerStartDate(), is(LocalDate.now()));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("부산"));
+        assertThat(result.getBelieverId(), is(1L));
 
-        assertThat(result.getCode(), is(nullValue()));
+        assertThat(result.getPrayerTypeCodeId(), is(0L));
     }
 
     @Test
@@ -208,19 +139,9 @@ public class PrayerMapperTest {
         assertThat(result.getPrayerId(), is(1L));
         assertThat(result.getPrayerStartDate(), is(LocalDate.now()));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("부산"));
+        assertThat(result.getBelieverId(), is(2L));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getPrayerTypeCodeId(), is(2L));
     }
 
     @Test
@@ -240,16 +161,8 @@ public class PrayerMapperTest {
         PrayerDTO fixtureDTO = PrayerDTO.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(null)
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .believerId(0L)
+                .prayerTypeCodeId(1L)
                 .build();
 
         //when
@@ -259,15 +172,9 @@ public class PrayerMapperTest {
         assertThat(result.getPrayerId(), is(1L));
         assertThat(result.getPrayerStartDate(), is(LocalDate.now()));
 
-        assertThat(result.getBeliever(), is(nullValue()));
+        assertThat(result.getBelieverId(), is(0L));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getPrayerTypeCodeId(), is(1L));
     }
 
     @Test
@@ -277,14 +184,8 @@ public class PrayerMapperTest {
         PrayerDTO fixtureDTO = PrayerDTO.builder()
                 .prayerId(1)
                 .prayerStartDate(LocalDate.now())
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("부산")
-                        .build())
-                .code(null)
+                .believerId(1L)
+                .prayerTypeCodeId(0L)
                 .build();
 
         //when
@@ -294,13 +195,9 @@ public class PrayerMapperTest {
         assertThat(result.getPrayerId(), is(1L));
         assertThat(result.getPrayerStartDate(), is(LocalDate.now()));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("부산"));
+        assertThat(result.getBelieverId(), is(1L));
 
-        assertThat(result.getCode(), is(nullValue()));
+        assertThat(result.getPrayerTypeCodeId(), is(0L));
     }
 
     @Test
@@ -313,19 +210,9 @@ public class PrayerMapperTest {
         assertThat(result.get(0).getPrayerId(), is(1L));
         assertThat(result.get(0).getPrayerStartDate(), is(LocalDate.now()));
 
-        assertThat(result.get(0).getBeliever().getBelieverId(), is(1L));
-        assertThat(result.get(0).getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.get(0).getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.get(0).getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.get(0).getBeliever().getAddress(), is("부산"));
+        assertThat(result.get(0).getBelieverId(), is(1L));
 
-        assertThat(result.get(0).getCode().getCodeId(), is(1L));
-        assertThat(result.get(0).getCode().getCodeName(), is("testCode"));
-        assertThat(result.get(0).getCode().getCodeValue(), is("testValue"));
-        assertThat(result.get(0).getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.get(0).getCode().getAtt1(), is("1"));
-        assertThat(result.get(0).getCode().getAtt2(), is("2"));
-        assertThat(result.get(0).getCode().getAtt3(), is("3"));
+        assertThat(result.get(0).getPrayerTypeCodeId(), is(1L));
     }
 
     @Test

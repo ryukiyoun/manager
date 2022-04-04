@@ -88,8 +88,8 @@
                 if(instance.prayerId !== 0) {
                     ajaxPutRequest('/prayer/' + instance.prayerId, JSON.stringify({
                         prayerStartDate: $('#' + instance.prayerStartDateElId).val(),
-                        code: {codeId: $('#' + instance.prayerTypeElId).val() },
-                        believer: {believerId: $('#' + instance.prayerBelieverNameElId).select2('data')[0].id }
+                        prayerTypeCodeId: $('#' + instance.prayerTypeElId).val(),
+                        believerId: $('#' + instance.prayerBelieverNameElId).select2('data')[0].id
                     }), function () {
                         //OPTION CALLBACK
                         if (typeof instance.options.onSaveSuccess == 'function') {
@@ -117,8 +117,8 @@
 
             $(instance.element).on('click', '.btn-append', function () {
                 ajaxPostRequest('/prayer', JSON.stringify({
-                    believer: { believerId: instance.believerId },
-                    code: { codeId: $('#' + instance.prayerTypeElId).val() },
+                    believerId: instance.believerId,
+                    prayerTypeCodeId: $('#' + instance.prayerTypeElId).val(),
                     prayerStartDate: $('#' + instance.prayerStartDateElId).val()
                 }), function (){
                     //OPTION CALLBACK
@@ -273,10 +273,10 @@
         setValues: function(rowData){
             this.prayerId = rowData.prayerId;
 
-            let select2Text = rowData.believer.believerName + ' (생년월일: ' + rowData.believer.birthOfYear + ')';
-            this.select2.append(new Option(select2Text, rowData.believer.believerId, false, true));
+            let select2Text = rowData.believerName + ' (생년월일: ' + rowData.birthOfYear + ')';
+            this.select2.append(new Option(select2Text, rowData.believerId, false, true));
 
-            $('#' + this.prayerTypeElId).val(rowData.code.codeId);
+            $('#' + this.prayerTypeElId).val(rowData.codeId);
 
             this.datepicker.datepicker('update', rowData.prayerStartDate);
         },
@@ -284,8 +284,6 @@
         //Reset Editor Data
         setEmpty: function(){
             this.prayerId = 0;
-
-            //$('#' + this.prayerTypeElId).val('');
 
             $('#' + this.prayerTypeElId).each(function(index, el){
                 $(el).val($(this).find('option').eq(0).val());
