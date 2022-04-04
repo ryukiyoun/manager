@@ -549,8 +549,8 @@
         function getComparePercent(amount1, amount2) {
             if(amount2 !== 0)
                 return Math.round(amount1 / amount2 * 100) < 100 ? Math.round(amount1 / amount2 * 100) : 100;
-            else
-                return 100;
+
+            return 100;
         }
 
         function getProgressColor(percent) {
@@ -558,8 +558,8 @@
                 return 'progress-bar-danger';
             else if (33 <= percent && percent < 66)
                 return 'progress-bar-warning';
-            else
-                return 'progress-bar-success';
+
+            return 'progress-bar-success';
         }
 
         function setProgressBar(element, data){
