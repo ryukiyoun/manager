@@ -45,7 +45,6 @@ public class PrayerService {
 
     @Transactional
     public void deletePrayer(long id) {
-        Prayer prayer = prayerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found Prayer"));
-        prayer.delete();
+        prayerRepository.deleteById(id);
     }
 }
