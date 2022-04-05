@@ -1,7 +1,5 @@
 package com.temple.manager.mapper;
 
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.config.TestMapperConfig;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
@@ -44,13 +42,7 @@ public class FamilyMapperTest {
                 .familyId(1)
                 .familyName("tester1")
                 .familyType(FamilyType.FATHER)
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("believer1")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("부산")
-                        .build())
+                .believerId(1)
                 .lunarSolarType(LunarSolarType.LUNAR)
                 .birthOfYear("111111")
                 .etcValue("etc1")
@@ -63,13 +55,7 @@ public class FamilyMapperTest {
                 .familyId(1)
                 .familyName("tester1")
                 .familyType(FamilyType.FATHER)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("believer1")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("부산")
-                        .build())
+                .believerId(1)
                 .lunarSolarType(LunarSolarType.LUNAR)
                 .birthOfYear("111111")
                 .etcValue("etc1")
@@ -92,11 +78,7 @@ public class FamilyMapperTest {
         assertThat(result.getLunarSolarType(), is(LunarSolarType.LUNAR));
         assertThat(result.getFamilyType(), is(FamilyType.FATHER));
         assertThat(result.getEtcValue(), is("etc1"));
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("believer1"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("부산"));
+        assertThat(result.getBelieverId(), is(1L));
     }
 
     @Test
@@ -117,7 +99,7 @@ public class FamilyMapperTest {
                 .familyId(1)
                 .familyName("tester1")
                 .familyType(FamilyType.FATHER)
-                .believer(null)
+                .believerId(0L)
                 .lunarSolarType(LunarSolarType.LUNAR)
                 .birthOfYear("111111")
                 .etcValue("etc1")
@@ -147,11 +129,7 @@ public class FamilyMapperTest {
         assertThat(result.getLunarSolarType(), is(LunarSolarType.LUNAR));
         assertThat(result.getFamilyType(), is(FamilyType.FATHER));
         assertThat(result.getEtcValue(), is("etc1"));
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("believer1"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("부산"));
+        assertThat(result.getBelieverId(), is(1L));
     }
 
     @Test
@@ -172,7 +150,7 @@ public class FamilyMapperTest {
                 .familyId(1)
                 .familyName("tester1")
                 .familyType(FamilyType.FATHER)
-                .believer(null)
+                .believerId(0L)
                 .lunarSolarType(LunarSolarType.LUNAR)
                 .birthOfYear("111111")
                 .etcValue("etc1")
@@ -202,11 +180,7 @@ public class FamilyMapperTest {
         assertThat(result.get(0).getLunarSolarType(), is(LunarSolarType.LUNAR));
         assertThat(result.get(0).getFamilyType(), is(FamilyType.FATHER));
         assertThat(result.get(0).getEtcValue(), is("etc1"));
-        assertThat(result.get(0).getBeliever().getBelieverId(), is(1L));
-        assertThat(result.get(0).getBeliever().getBelieverName(), is("believer1"));
-        assertThat(result.get(0).getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.get(0).getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.get(0).getBeliever().getAddress(), is("부산"));
+        assertThat(result.get(0).getBelieverId(), is(1L));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.temple.manager.family.entity;
 
-import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.common.entity.BaseEntity;
 import com.temple.manager.converter.AesConverter;
 import com.temple.manager.enumable.FamilyType;
@@ -15,8 +14,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -49,9 +46,8 @@ public class Family extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private LunarSolarType lunarSolarType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BELIEVER_ID", nullable = false)
-    private Believer believer;
+    @JoinColumn(name = "BELIEVER_ID", nullable = false, referencedColumnName = "BELIEVER_ID")
+    private long believerId;
 
     public void update(FamilyDTO familyDTO){
         this.familyType = familyDTO.getFamilyType();

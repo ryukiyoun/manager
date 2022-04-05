@@ -1,11 +1,9 @@
 package com.temple.manager.service;
 
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.family.dto.FamilyDTO;
-import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.family.entity.Family;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
+import com.temple.manager.family.dto.FamilyDTO;
+import com.temple.manager.family.entity.Family;
 import com.temple.manager.family.mapper.FamilyMapper;
 import com.temple.manager.family.repository.FamilyRepository;
 import com.temple.manager.family.service.FamilyService;
@@ -53,12 +51,7 @@ class FamilyServiceTest {
                 .familyId(1)
                 .familyName("tester1")
                 .familyType(FamilyType.FATHER)
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("believer1")
-                        .birthOfYear("111111")
-                        .address("부산")
-                        .build())
+                .believerId(1)
                 .lunarSolarType(LunarSolarType.LUNAR)
                 .birthOfYear("111111")
                 .etcValue("etc1")
@@ -68,12 +61,7 @@ class FamilyServiceTest {
                 .familyId(2)
                 .familyName("tester2")
                 .familyType(FamilyType.MOTHER)
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("believer2")
-                        .birthOfYear("222222")
-                        .address("서울")
-                        .build())
+                .believerId(1)
                 .lunarSolarType(LunarSolarType.SOLAR)
                 .birthOfYear("222222")
                 .etcValue("etc2")
@@ -87,12 +75,7 @@ class FamilyServiceTest {
                 .familyId(1)
                 .familyName("tester1")
                 .familyType(FamilyType.FATHER)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("believer1")
-                        .birthOfYear("111111")
-                        .address("부산")
-                        .build())
+                .believerId(1)
                 .lunarSolarType(LunarSolarType.LUNAR)
                 .birthOfYear("111111")
                 .etcValue("etc1")
@@ -102,12 +85,7 @@ class FamilyServiceTest {
                 .familyId(2)
                 .familyName("tester2")
                 .familyType(FamilyType.MOTHER)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("believer2")
-                        .birthOfYear("222222")
-                        .address("서울")
-                        .build())
+                .believerId(1)
                 .lunarSolarType(LunarSolarType.SOLAR)
                 .birthOfYear("222222")
                 .etcValue("etc2")
@@ -178,9 +156,6 @@ class FamilyServiceTest {
     @Test
     @DisplayName("특정 가족 Soft Delete 테스트")
     void deleteFamily() {
-        //given
-        Family spyFamily = spy(Family.class);
-
         //when
         familyService.deleteFamily(1);
 
@@ -195,6 +170,6 @@ class FamilyServiceTest {
         assertThat(resultDTO.getLunarSolarType(), is(compareDTO.getLunarSolarType()));
         assertThat(resultDTO.getBirthOfYear(), is(compareDTO.getBirthOfYear()));
         assertThat(resultDTO.getEtcValue(), is(compareDTO.getEtcValue()));
-        assertThat(resultDTO.getBeliever().getBelieverId(), is(compareDTO.getBeliever().getBelieverId()));
+        assertThat(resultDTO.getBelieverId(), is(compareDTO.getBelieverId()));
     }
 }

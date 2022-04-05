@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface FamilyRepository extends JpaRepository<Family, Long> {
-    @Query("from Family f join fetch f.believer b where b.believerId = :believerId")
+    @Query("from Family f inner join Believer b on b.believerId = f.believerId where f.believerId = :believerId")
     List<Family> findAllByBeliever_BelieverId(long believerId);
 
-    long deleteByBeliever_BelieverId(long believerId);
+    long deleteByBelieverId(long believerId);
 }

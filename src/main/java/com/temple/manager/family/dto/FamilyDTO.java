@@ -1,6 +1,5 @@
 package com.temple.manager.family.dto;
 
-import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
 import lombok.AllArgsConstructor;
@@ -25,5 +24,5 @@ public class FamilyDTO {
 
     private LunarSolarType lunarSolarType;
 
-    private BelieverDTO believer;
+    private long believerId;
 }

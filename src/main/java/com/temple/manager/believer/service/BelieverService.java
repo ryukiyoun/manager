@@ -50,6 +50,6 @@ public class BelieverService {
     public void deleteBeliever(long id) {
         believerRepository.deleteById(id);
 
-        familyRepository.deleteByBeliever_BelieverId(id);
+        familyRepository.deleteByBelieverId(id);
     }
 }

@@ -6,7 +6,6 @@ import com.temple.manager.believer.mapper.BelieverMapper;
 import com.temple.manager.believer.repository.BelieverRepository;
 import com.temple.manager.believer.service.BelieverService;
 import com.temple.manager.enumable.LunarSolarType;
-import com.temple.manager.family.entity.Family;
 import com.temple.manager.family.repository.FamilyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -199,14 +198,14 @@ class BelieverServiceTest {
     void deleteBeliever(){
         //given
         doNothing().when(believerRepository).deleteById(anyLong());
-        given(familyRepository.deleteByBeliever_BelieverId(anyLong())).willReturn(2L);
+        given(familyRepository.deleteByBelieverId(anyLong())).willReturn(2L);
 
         //when
         believerService.deleteBeliever(1);
 
         //then
         verify(believerRepository, times(1)).deleteById(anyLong());
-        verify(familyRepository, times(1)).deleteByBeliever_BelieverId(anyLong());
+        verify(familyRepository, times(1)).deleteByBelieverId(anyLong());
     }
 
     void checkEntity(BelieverDTO resultDTO, BelieverDTO compareDTO){

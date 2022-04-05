@@ -75,7 +75,7 @@
 
             $(instance.element).on('click', '.btn-append', function () {
                 ajaxPostRequest('/family', JSON.stringify({
-                    believer: { believerId: instance.believerId },
+                    believerId: instance.believerId,
                     familyType: $('#' + instance.familyTypeElId).val(),
                     etcValue: $('#' + instance.familyTypeETCElId).val(),
                     familyName: $('#' + instance.familyNameElId).val(),
