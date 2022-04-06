@@ -3,6 +3,7 @@ package com.temple.manager.repository;
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.believer.repository.BelieverRepository;
+import com.temple.manager.config.AuditorAwareConfig;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
 import com.temple.manager.enumable.LunarSolarType;
