@@ -1,11 +1,14 @@
 package com.temple.manager.controller;
 
+import com.temple.manager.config.PasswordEncoderConfig;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
+import com.temple.manager.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,12 +19,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import({RedisConfig.class, RedisProperties.class})
+@Import({RedisConfig.class, RedisProperties.class, PasswordEncoderConfig.class})
 @WebMvcTest(controllers = RegistrationController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 public class RegistrationControllerTest {
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    UserService userService;
 
     @Test
     @DisplayName("화면 접속 Page 반환 테스트")

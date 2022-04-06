@@ -1,6 +1,7 @@
 package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.temple.manager.config.PasswordEncoderConfig;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
 import com.temple.manager.believer.dto.BelieverDTO;
@@ -10,6 +11,7 @@ import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.controller.IncomeController;
 import com.temple.manager.income.dto.IncomeStatisticsDTO;
 import com.temple.manager.income.service.IncomeService;
+import com.temple.manager.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,12 +38,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@Import({RedisConfig.class, RedisProperties.class})
+@Import({RedisConfig.class, RedisProperties.class, PasswordEncoderConfig.class})
 @WebMvcTest(controllers = IncomeController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class IncomeControllerTest {
     @MockBean
     IncomeService incomeService;
+
+    @MockBean
+    UserService userService;
 
     @Autowired
     ObjectMapper objectMapper;

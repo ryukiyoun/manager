@@ -6,6 +6,7 @@ import com.temple.manager.expenditure.mapper.ExpenditureMapper;
 import com.temple.manager.family.mapper.FamilyMapper;
 import com.temple.manager.income.mapper.IncomeMapper;
 import com.temple.manager.prayer.mapper.PrayerMapper;
+import com.temple.manager.user.mapper.UserMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -40,5 +41,10 @@ public class TestMapperConfig {
     @Bean
     public ExpenditureMapper expenditureMapper(){
         return Mappers.getMapper(ExpenditureMapper.class);
+    }
+
+    @Bean
+    public UserMapper userMapper(){
+        return Mappers.getMapper(UserMapper.class);
     }
 }

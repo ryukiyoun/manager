@@ -2,10 +2,12 @@ package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.code.controller.CodeController;
+import com.temple.manager.config.PasswordEncoderConfig;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
 import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.code.service.CodeService;
+import com.temple.manager.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,12 +30,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@Import({RedisConfig.class, RedisProperties.class})
+@Import({RedisConfig.class, RedisProperties.class, PasswordEncoderConfig.class})
 @WebMvcTest(controllers = CodeController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class CodeControllerTest {
     @MockBean
     CodeService codeService;
+
+    @MockBean
+    UserService userService;
 
     @Autowired
     ObjectMapper objectMapper;

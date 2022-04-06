@@ -2,11 +2,13 @@ package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.believer.controller.BelieverController;
+import com.temple.manager.config.PasswordEncoderConfig;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.believer.service.BelieverService;
+import com.temple.manager.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,12 +34,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@Import({RedisConfig.class, RedisProperties.class})
+@Import({RedisConfig.class, RedisProperties.class, PasswordEncoderConfig.class})
 @WebMvcTest(controllers = BelieverController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class BelieverControllerTest {
     @MockBean
     BelieverService believerService;
+
+    @MockBean
+    UserService userService;
 
     @Autowired
     ObjectMapper objectMapper;

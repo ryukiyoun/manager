@@ -1,6 +1,7 @@
 package com.temple.manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.temple.manager.config.PasswordEncoderConfig;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
 import com.temple.manager.believer.dto.BelieverDTO;
@@ -10,6 +11,7 @@ import com.temple.manager.expenditure.dto.ExpenditureDTO;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.expenditure.dto.ExpenditureStatisticsDTO;
 import com.temple.manager.expenditure.service.ExpenditureService;
+import com.temple.manager.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,12 +38,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@Import({RedisConfig.class, RedisProperties.class})
+@Import({RedisConfig.class, RedisProperties.class, PasswordEncoderConfig.class})
 @WebMvcTest(controllers = ExpenditureController.class, includeFilters = @ComponentScan.Filter(classes = {EnableWebSecurity.class}))
 @WithMockUser(username = "user")
 class ExpenditureControllerTest {
     @MockBean
     ExpenditureService expenditureService;
+
+    @MockBean
+    UserService userService;
 
     @Autowired
     ObjectMapper objectMapper;

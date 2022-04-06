@@ -219,27 +219,11 @@ class PrayerServiceTest {
     @Test
     @DisplayName("특정 기도 Soft Delete 테스트")
     void deletePrayer() {
-        //given
-        Prayer spyPrayer = spy(Prayer.class);
-
-        given(prayerRepository.findById(anyLong())).willReturn(Optional.of(spyPrayer));
-
         //when
         prayerService.deletePrayer(1);
 
         //then
-        verify(prayerRepository, times(1)).findById(anyLong());
-        verify(spyPrayer, times(1)).delete();
-    }
-
-    @Test
-    @DisplayName("특정 기도 삭제 시 Empty 테스트")
-    void deletePrayerEmpty() {
-        //given
-        given(prayerRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        //when, then
-        assertThrows(RuntimeException.class, () -> prayerService.deletePrayer(0));
+        verify(prayerRepository, times(1)).deleteById(anyLong());
     }
 
     void checkEntity(PrayerDTO resultDTO, PrayerDTO compareDTO){
