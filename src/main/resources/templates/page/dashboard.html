@@ -152,6 +152,16 @@
                     <div class="card">
                         <canvas id="prayerCntChart" height="380"></canvas>
                     </div>
+
+                    <div class="card">
+                        <div class="card-title mb-2">
+                            <h4>요청사항</h4>
+                            <button class="btn btn-sm btn-primary float-right" id="notificationRequest">요청</button>
+                        </div>
+                        <div class="card-body">
+                            <textarea class="col-12 form-control" id="notificationMessage" style="height: 155px !important; resize: none"></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -313,6 +323,13 @@
         $(document).on('click', '#yearStatisticsBtn', function(){
             $('#dailyStatisticsBtn').removeClass('active');
             setYearChart();
+        });
+
+        $(document).on('click', '#notificationRequest', function(){
+            ajaxPostRequest("/slack/notification", $('#notificationMessage').val(), function(result){
+                console.log(result);
+                $('#notificationMessage').val('');
+            }, null);
         });
 
         function setPrayerCntChart(){
