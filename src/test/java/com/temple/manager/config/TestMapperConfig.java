@@ -5,6 +5,7 @@ import com.temple.manager.code.mapper.CodeMapper;
 import com.temple.manager.expenditure.mapper.ExpenditureMapper;
 import com.temple.manager.family.mapper.FamilyMapper;
 import com.temple.manager.income.mapper.IncomeMapper;
+import com.temple.manager.notification.mapper.NotificationMapper;
 import com.temple.manager.prayer.mapper.PrayerMapper;
 import com.temple.manager.user.mapper.UserMapper;
 import org.mapstruct.factory.Mappers;
@@ -46,5 +47,10 @@ public class TestMapperConfig {
     @Bean
     public UserMapper userMapper(){
         return Mappers.getMapper(UserMapper.class);
+    }
+
+    @Bean
+    public NotificationMapper notificationMapper(){
+        return Mappers.getMapper(NotificationMapper.class);
     }
 }

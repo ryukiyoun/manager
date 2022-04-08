@@ -8,6 +8,7 @@ import com.temple.manager.config.QuerydslConfig;
 import com.temple.manager.config.RedisConfig;
 import com.temple.manager.config.RedisProperties;
 import com.temple.manager.enumable.LunarSolarType;
+import com.temple.manager.prayer.dto.PrayerGridListDTO;
 import com.temple.manager.prayer.dto.PrayerTypeGroupCntDTO;
 import com.temple.manager.prayer.entity.Prayer;
 import com.temple.manager.prayer.repository.PrayerRepository;
@@ -51,9 +52,11 @@ public class PrayerRepositorySupportTest {
     @Autowired
     PrayerRepositorySupport prayerRepositorySupport;
 
+    Believer saveBeliever;
+
     @BeforeEach
     void init(){
-        Believer saveBeliever = Believer.builder()
+        saveBeliever = Believer.builder()
                 .believerName("saveTester")
                 .birthOfYear("111111")
                 .lunarSolarType(LunarSolarType.LUNAR)
@@ -99,10 +102,32 @@ public class PrayerRepositorySupportTest {
     }
 
     @Test
+    @DisplayName("등록 기도 검색 테스트")
+    void getPrayers() {
+        //when
+        List<PrayerGridListDTO> result = prayerRepositorySupport.getPrayers();
+
+        //then
+        assertThat(result.size(), is(3));
+    }
+
+    @Test
+    @DisplayName("등록 기도 중 특정 신도 Id로 검색 테스트")
+    void getPrayersByBelieverId() {
+        //when
+        List<PrayerGridListDTO> result = prayerRepositorySupport.getPrayersByBelieverId(saveBeliever.getBelieverId());
+
+        //then
+        assertThat(result.size(), is(3));
+    }
+
+    @Test
     @DisplayName("등록 기도에 대한 기도별 갯수 테스트")
     void getPrayersTypeGroupCnt() {
+        //when
         List<PrayerTypeGroupCntDTO> result = prayerRepositorySupport.getPrayersTypeGroupCnt();
 
+        //then
         assertThat(result.size(), is(2));
     }
 }
