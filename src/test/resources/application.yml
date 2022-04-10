@@ -3,21 +3,6 @@ spring:
     active: test_local
 ---
 spring:
-  profiles: test_local
-
-  mvc:
-    static-path-pattern: /static/**
-
-  thymeleaf:
-    cache: false
-    prefix: file:src/main/resources/templates/
-
-  web:
-    resources:
-      static-locations: file:src/main/resources/static/
-      cache:
-        period: 0
-
   redis:
     host: localhost
     port: 6379
@@ -31,3 +16,6 @@ logging:
     org:
       hibernate:
         type: trace
+
+slack:
+  webhook: ENC(zvcaaqbkvh4hKQid5f0arqmUq2hIODsN)
