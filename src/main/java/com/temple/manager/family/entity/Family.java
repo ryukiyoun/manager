@@ -1,7 +1,7 @@
 package com.temple.manager.family.entity;
 
 import com.temple.manager.common.entity.BaseEntity;
-import com.temple.manager.converter.AesConverter;
+import com.temple.manager.common.converter.AesConverter;
 import com.temple.manager.enumable.FamilyType;
 import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.family.dto.FamilyDTO;

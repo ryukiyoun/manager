@@ -2,7 +2,7 @@ package com.temple.manager.believer.entity;
 
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.common.entity.BaseEntity;
-import com.temple.manager.converter.AesConverter;
+import com.temple.manager.common.converter.AesConverter;
 import com.temple.manager.enumable.LunarSolarType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

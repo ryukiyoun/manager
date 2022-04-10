@@ -1,9 +1,9 @@
 package com.temple.manager.notification.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.temple.manager.config.PasswordEncoderConfig;
-import com.temple.manager.config.RedisConfig;
-import com.temple.manager.config.RedisProperties;
+import com.temple.manager.common.config.PasswordEncoderConfig;
+import com.temple.manager.common.config.RedisConfig;
+import com.temple.manager.common.config.RedisProperties;
 import com.temple.manager.notification.dto.NotificationDTO;
 import com.temple.manager.notification.service.NotificationService;
 import com.temple.manager.user.service.UserService;

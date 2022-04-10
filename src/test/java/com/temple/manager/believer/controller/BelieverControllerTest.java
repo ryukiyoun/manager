@@ -1,10 +1,9 @@
 package com.temple.manager.believer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.temple.manager.believer.controller.BelieverController;
-import com.temple.manager.config.PasswordEncoderConfig;
-import com.temple.manager.config.RedisConfig;
-import com.temple.manager.config.RedisProperties;
+import com.temple.manager.common.config.PasswordEncoderConfig;
+import com.temple.manager.common.config.RedisConfig;
+import com.temple.manager.common.config.RedisProperties;
 import com.temple.manager.believer.dto.BelieverDTO;
 import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.believer.service.BelieverService;

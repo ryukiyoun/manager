@@ -1,6 +1,6 @@
 package com.temple.manager;
 
-import com.temple.manager.config.TestRedisConfig;
+import com.temple.manager.common.config.TestRedisConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

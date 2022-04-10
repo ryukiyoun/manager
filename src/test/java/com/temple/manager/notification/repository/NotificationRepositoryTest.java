@@ -1,7 +1,7 @@
 package com.temple.manager.notification.repository;
 
-import com.temple.manager.config.RedisConfig;
-import com.temple.manager.config.RedisProperties;
+import com.temple.manager.common.config.RedisConfig;
+import com.temple.manager.common.config.RedisProperties;
 import com.temple.manager.notification.entity.Notification;
 import com.temple.manager.util.AesUtil;
 import org.junit.jupiter.api.DisplayName;

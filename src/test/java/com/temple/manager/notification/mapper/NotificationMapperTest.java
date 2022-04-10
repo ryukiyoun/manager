@@ -1,6 +1,6 @@
 package com.temple.manager.notification.mapper;
 
-import com.temple.manager.config.TestMapperConfig;
+import com.temple.manager.common.config.TestMapperConfig;
 import com.temple.manager.notification.dto.NotificationDTO;
 import com.temple.manager.notification.entity.Notification;
 import org.junit.jupiter.api.BeforeEach;

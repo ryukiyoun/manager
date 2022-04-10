@@ -13,7 +13,7 @@ import com.slack.api.model.block.element.ButtonElement;
 import com.slack.api.model.block.element.PlainTextInputElement;
 import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
-import com.temple.manager.config.ActionResponseSenderConfig;
+import com.temple.manager.common.config.ActionResponseSenderConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
