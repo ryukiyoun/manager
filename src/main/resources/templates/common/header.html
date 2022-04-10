@@ -46,4 +46,26 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="notificationDocModal" data-backdrop="static" tabindex="-1" data-keyboard="false" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">요청 사항</h5>
+                    <p class="m-b-0 m-t-4">요청 사항 확인</p>
+                </div>
+                <div class="modal-body">
+                    <h6>내용</h6>
+                    <textarea class="col-12 form-control input-default" id="notificationRequestTextArea" style="height: 155px !important; resize: none" disabled></textarea>
+                    <hr>
+                    <h6>답변</h6>
+                    <input type="text" class="col-12 form-control mb-3 input-default" id="notificationTitleInput" disabled>
+                    <textarea class="col-12 form-control input-default" id="notificationMessageTextArea" style="height: 155px !important; resize: none" disabled></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
