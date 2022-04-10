@@ -16,6 +16,7 @@ import com.slack.api.model.block.element.PlainTextInputElement;
 import com.slack.api.util.json.GsonFactory;
 import com.slack.api.webhook.Payload;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,11 +26,14 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class SlackUtils {
+    @Value("${slack.webhook}")
+    private String slackURL;
+
     private final ActionResponseSender actionResponseSender;
 
     public void sendSlackMessage(List<LayoutBlock> layoutBlocks) {
         try {
-            Slack.getInstance().send("https://hooks.slack.com/services/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",
+            Slack.getInstance().send(slackURL,
                     Payload.builder().blocks(layoutBlocks).build());
         }
         catch (IOException e){
