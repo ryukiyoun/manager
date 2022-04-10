@@ -1,4 +1,4 @@
-package com.temple.manager.controller;
+package com.temple.manager.believer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.temple.manager.believer.controller.BelieverController;
