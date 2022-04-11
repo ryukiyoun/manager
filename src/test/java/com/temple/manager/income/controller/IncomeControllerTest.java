@@ -1,13 +1,12 @@
 package com.temple.manager.income.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.common.config.PasswordEncoderConfig;
 import com.temple.manager.common.config.RedisConfig;
 import com.temple.manager.common.config.RedisProperties;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.dto.IncomeDTO;
+import com.temple.manager.income.dto.IncomeGridListDTO;
 import com.temple.manager.income.dto.IncomeStatisticsDTO;
 import com.temple.manager.income.service.IncomeService;
 import com.temple.manager.user.service.UserService;
@@ -64,8 +63,8 @@ class IncomeControllerTest {
                 .cardAmount(222)
                 .bankBookAmount(333)
                 .installment(10)
-                .code(CodeDTO.builder().codeId(1).build())
-                .believer(BelieverDTO.builder().believerId(1).build())
+                .incomeTypeCodeId(1)
+                .believerId(1L)
                 .paymentType(PaymentType.BELIEVER)
                 .build();
 
@@ -76,8 +75,8 @@ class IncomeControllerTest {
                 .cardAmount(555)
                 .bankBookAmount(666)
                 .installment(3)
-                .code(CodeDTO.builder().codeId(2).build())
-                .believer(BelieverDTO.builder().believerId(2).build())
+                .incomeTypeCodeId(1)
+                .believerId(1L)
                 .paymentType(PaymentType.TEMPLE)
                 .build();
     }
@@ -95,9 +94,9 @@ class IncomeControllerTest {
     @DisplayName("등록된 수입 정보 반환 테스트")
     void getAllIncomeByActive() throws Exception{
         //given
-        List<IncomeDTO> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
+        List<IncomeGridListDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeGridListDTO(1, PaymentType.BELIEVER, 1, "test", 100, 100, 100, 2, "tester", LocalDate.now()));
+        fixtureList.add(new IncomeGridListDTO(2, PaymentType.TEMPLE, 2, "test2", 200, 200, 200, 12, "tester2", LocalDate.now()));
 
         given(incomeService.getAllIncomes()).willReturn(fixtureList);
 
@@ -113,9 +112,9 @@ class IncomeControllerTest {
     @DisplayName("등록된 수입 신도ID 검색 정보 반환 테스트")
     void getIncomeByBelieverId() throws Exception{
         //given
-        List<IncomeDTO> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
+        List<IncomeGridListDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeGridListDTO(1, PaymentType.BELIEVER, 1, "test", 100, 100, 100, 2, "tester", LocalDate.now()));
+        fixtureList.add(new IncomeGridListDTO(2, PaymentType.TEMPLE, 2, "test2", 200, 200, 200, 12, "tester2", LocalDate.now()));
 
         given(incomeService.getIncomesByBelieverId(anyLong())).willReturn(fixtureList);
 
@@ -131,9 +130,9 @@ class IncomeControllerTest {
     @DisplayName("최근 등록 수입 5건 조회 테스트")
     void getRecent5Incomes() throws Exception{
         //given
-        List<IncomeDTO> fixtureList = new ArrayList<>();
-        fixtureList.add(fixture1);
-        fixtureList.add(fixture2);
+        List<IncomeGridListDTO> fixtureList = new ArrayList<>();
+        fixtureList.add(new IncomeGridListDTO(1, PaymentType.BELIEVER, 1, "test", 100, 100, 100, 2, "tester", LocalDate.now()));
+        fixtureList.add(new IncomeGridListDTO(2, PaymentType.TEMPLE, 2, "test2", 200, 200, 200, 12, "tester2", LocalDate.now()));
 
         given(incomeService.getRecent5Incomes()).willReturn(fixtureList);
 

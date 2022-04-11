@@ -2,9 +2,9 @@ package com.temple.manager.income.repository;
 
 import com.temple.manager.believer.entity.Believer;
 import com.temple.manager.believer.repository.BelieverRepository;
-import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.code.entity.Code;
 import com.temple.manager.code.repository.CodeRepository;
+import com.temple.manager.common.config.AuditorAwareConfig;
 import com.temple.manager.common.config.RedisConfig;
 import com.temple.manager.common.config.RedisProperties;
 import com.temple.manager.enumable.LunarSolarType;
@@ -15,13 +15,12 @@ import com.temple.manager.util.AesUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -32,8 +31,8 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@ExtendWith(SpringExtension.class)
-@Import({AesUtil.class, RedisConfig.class, RedisProperties.class})
+@EnableJpaAuditing
+@Import({AesUtil.class, RedisConfig.class, RedisProperties.class, AuditorAwareConfig.class})
 @DataJpaTest
 @WithMockUser(username = "user")
 public class IncomeRepositoryTest {
@@ -76,22 +75,23 @@ public class IncomeRepositoryTest {
 
         saveIncome = Income.builder()
                 .incomeDate(LocalDate.now())
-                .believer(saveBeliever)
+                .believerId(saveBeliever.getBelieverId())
                 .cashAmount(100L)
                 .cardAmount(100L)
                 .bankBookAmount(100L)
                 .installment(1)
-                .code(saveCode)
+                .incomeTypeCodeId(saveCode.getCodeId())
                 .paymentType(PaymentType.BELIEVER)
                 .build();
 
         saveIncome2 = Income.builder()
                 .incomeDate(LocalDate.now())
+                .believerId(saveBeliever.getBelieverId())
                 .cashAmount(100L)
                 .cardAmount(100L)
                 .bankBookAmount(100L)
                 .installment(1)
-                .code(saveCode)
+                .incomeTypeCodeId(saveCode.getCodeId())
                 .paymentType(PaymentType.BELIEVER)
                 .build();
 
@@ -103,71 +103,17 @@ public class IncomeRepositoryTest {
     }
 
     @Test
-    @DisplayName("등록된 수입 조회 테스트")
-    void getAllIncomes() {
-        //when
-        List<Income> result = incomeRepository.findAll();
-
-        //then
-        assertThat(result.size(), is(2));
-        assertThat(result.get(0).getIncomeDate(), is(LocalDate.now()));
-        assertThat(result.get(0).getBeliever(), is(not(nullValue())));
-        assertThat(result.get(0).getCashAmount(), is(100L));
-        assertThat(result.get(0).getCardAmount(), is(100L));
-        assertThat(result.get(0).getBankBookAmount(), is(100L));
-        assertThat(result.get(0).getInstallment(), is(1));
-        assertThat(result.get(0).getCode(), is(not(nullValue())));
-        assertThat(result.get(0).getPaymentType(), is(PaymentType.BELIEVER));
-    }
-
-    @Test
-    @DisplayName("등록된 수입 중 특정 신도로 조회 테스트")
-    void getExpendituresByBelieverId() {
-        //when
-        List<Income> result = incomeRepository.findAllByBeliever_BelieverId(saveBeliever.getBelieverId());
-
-        //then
-        assertThat(result.size(), is(1));
-        assertThat(result.get(0).getIncomeDate(), is(LocalDate.now()));
-        assertThat(result.get(0).getBeliever(), is(not(nullValue())));
-        assertThat(result.get(0).getCashAmount(), is(100L));
-        assertThat(result.get(0).getCardAmount(), is(100L));
-        assertThat(result.get(0).getBankBookAmount(), is(100L));
-        assertThat(result.get(0).getInstallment(), is(1));
-        assertThat(result.get(0).getCode(), is(not(nullValue())));
-        assertThat(result.get(0).getPaymentType(), is(PaymentType.BELIEVER));
-    }
-
-    @Test
-    @DisplayName("등록된 수입 중 최근 등록된 지출 5건 조회 테스트")
-    void getRecent5Expenditures() {
-        //when
-        List<Income> result = incomeRepository.findTop5ByOrderByIncomeIdDesc(PageRequest.of(0, 5));
-
-        //then
-        assertThat(result.size(), is(2));
-        assertThat(result.get(0).getIncomeDate(), is(LocalDate.now()));
-        assertThat(result.get(0).getBeliever(), is(not(nullValue())));
-        assertThat(result.get(0).getCashAmount(), is(100L));
-        assertThat(result.get(0).getCardAmount(), is(100L));
-        assertThat(result.get(0).getBankBookAmount(), is(100L));
-        assertThat(result.get(0).getInstallment(), is(1));
-        assertThat(result.get(0).getCode(), is(not(nullValue())));
-        assertThat(result.get(0).getPaymentType(), is(PaymentType.BELIEVER));
-    }
-
-    @Test
     @DisplayName("수입 추가 테스트 테스트")
-    void setSaveExpenditureTest() {
+    void setSaveIncomeTest() {
         //given
         Income saveIncome = Income.builder()
                 .incomeDate(LocalDate.now())
-                .believer(saveBeliever)
+                .believerId(saveBeliever.getBelieverId())
                 .cashAmount(200L)
                 .cardAmount(200L)
                 .bankBookAmount(200L)
                 .installment(2)
-                .code(saveCode)
+                .incomeTypeCodeId(saveCode.getCodeId())
                 .paymentType(PaymentType.TEMPLE)
                 .build();
 
@@ -177,28 +123,28 @@ public class IncomeRepositoryTest {
         //when
         assertThat(result.getIncomeId(), is(not(nullValue())));
         assertThat(result.getIncomeDate(), is(LocalDate.now()));
-        assertThat(result.getBeliever(), is(not(nullValue())));
+        assertThat(result.getBelieverId(), is(saveBeliever.getBelieverId()));
         assertThat(result.getCashAmount(), is(200L));
         assertThat(result.getCardAmount(), is(200L));
         assertThat(result.getBankBookAmount(), is(200L));
         assertThat(result.getInstallment(), is(2));
-        assertThat(result.getCode(), is(not(nullValue())));
+        assertThat(result.getIncomeTypeCodeId(), is(saveCode.getCodeId()));
         assertThat(result.getPaymentType(), is(PaymentType.TEMPLE));
     }
 
     @Test
     @DisplayName("수입 변경 테스트")
     @Transactional
-    void updateExpenditureTest() {
+    void updateIncomeTest() {
         //given
         Income saveIncome = Income.builder()
                 .incomeDate(LocalDate.now())
-                .believer(saveBeliever)
+                .believerId(saveBeliever.getBelieverId())
                 .cashAmount(200L)
                 .cardAmount(200L)
                 .bankBookAmount(200L)
                 .installment(2)
-                .code(saveCode)
+                .incomeTypeCodeId(saveCode.getCodeId())
                 .paymentType(PaymentType.TEMPLE)
                 .build();
 
@@ -211,26 +157,25 @@ public class IncomeRepositoryTest {
                 .cardAmount(300L)
                 .bankBookAmount(300L)
                 .installment(2)
-                .code(CodeDTO.builder().codeId(saveCode.getCodeId()).build())
+                .incomeTypeCodeId(saveCode.getCodeId())
                 .paymentType(PaymentType.BELIEVER)
                 .build());
 
         //then
         assertThat(result.getIncomeId(), is(not(nullValue())));
         assertThat(result.getIncomeDate(), is(LocalDate.now()));
-        assertThat(result.getBeliever(), is(nullValue()));
         assertThat(result.getCashAmount(), is(300L));
         assertThat(result.getCardAmount(), is(300L));
         assertThat(result.getBankBookAmount(), is(300L));
         assertThat(result.getInstallment(), is(2));
-        assertThat(result.getCode(), is(not(nullValue())));
+        assertThat(result.getIncomeTypeCodeId(), is(saveCode.getCodeId()));
         assertThat(result.getPaymentType(), is(PaymentType.TEMPLE));
     }
 
     @Test
     @DisplayName("수입 삭제 테스트")
     @Transactional
-    void deleteBelieverTest() {
+    void deleteIncomeTest() {
         //when
         incomeRepository.deleteById(saveIncome.getIncomeId());
 

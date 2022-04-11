@@ -1,7 +1,5 @@
 package com.temple.manager.income.entity;
 
-import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.code.entity.Code;
 import com.temple.manager.common.entity.BaseEntity;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.dto.IncomeDTO;
@@ -32,9 +30,8 @@ public class Income extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private PaymentType paymentType;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "INCOME_TYPE_CODE_ID", nullable = false)
-    private Code code;
+    @JoinColumn(name = "INCOME_TYPE_CODE_ID", nullable = false, referencedColumnName = "CODE_ID")
+    private long incomeTypeCodeId;
 
     private long cashAmount;
 
@@ -44,28 +41,18 @@ public class Income extends BaseEntity {
 
     private int installment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BELIEVER_ID")
-    private Believer believer;
+    @JoinColumn(name = "BELIEVER_ID", referencedColumnName = "BELIEVER_ID")
+    private Long believerId;
 
     @Column(nullable = false)
     private LocalDate incomeDate;
 
-    @PostLoad
-    public void postLoad() {
-        if(this.believer == null)
-            this.believer = Believer.builder().believerName("해심").build();
-    }
-
     public void update(IncomeDTO incomeDTO){
-        this.code = Code.builder().codeId(incomeDTO.getCode().getCodeId()).build();
+        this.incomeTypeCodeId = incomeDTO.getIncomeTypeCodeId();
         this.cashAmount = incomeDTO.getCashAmount();
         this.cardAmount = incomeDTO.getCardAmount();
         this.bankBookAmount = incomeDTO.getBankBookAmount();
         this.installment = incomeDTO.getInstallment();
         this.incomeDate = incomeDTO.getIncomeDate();
-
-        if(incomeDTO.getBeliever() == null)
-            this.believer = null;
     }
 }

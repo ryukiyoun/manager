@@ -1,6 +1,7 @@
 package com.temple.manager.income.controller;
 
 import com.temple.manager.income.dto.IncomeDTO;
+import com.temple.manager.income.dto.IncomeGridListDTO;
 import com.temple.manager.income.dto.IncomeStatisticsDTO;
 import com.temple.manager.income.service.IncomeService;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,17 @@ public class IncomeController {
     }
 
     @GetMapping("/incomes")
-    public ResponseEntity<List<IncomeDTO>> getAllIncomes() {
+    public ResponseEntity<List<IncomeGridListDTO>> getAllIncomes() {
         return ResponseEntity.ok(incomeService.getAllIncomes());
     }
 
     @GetMapping("/incomes/{believerId}")
-    public ResponseEntity<List<IncomeDTO>> getIncomeByBelieverId(@PathVariable long believerId) {
+    public ResponseEntity<List<IncomeGridListDTO>> getIncomeByBelieverId(@PathVariable long believerId) {
         return ResponseEntity.ok(incomeService.getIncomesByBelieverId(believerId));
     }
 
     @GetMapping("/incomes/top/5")
-    public ResponseEntity<List<IncomeDTO>> getRecent5Incomes() {
+    public ResponseEntity<List<IncomeGridListDTO>> getRecent5Incomes() {
         return ResponseEntity.ok(incomeService.getRecent5Incomes());
     }
 

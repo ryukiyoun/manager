@@ -1,10 +1,12 @@
 package com.temple.manager.income.service;
 
 import com.temple.manager.income.dto.IncomeDTO;
+import com.temple.manager.income.dto.IncomeGridListDTO;
 import com.temple.manager.income.dto.IncomeStatisticsDTO;
 import com.temple.manager.income.entity.Income;
 import com.temple.manager.income.mapper.IncomeMapper;
 import com.temple.manager.income.repository.IncomeRepository;
+import com.temple.manager.income.repository.IncomeRepositorySupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,18 +20,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IncomeService {
     private final IncomeRepository incomeRepository;
+    private final IncomeRepositorySupport incomeRepositorySupport;
     private final IncomeMapper incomeMapper;
 
-    public List<IncomeDTO> getAllIncomes() {
-        return incomeMapper.entityListToDTOList(incomeRepository.findAll());
+    public List<IncomeGridListDTO> getAllIncomes() {
+        return incomeRepositorySupport.getIncomes();
     }
 
-    public List<IncomeDTO> getIncomesByBelieverId(long believerId) {
-        return incomeMapper.entityListToDTOList(incomeRepository.findAllByBeliever_BelieverId(believerId));
+    public List<IncomeGridListDTO> getIncomesByBelieverId(long believerId) {
+        return incomeRepositorySupport.getIncomeByBelieverId(believerId);
     }
 
-    public List<IncomeDTO> getRecent5Incomes(){
-        return incomeMapper.entityListToDTOList(incomeRepository.findTop5ByOrderByIncomeIdDesc(PageRequest.of(0, 5)));
+    public List<IncomeGridListDTO> getRecent5Incomes(){
+        return incomeRepositorySupport.getIncomeTop5(PageRequest.of(0, 5));
     }
 
     public List<IncomeStatisticsDTO> getIncomeDailyStatistics(String date) {

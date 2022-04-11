@@ -1,11 +1,6 @@
 package com.temple.manager.income.mapper;
 
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.believer.entity.Believer;
-import com.temple.manager.code.dto.CodeDTO;
-import com.temple.manager.code.entity.Code;
 import com.temple.manager.common.config.TestMapperConfig;
-import com.temple.manager.enumable.LunarSolarType;
 import com.temple.manager.enumable.PaymentType;
 import com.temple.manager.income.dto.IncomeDTO;
 import com.temple.manager.income.entity.Income;
@@ -49,22 +44,8 @@ public class IncomeMapperTest {
                 .bankBookAmount(300)
                 .installment(3)
                 .paymentType(PaymentType.BELIEVER)
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("서울")
-                        .build())
-                .code(Code.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .believerId(1L)
+                .incomeTypeCodeId(1)
                 .build();
 
         fixtureList = new ArrayList<>();
@@ -78,22 +59,8 @@ public class IncomeMapperTest {
                 .bankBookAmount(300)
                 .installment(3)
                 .paymentType(PaymentType.BELIEVER)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("서울")
-                        .build())
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .believerId(1L)
+                .incomeTypeCodeId(1)
                 .build();
 
         fixtureDTOList = new ArrayList<>();
@@ -115,19 +82,9 @@ public class IncomeMapperTest {
         assertThat(result.getInstallment(), is(3));
         assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("서울"));
+        assertThat(result.getBelieverId(), is(1L));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getIncomeTypeCodeId(), is(1L));
     }
 
     @Test
@@ -152,16 +109,8 @@ public class IncomeMapperTest {
                 .bankBookAmount(300)
                 .installment(3)
                 .paymentType(PaymentType.BELIEVER)
-                .believer(null)
-                .code(Code.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .believerId(null)
+                .incomeTypeCodeId(1)
                 .build();
 
         //when
@@ -176,15 +125,9 @@ public class IncomeMapperTest {
         assertThat(result.getInstallment(), is(3));
         assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
-        assertThat(result.getBeliever(), is(nullValue()));
+        assertThat(result.getBelieverId(), is(nullValue()));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getIncomeTypeCodeId(), is(1L));
     }
 
     @Test
@@ -199,14 +142,7 @@ public class IncomeMapperTest {
                 .bankBookAmount(300)
                 .installment(3)
                 .paymentType(PaymentType.BELIEVER)
-                .believer(Believer.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("서울")
-                        .build())
-                .code(null)
+                .believerId(1L)
                 .build();
 
         //when
@@ -221,13 +157,9 @@ public class IncomeMapperTest {
         assertThat(result.getInstallment(), is(3));
         assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("서울"));
+        assertThat(result.getBelieverId(), is(1L));
 
-        assertThat(result.getCode(), is(nullValue()));
+        assertThat(result.getIncomeTypeCodeId(), is(0L));
     }
 
     @Test
@@ -245,19 +177,9 @@ public class IncomeMapperTest {
         assertThat(result.getInstallment(), is(3));
         assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("서울"));
+        assertThat(result.getBelieverId(), is(1L));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getIncomeTypeCodeId(), is(1L));
     }
 
     @Test
@@ -282,16 +204,7 @@ public class IncomeMapperTest {
                 .bankBookAmount(300)
                 .installment(3)
                 .paymentType(PaymentType.BELIEVER)
-                .believer(null)
-                .code(CodeDTO.builder()
-                        .codeId(1)
-                        .codeName("testCode")
-                        .codeValue("testValue")
-                        .parentCodeValue("P_TEST")
-                        .att1("1")
-                        .att2("2")
-                        .att3("3")
-                        .build())
+                .incomeTypeCodeId(1)
                 .build();
 
         //when
@@ -306,15 +219,9 @@ public class IncomeMapperTest {
         assertThat(result.getInstallment(), is(3));
         assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
-        assertThat(result.getBeliever(), is(nullValue()));
+        assertThat(result.getBelieverId(), is(nullValue()));
 
-        assertThat(result.getCode().getCodeId(), is(1L));
-        assertThat(result.getCode().getCodeName(), is("testCode"));
-        assertThat(result.getCode().getCodeValue(), is("testValue"));
-        assertThat(result.getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.getCode().getAtt1(), is("1"));
-        assertThat(result.getCode().getAtt2(), is("2"));
-        assertThat(result.getCode().getAtt3(), is("3"));
+        assertThat(result.getIncomeTypeCodeId(), is(1L));
     }
 
     @Test
@@ -329,14 +236,7 @@ public class IncomeMapperTest {
                 .bankBookAmount(300)
                 .installment(3)
                 .paymentType(PaymentType.BELIEVER)
-                .believer(BelieverDTO.builder()
-                        .believerId(1)
-                        .believerName("tester")
-                        .birthOfYear("111111")
-                        .lunarSolarType(LunarSolarType.LUNAR)
-                        .address("서울")
-                        .build())
-                .code(null)
+                .believerId(1L)
                 .build();
 
         //when
@@ -351,13 +251,9 @@ public class IncomeMapperTest {
         assertThat(result.getInstallment(), is(3));
         assertThat(result.getPaymentType(), is(PaymentType.BELIEVER));
 
-        assertThat(result.getBeliever().getBelieverId(), is(1L));
-        assertThat(result.getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.getBeliever().getAddress(), is("서울"));
+        assertThat(result.getBelieverId(), is(1L));
 
-        assertThat(result.getCode(), is(nullValue()));
+        assertThat(result.getIncomeTypeCodeId(), is(0L));
     }
 
     @Test
@@ -375,19 +271,9 @@ public class IncomeMapperTest {
         assertThat(result.get(0).getInstallment(), is(3));
         assertThat(result.get(0).getPaymentType(), is(PaymentType.BELIEVER));
 
-        assertThat(result.get(0).getBeliever().getBelieverId(), is(1L));
-        assertThat(result.get(0).getBeliever().getBelieverName(), is("tester"));
-        assertThat(result.get(0).getBeliever().getBirthOfYear(), is("111111"));
-        assertThat(result.get(0).getBeliever().getLunarSolarType(), is(LunarSolarType.LUNAR));
-        assertThat(result.get(0).getBeliever().getAddress(), is("서울"));
+        assertThat(result.get(0).getBelieverId(), is(1L));
 
-        assertThat(result.get(0).getCode().getCodeId(), is(1L));
-        assertThat(result.get(0).getCode().getCodeName(), is("testCode"));
-        assertThat(result.get(0).getCode().getCodeValue(), is("testValue"));
-        assertThat(result.get(0).getCode().getParentCodeValue(), is("P_TEST"));
-        assertThat(result.get(0).getCode().getAtt1(), is("1"));
-        assertThat(result.get(0).getCode().getAtt2(), is("2"));
-        assertThat(result.get(0).getCode().getAtt3(), is("3"));
+        assertThat(result.get(0).getIncomeTypeCodeId(), is(1L));
     }
 
     @Test

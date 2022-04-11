@@ -45,7 +45,7 @@
             $(instance.element).on('click', '.btn-save', function() {
                 if(instance.incomeId !== 0) {
                     ajaxPutRequest('/income/' + instance.incomeId, JSON.stringify({
-                        code: {codeId: $('#' + instance.incomeTypeElId).val() },
+                        incomeTypeCodeId: $('#' + instance.incomeTypeElId).val(),
                         cashAmount: $('#' + instance.incomeCashAmountElId).val(),
                         cardAmount: $('#' + instance.incomeCardAmountElId).val(),
                         bankBookAmount: $('#' + instance.incomeBankBookAmountElId).val(),
@@ -78,8 +78,8 @@
 
             $(instance.element).on('click', '.btn-append', function () {
                 ajaxPostRequest('/income', JSON.stringify({
-                    believer: instance.believerId === 0 ? null : { believerId: instance.believerId },
-                    code: {codeId: $('#' + instance.incomeTypeElId).val() },
+                    believerId: instance.believerId === 0 ? null : instance.believerId,
+                    incomeTypeCodeId: $('#' + instance.incomeTypeElId).val(),
                     cashAmount: $('#' + instance.incomeCashAmountElId).val(),
                     cardAmount: $('#' + instance.incomeCardAmountElId).val(),
                     bankBookAmount: $('#' + instance.incomeBankBookAmountElId).val(),
@@ -311,9 +311,10 @@
 
         //Editor Input Setting Data
         setValues: function(rowData){
+            console.log(rowData);
             this.incomeId = rowData.incomeId;
 
-            $('#' + this.incomeTypeElId).val(rowData.code.codeId);
+            $('#' + this.incomeTypeElId).val(rowData.codeId);
 
             $('#' + this.incomeCashAmountElId).val(rowData.cashAmount);
             $('#' + this.incomeCardAmountElId).val(rowData.cardAmount);

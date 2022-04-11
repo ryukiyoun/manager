@@ -1,7 +1,5 @@
 package com.temple.manager.income.dto;
 
-import com.temple.manager.believer.dto.BelieverDTO;
-import com.temple.manager.code.dto.CodeDTO;
 import com.temple.manager.enumable.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +17,7 @@ public class IncomeDTO {
 
     private PaymentType paymentType;
 
-    private CodeDTO code;
+    private long incomeTypeCodeId;
 
     private long cashAmount;
 
@@ -29,7 +27,7 @@ public class IncomeDTO {
 
     private int installment;
 
-    private BelieverDTO believer;
+    private Long believerId;
 
     private LocalDate incomeDate;
 }
