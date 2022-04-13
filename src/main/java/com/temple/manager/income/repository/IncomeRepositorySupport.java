@@ -34,6 +34,7 @@ public class IncomeRepositorySupport {
 
     public List<IncomeGridListDTO> getIncomeTop5(Pageable pageable){
         return selectGridBaseQuery()
+                .orderBy(income.createDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
